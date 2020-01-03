@@ -1,0 +1,63 @@
+.auth{
+    width: 850px;
+    display: flex;
+    justify-content: space-between;
+    margin: 30px auto;
+}
+
+.title{
+    margin: 10px 0;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.button-box{
+    display:flex;
+    justify-content: space-between;
+}
+
+.sign-in{
+    width: 30vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.sign-up{
+    display: flex;
+    flex-direction: column;
+    width: 380px;
+}
+
+.sign-out-box{
+    position: absolute;
+    top: 58px;
+    right: 2px;
+    z-index: 5;
+    height: 50px;
+    width: fit-content;
+    background-color: whitesmoke;
+    color: black;
+    border: teal solid 3px;
+    margin: 0.5rem;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+}
+
+.sign-out-box button{
+    font-size: 0.75rem;
+    background-color: whitesmoke;
+    border: none;
+    color: teal;
+    box-shadow: none;
+}
+
+.sign-out-box button:hover{
+    color: whitesmoke;
+    background-color: teal;
+}
+
+.sign-out-box button:active{
+    color: whitesmoke;
+    background-color: teal;
+}

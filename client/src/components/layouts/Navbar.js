@@ -1,23 +1,38 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import './Navbar.css'
+import { connect } from 'react-redux';
 
-const Navbar = () => {
+import SignOut from '../auth/SignOut';
+
+const Navbar = ({currentUser}) => {
+
+    const [hidden, toggleHidden] = useState(false)
 
     return (
         <Fragment>
             <div className="navbar-fixed">
                 <nav>
                     <div className="nav-wrapper">
-                        <a href="/" className="brand-logo">File-Tracker</a>
-                        <a href="#" data-target="mobile-demo" className="sidenav-trigger">Click</a>
+                        <a href="/" className="brand-logo">Six-Sigma</a>
+                        <a data-target="mobile-demo" className="sidenav-trigger">Click</a>
                         <ul className="right hide-on-med-and-down">
                             <li><a href="/generator">New File</a></li>
                             <li><a href="/scanner">Scanner</a></li>
+                            { !currentUser ? <li><a href="/auth">SignIn</a></li> 
+                            : <li>
+                                <a href="#">{currentUser.displayName}</a>
+                            </li>}
+                            { currentUser && <li>
+                              <img onClick={()=>toggleHidden(!hidden)} 
+                                className="nav-img" src={currentUser.picture} />  
+                            </li>}
                         </ul>
                     </div>
                 </nav>
             </div>
+            {hidden && <SignOut closePopup={toggleHidden}/>}
             <ul className="sidenav" id="mobile-demo">
+                <li><a href="/">Home</a></li>
                 <li><a href="/generator">New File</a></li>
                 <li><a href="/scanner">Scanner</a></li>
             </ul>
@@ -25,4 +40,8 @@ const Navbar = () => {
     )
 }
 
-export default Navbar;
+const mapStateToProps = state => ({
+    currentUser: state.user.currentUser
+})
+
+export default connect(mapStateToProps)(Navbar);

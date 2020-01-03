@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://SixSigma:6sigmasih@cluster0-7gsuh.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtSecret": "mysecrettoken"
+}
