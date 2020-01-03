@@ -16,7 +16,9 @@ const Navbar = ({currentUser}) => {
                         <a href="/" className="brand-logo">Six-Sigma</a>
                         <a data-target="mobile-demo" className="sidenav-trigger">Click</a>
                         <ul className="right hide-on-med-and-down">
-                            <li><a href="/generator">New File</a></li>
+                            <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">
+                                File
+                            </a></li>
                             <li><a href="/scanner">Scanner</a></li>
                             { !currentUser ? <li><a href="/auth">SignIn</a></li> 
                             : <li>
@@ -35,6 +37,12 @@ const Navbar = ({currentUser}) => {
                 <li><a href="/">Home</a></li>
                 <li><a href="/generator">New File</a></li>
                 <li><a href="/scanner">Scanner</a></li>
+            </ul>
+            <ul id="dropdown1" className="dropdown-content">
+                <li><a href="/generator">New File</a></li>
+                <li><a href="#!">two</a></li>
+                <li class="divider"></li>
+                <li><a href="#!">three</a></li>
             </ul>
         </Fragment>
     )

@@ -22,7 +22,7 @@ const fileSchema = new mongoose.Schema({
             }
         }
     ],
-    assigner:{
+    creator:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },

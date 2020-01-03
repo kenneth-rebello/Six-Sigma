@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node server",
     "server": "nodemon server",
-    "client": "cd ../client && npm start",
-    "build": "cd ../client and npm run build",
+    "client": "cd client && npm start",
+    "build": "cd client and npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "cd client && npm install && npm run build "
   },
@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "concurrently": "^5.0.2",
     "config": "^3.2.4",
     "express": "^4.17.1",
     "mongoose": "^5.8.3",

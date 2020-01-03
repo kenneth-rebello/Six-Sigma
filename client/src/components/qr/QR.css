@@ -19,9 +19,10 @@
     padding:0
 }
 
+
 .btn{
     color: white;
-    margin: auto;
+    margin: 0.2rem;
 }
 
 a{
@@ -53,14 +54,16 @@ input::placeholder{
     color: darkseagreen;
 }
 
-.btn-box{
-    display: grid;
-    grid-template-columns: 1fr;
-    height: fit-content;
-    margin: 0;
+
+.qr-home .btn{
+    width: 15rem;
+    margin: 1%;
 }
 
-.btn-box .btn{
+#toExport{
+    display: none;
+}
+
+#screenshot{
     width: 20rem;
-    margin: 1%;
 }

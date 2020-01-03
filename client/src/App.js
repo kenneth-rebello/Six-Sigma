@@ -11,9 +11,14 @@ import Generator from './components/qr/Generator';
 
 import {auth } from './firebase/firebase.utils';
 import { setCurrentUser } from './actions/user.actions';
+import setAuthHeader from './utils/setAuthHeader';
 
 
 const App = ({currentUser, setCurrentUser}) => {
+
+  if(currentUser){
+    setAuthHeader(currentUser)
+  }
 
   useEffect(() => {
     const unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
