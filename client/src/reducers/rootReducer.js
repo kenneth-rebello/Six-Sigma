@@ -3,6 +3,7 @@ import {combineReducers} from 'redux';
 // import storage from 'redux-persist/lib/storage';
 
 import userReducer from './user.reducer';
+import fileReducer from './file.reducer';
 
 // const persistConfig = {
 //     key: 'root',
@@ -11,7 +12,8 @@ import userReducer from './user.reducer';
 // }
 
 const rootReducer = combineReducers({
-    user: userReducer
+    user: userReducer,
+    file: fileReducer
 });
 
 export default rootReducer;

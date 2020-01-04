@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER, UNSET_CURRENT_USER } from "../redux/types";
+import { SET_CURRENT_USER, UNSET_CURRENT_USER, FETCH_USERS } from "../redux/types";
 import { auth } from '../firebase/firebase.utils';
 import axios from 'axios';
 
@@ -26,4 +26,26 @@ export const unsetCurrentUser = () => dispatch => {
     dispatch({
         type: UNSET_CURRENT_USER
     })
+}
+
+export const fetchAllUsers = () =>async dispatch => {
+
+    const res = await axios.get('/api/user/all');
+
+    dispatch({
+        type: FETCH_USERS,
+        payload: res.data
+    })
+
+}
+
+export const fetchSupervisors = () =>async dispatch => {
+
+    const res = await axios.get('/api/user/supervisors');
+
+    dispatch({
+        type: FETCH_USERS,
+        payload: res.data
+    })
+
 }

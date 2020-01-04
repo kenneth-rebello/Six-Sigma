@@ -13,15 +13,6 @@ const fileSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
-    // List of previous owners ids
-    history:[
-        {
-            user:{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'user'
-            }
-        }
-    ],
     creator:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
@@ -35,6 +26,14 @@ const fileSchema = new mongoose.Schema({
             },
             position:{
                 type: Number
+            },
+            done:{
+                type: Boolean,
+                default: false
+            },
+            owner:{
+                type:Boolean,
+                default: false
             }
         }
     ]

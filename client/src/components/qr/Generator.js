@@ -4,9 +4,9 @@ import {connect} from 'react-redux';
 
 import html2canvas from 'html2canvas';
 import QRCode from 'qrcode.react';
-import { addFileToDB } from '../../actions/file.actions';
+import { addFile } from '../../actions/file.actions';
 
-const Generator = ({loggedIn, addFileToDB}) => {
+const Generator = ({loggedIn, addFile, history}) => {
 
     const [text, setText] = useState('No text entered yet');
 
@@ -39,14 +39,17 @@ const Generator = ({loggedIn, addFileToDB}) => {
         document.getElementById("toExport").style.display = "none"
     }
 
-    const addFile = () => {
+    const addFileFunc = () => {
         if(text==="No text entered yet" || text.trim()===""){
             alert('Filename needs to be filled')
+            return
         }
         if(!loggedIn){
             alert('You need to log in to add a file to database')
+            return
         }
-        addFileToDB(text);
+        addFile(text);
+        history.push('/new_file')
     }
 
     let pdfPage = [];
@@ -102,7 +105,7 @@ const Generator = ({loggedIn, addFileToDB}) => {
                     </a>
                 </div>
                 <div className="col s12 m6 l4 center-align">
-                    <button className="btn" onClick={addFile}>Add File To Database</button>
+                    <button className="btn" onClick={addFileFunc}>Add File To Database</button>
                 </div>
             </div>
             
@@ -131,4 +134,4 @@ const mapStateToProps = state => ({
     loggedIn: state.user.loggedIn
 })
 
-export default connect(mapStateToProps, {addFileToDB})(Generator);
+export default connect(mapStateToProps, {addFile})(Generator);

@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema({
     },
     // Unique employee identification number
     emp_code:{
-        type: String
+        type: String,
+        unique: true
     },
     // Employees position in the organisation
     position:{

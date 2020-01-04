@@ -1,11 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const connectDB = require('./config/db')
+const methodOverride = require('method-override');
+const compression = require('compression');
+const connectDB = require('./config/db');
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(express.json({extended: false}));
+app.use(methodOverride('_method'));
+
+if(process.env.NODE_ENV === "production"){
+    app.use(compression());
+    app.use(express.static('client/build'));
+
+    app.get('*', (req, res)=>{
+        res.sendFile(path.resolve(__dirname, 'client', 'build','index.html'));
+    })
+}
 
 //Routes
 app.use('/api/user', require('./routes/api/user'));
