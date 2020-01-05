@@ -5,7 +5,6 @@ import axios from 'axios';
 export const setCurrentUser = user => async dispatch => {
 
     const { email, displayName, photoURL } = user;
-
     const config = {
         headers: {
             'Content-Type': 'application/json'

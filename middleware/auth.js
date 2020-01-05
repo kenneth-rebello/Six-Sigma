@@ -6,7 +6,6 @@ module.exports = function(req, res, next){
         return res.status(401).json({msg: 'Authorization denied.'});
     }
 
-    //Verify token
     try{
         req.user = id;
         next();

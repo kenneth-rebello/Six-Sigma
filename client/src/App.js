@@ -10,17 +10,19 @@ import Scanner from './components/qr/Scanner';
 import Generator from './components/qr/Generator';
 import NewFile from './components/file/NewFile';
 import Register from './components/auth-form/Register';
-
+import AllFiles from './components/files/AllFiles';
 
 import {auth } from './firebase/firebase.utils';
 import { setCurrentUser } from './actions/user.actions';
 import setAuthHeader from './utils/setAuthHeader';
+import PrivateRoute from './components/routing/PrivateRoute';
+import File from './components/file/File';
 
 
 const App = ({currentUser, setCurrentUser}) => {
 
-  if(currentUser){
-    setAuthHeader(currentUser)
+  if(localStorage.token){
+    setAuthHeader(localStorage.token)
   }
 
   useEffect(() => {
@@ -45,9 +47,11 @@ const App = ({currentUser, setCurrentUser}) => {
           <Route exact path="/" component={Home}/>
           <Route path="/auth" render={()=> currentUser ? (<Redirect to="/"/>):<Auth/>}/>
           <Route exact path="/register" component={Register}/>
-          <Route exact path="/scanner" component={Scanner}/>
+          <PrivateRoute exact path="/scanner" component={Scanner}/>
           <Route exact path="/generator" component={Generator}/>
           <Route exact path="/new_file" component={NewFile}/>
+          <PrivateRoute exact path="/files" component={AllFiles}/>
+          <PrivateRoute exact path="/file/:id" component={File}/>
         </div>
       </Switch>
     </Router>

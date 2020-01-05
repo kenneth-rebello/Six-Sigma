@@ -12,17 +12,21 @@ const userReducer = (state = initialState, action) => {
     const {type, payload} = action;
 
     switch(type){
-        case SET_CURRENT_USER:
+        case SET_CURRENT_USER:    
+            localStorage.setItem('token',payload._id);
             return{
                 ...state,
                 currentUser: payload,
-                loggedIn: true
+                loggedIn: true,
+                loading: false
             }
         case UNSET_CURRENT_USER:
+            localStorage.removeItem('token');
             return{
                 ...state,
                 currentUser: null,
-                loggedIn: false
+                loggedIn: false,
+                loading: false
             }
         case FETCH_USERS:
             return{

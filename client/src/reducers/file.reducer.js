@@ -1,4 +1,4 @@
-import { ADD_FILE } from "../redux/types";
+import { ADD_FILE, LOAD_FILE, FETCH_FILES } from "../redux/types";
 
 const initialState = {
     file: null,
@@ -16,6 +16,18 @@ const fileReducer = (state = initialState, action) => {
             return{
                 ...state,
                 newFile: payload,
+                loading: false
+            }
+        case LOAD_FILE:
+            return{
+                ...state,
+                file: payload,
+                loading: false
+            }
+        case FETCH_FILES:
+            return{
+                ...state,
+                files: payload,
                 loading: false
             }
         default: 

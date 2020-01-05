@@ -25,7 +25,9 @@ const Navbar = ({currentUser}) => {
                             </a></li>
                             { !currentUser ? <li><a href="/auth">SignIn</a></li> 
                             : <li>
-                                <a href="#">{currentUser.displayName}</a>
+                                <a href="#" onClick={()=>toggleHidden(!hidden)}>
+                                    {currentUser.displayName}
+                                </a>
                             </li>}
                             { currentUser && <li>
                               <img onClick={()=>toggleHidden(!hidden)} 
@@ -43,11 +45,14 @@ const Navbar = ({currentUser}) => {
                 <li>
                     <ul className="collapsible">
                         <li>
-                            <div class="collapsible-header">File</div>
-                            <div class="collapsible-body">
-                                <li><a href="/generator">New QRCode</a></li>
-                                <li><a href="/new_file">New File</a></li>
-                                <li><a href="/scanner">QR Scanner</a></li>
+                            <div className="collapsible-header">File</div>
+                            <div className="collapsible-body">
+                                <ul>
+                                    <li><a href="/new_file">New File</a></li>
+                                    <li><a href="/generator">New QRCode</a></li>
+                                    <li><a href="/scanner">QR Scanner</a></li>
+                                    <li><a href="/files">All Files</a></li>
+                                </ul>
                             </div>
                         </li> 
                     </ul>
@@ -55,9 +60,11 @@ const Navbar = ({currentUser}) => {
                 <li>
                     <ul className="collapsible">
                         <li>
-                            <div class="collapsible-header">User</div>
-                            <div class="collapsible-body">
-                                <li><a href="/register">Register</a></li>
+                            <div className="collapsible-header">User</div>
+                            <div className="collapsible-body">
+                                <ul>
+                                    <li><a href="/register">Register</a></li>
+                                </ul>
                             </div>
                         </li> 
                     </ul>
@@ -66,9 +73,10 @@ const Navbar = ({currentUser}) => {
 
 
             <ul id="file-dropdown" className="dropdown-content">
-                <li><a href="/generator">New QRCode</a></li>
                 <li><a href="/new_file">New File</a></li>
-                <li><a href="/scanner">Scanner</a></li>
+                <li><a href="/generator">New QRCode</a></li>
+                <li><a href="/scanner">QR Scanner</a></li>
+                <li><a href="/files">All Files</a></li>
             </ul>
             <ul id="user-dropdown" className="dropdown-content">
                 <li><a href="/register">Register</a></li>

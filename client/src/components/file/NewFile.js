@@ -3,8 +3,9 @@ import './File.css'
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { fetchAllUsers } from '../../actions/user.actions';
+import { addFileToDB } from '../../actions/file.actions';
 
-const NewFile = ({fileNo, users, fetchAllUsers}) => {
+const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
 
     useEffect(()=>{
         fetchAllUsers();
@@ -37,7 +38,7 @@ const NewFile = ({fileNo, users, fetchAllUsers}) => {
         users.forEach(each => {
             temp.push({
                 label: each.displayName,
-                value: each.email,
+                value: each._id,
                 position: counter
             })
         });
@@ -61,7 +62,12 @@ const NewFile = ({fileNo, users, fetchAllUsers}) => {
 
     const Submitter = (e) => {
         e.preventDefault();
-
+        addFileToDB(formData);
+        setFormData({
+            file_number: "",
+            name: "",
+            path: []
+        })
     }
 
     const Changer = e => {
@@ -88,7 +94,7 @@ const NewFile = ({fileNo, users, fetchAllUsers}) => {
             <div className="col s1">
                 {
                     path.length > i &&
-                    <button className="btn" onClick={()=>count(counter+1)}>
+                    <button className="btn" onClick={()=>count(counter+1)} disabled={i<counter || path.length < counter}>
                         +
                     </button>
                 }
@@ -108,18 +114,26 @@ const NewFile = ({fileNo, users, fetchAllUsers}) => {
             <form onSubmit={e=>Submitter(e)}>
                 <div className="row">
                     <div className="input-field col s12 m6">
-                        <input type="text" id="file_number" value={file_number} onChange={e=>Changer(e)}/> 
+                        <input type="text" id="file_number" value={file_number} onChange={e=>Changer(e)} required/> 
                         <label htmlFor="file_number">File Number</label>
-                        <span class="helper-text" data-error="wrong" data-success="right">Enter a valid file number</span>
+                        <span className="helper-text" data-error="wrong" data-success="right">Enter a valid file number</span>
                     </div>
                     <div className="input-field col s12 m6">
                         <input type="text" id="name" value={name} onChange={e=>Changer(e)}/> 
                         <label htmlFor="name">File Name</label>
-                        <span class="helper-text" data-error="wrong" data-success="right">Optional</span>
+                        <span className="helper-text" data-error="wrong" data-success="right">Optional</span>
                     </div>
                 </div>
                 <div className="row">
                     {pathSelects}
+                </div>
+                <div className="row">
+                    <div className="input-field col s6">
+                        <input className="btn green" type="submit" value="Add"/>
+                        <span className="helper-text" data-error="wrong" data-success="right">
+                            Add new file to database
+                        </span>
+                    </div>
                 </div>
             </form>
         </div>
@@ -131,4 +145,4 @@ const mapStateToProps = state => ({
     users: state.user.users
 })
 
-export default connect(mapStateToProps, {fetchAllUsers})(NewFile);
+export default connect(mapStateToProps, {fetchAllUsers,addFileToDB})(NewFile);

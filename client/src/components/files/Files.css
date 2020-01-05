@@ -1,0 +1,50 @@
+@media screen and (max-width:800px) and (min-width:400px){
+    .all-files{
+        margin: unset;
+        margin-right: 5rem;
+    }
+}
+
+@media screen and (max-width:400px){
+    .all-files{
+        margin: unset;
+        margin-right: 10rem;
+    }
+}
+
+.file-item{
+    margin: 1rem;
+}
+
+.file-item .label{
+    color: black;
+    font-size: 0.9rem;
+    margin: 0.5rem;
+    margin-left: 0;
+}
+
+.file-item .title{
+    color: teal;
+    font-weight: bold;
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.file-item .subtitle{
+    color: darkslategray;
+    font-weight: bold;
+    font-size: 1.3rem;
+    display: block;
+}
+
+.file-item .name{
+    color: darkslategray;
+    font-weight: bold;
+    font-size: 1rem;
+    display: block;
+}
+
+.file-item .col{
+    max-height: 3.2rem;
+}

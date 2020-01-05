@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const setAuthHeader = currentUser => {
-    if(currentUser._id) {
-        axios.defaults.headers.common['x-auth-token'] = currentUser._id;
+const setAuthHeader = token => {
+    if(token) {
+        axios.defaults.headers.common['x-auth-token'] = token;
     }else{
-        delete axios.defaults.headers.common('x-auth-token');
+        axios.defaults.headers.common['x-auth-token'] = undefined;
     }
 }
 

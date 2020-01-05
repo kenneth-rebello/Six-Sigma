@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { ADD_FILE } from '../redux/types';
+import { ADD_FILE, LOAD_FILE, FETCH_FILES } from '../redux/types';
 
-export const addFile = fileNo => async dispatch => {
+export const addFile = fileNo => dispatch => {
 
     dispatch({
         type: ADD_FILE,
@@ -12,11 +12,57 @@ export const addFile = fileNo => async dispatch => {
 
 export const addFileToDB = fileData => async dispatch => {
     
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
+    try {
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
+        const res = await axios.post('api/file/new_file', fileData, config);
+    
+        dispatch({
+            type: LOAD_FILE,
+            payload: res.data
+        })
+
+        
+    } catch (err) {
+        
     }
-    await axios.post('api/file/new_file', fileData, config)
+
+}
+
+export const getAllFiles = () => async dispatch => {
+
+    try {
+
+        const res = await axios.get('/api/file');
+
+        dispatch({
+            type: FETCH_FILES,
+            payload: res.data
+        })
+
+    } catch (err) {
+        console.log(err.response)
+    }
+
+}
+
+export const getFileById = id => async dispatch => {
+
+    try {
+
+        const res = await axios.get(`/api/file/one/${id}`);
+
+        dispatch({
+            type: LOAD_FILE,
+            payload: res.data
+        })
+
+    } catch (err) {
+        
+    }
 
 }
