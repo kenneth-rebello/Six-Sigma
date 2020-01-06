@@ -5,3 +5,19 @@ body{
 .page{
   padding: 1rem;
 }
+
+#suggestbtn{
+  display: none;
+}
+
+.own-default{
+  border-style: groove;
+  border-radius: 25px;
+  background: transparent;
+  color: gray;
+  font-size: 1.1rem;
+}
+
+.own-default::v{
+  color: gray;
+}

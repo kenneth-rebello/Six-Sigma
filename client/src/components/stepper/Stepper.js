@@ -38,8 +38,8 @@ function Stepper({
             icon={step.icon}
             href={step.href}
             onClick={step.onClick}
-            active={!(disabledSteps || []).includes(index) && index === activeStep}
-            completed={!(disabledSteps || []).includes(index) && index < activeStep}
+            active={index === activeStep}
+            completed={index < activeStep}
             first={index === 0}
             isLast={index === steps.length - 1}
             index={index}

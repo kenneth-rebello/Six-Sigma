@@ -25,7 +25,8 @@ router.post('/new_file', [auth], async(req, res)=>{
         req.body.path.map(path => {
             lineage[path.position] = {
                 position: path.position,
-                user: path.value
+                user: path.value,
+                notes: path.notes
             }
         });
 

@@ -20,15 +20,17 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
     const [formData, setFormData] = useState({
         file_number: fileNo ? fileNo : "",
         name: "",
-        path: []
+        path: [],
+        notes: ""
     });
 
     useEffect(()=>{
         provideOptions();
+        if(counter!==0) document.getElementById(`notes${counter-1}`).disabled = true
     },[counter])
     
     useEffect(()=>{
-        console.log(formData)
+        // console.log(formData)
     },[formData])
 
     const [options, setOptions] = useState([]);
@@ -52,12 +54,18 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
             ...formData,
             path: temp
         });
+        document.getElementById(`notes${option.position}`).disabled = false
     }
 
     const undoSelect = (i) => {
         count(i-2);
         let temp = formData.path;
-        temp = temp.slice(0,i-2)
+        temp = temp.slice(0,i-1);
+        document.getElementById(`notes${i-2}`).disabled = false
+        setFormData({
+            ...formData,
+            path: temp
+        })
     }
 
     const Submitter = (e) => {
@@ -68,16 +76,28 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
             name: "",
             path: []
         })
+        count(0)
     }
 
-    const Changer = e => {
-        setFormData({
-            ...formData,
-            [e.target.id]: e.target.value
-        })
+    const Changer = ( e ) => {
+        if(e.target.id.includes("notes")){
+            let note = e.target.value;
+            let temp = formData.path;
+            temp[i-1].notes = note
+            setFormData({
+                ...formData,
+                notes: note,
+                path: temp
+            });
+        }else{
+            setFormData({
+                ...formData,
+                [e.target.id]: e.target.value
+            })
+        }
     }
 
-    const { file_number, name, path } = formData;
+    const { file_number, name, path, notes } = formData;
 
     let pathSelects = []
     for(var i=0; i<=counter; i++){
@@ -90,6 +110,13 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
                     options={options}
                     isDisabled={i<counter}
                 />
+                <div className="input-field col s12 m6">
+                    <input type="text" id={`notes${i}`} onChange={e=>Changer(e)} disabled/> 
+                    <label htmlFor="notes">Additional Notes</label>
+                    <span className="helper-text" data-error="wrong" data-success="right">
+                        Add notes for this user if needed (will only be visible to this user)
+                    </span>
+                </div>
             </div>
             <div className="col s1">
                 {
@@ -99,7 +126,7 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
                     </button>
                 }
                 {
-                    i===counter-1 &&
+                    i===counter && i!==0 &&
                     
                     <button className="btn red" onClick={()=>undoSelect(i)}>
                         X

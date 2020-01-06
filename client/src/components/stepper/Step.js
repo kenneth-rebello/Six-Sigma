@@ -39,7 +39,8 @@ export default class Step extends Component {
         opacity: defaultOpacity,
         borderWidth: (defaultBorderColor ? defaultBorderWidth : 0),
         borderColor: defaultBorderColor,
-        borderStyle: defaultBorderStyle
+        borderStyle: defaultBorderStyle,
+        cursor: 'pointer'
       },
       activeCircle: {
         backgroundColor: activeColor,
@@ -131,15 +132,15 @@ export default class Step extends Component {
 
     return (
       <div style={ styles.step }>
-        <div style={ circleStyle }>
+        <div style={ circleStyle } onClick={onClick}>
         {active || completed ? (
-          <a href={href} onClick={onClick} style={ styles.index }>{ stepContent }</a>
+          <a href={href} style={ styles.index }>{ stepContent }</a>
         ) : (
           <span style={ styles.index }>{ stepContent }</span>
         )}
         </div>
         {active || completed ? (
-          <a href={href} onClick={onClick} style={ titleStyle }>{ title }</a>
+          <a href={href} style={ titleStyle }>{ title }</a>
         ) : (
           <div style={ titleStyle }>{ title }</div>
         )}

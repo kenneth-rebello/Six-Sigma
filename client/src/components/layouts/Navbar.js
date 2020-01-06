@@ -6,7 +6,27 @@ import SignOut from '../auth/SignOut';
 
 const Navbar = ({currentUser}) => {
 
-    const [hidden, toggleHidden] = useState(false)
+    const [hidden, toggleHidden] = useState(false);
+
+    const guestLinks = (
+        <Fragment>
+            <li><a className="dropdown-trigger" href="#!" data-target="user-dropdown">
+                User
+            </a></li>
+        </Fragment>
+    )
+
+    const authLinks = (
+        <Fragment>
+            <li><a className="dropdown-trigger" href="#!" data-target="file-dropdown">
+                File
+            </a></li>
+            <li><a className="dropdown-trigger" href="#!" data-target="qr-dropdown">
+                QR
+            </a></li>
+        </Fragment>
+    )
+    
 
     return (
         <Fragment>
@@ -17,12 +37,7 @@ const Navbar = ({currentUser}) => {
                         <a href="/" className="brand-logo">Six-Sigma</a>
                         <a data-target="mobile-demo" className="sidenav-trigger">Click</a>
                         <ul className="right hide-on-med-and-down">
-                            <li><a className="dropdown-trigger" href="#!" data-target="file-dropdown">
-                                File
-                            </a></li>
-                            <li><a className="dropdown-trigger" href="#!" data-target="user-dropdown">
-                                User
-                            </a></li>
+                            {currentUser && currentUser.registered ? authLinks : guestLinks}
                             { !currentUser ? <li><a href="/auth">SignIn</a></li> 
                             : <li>
                                 <a href="#" onClick={()=>toggleHidden(!hidden)}>
@@ -49,8 +64,6 @@ const Navbar = ({currentUser}) => {
                             <div className="collapsible-body">
                                 <ul>
                                     <li><a href="/new_file">New File</a></li>
-                                    <li><a href="/generator">New QRCode</a></li>
-                                    <li><a href="/scanner">QR Scanner</a></li>
                                     <li><a href="/files">All Files</a></li>
                                 </ul>
                             </div>
@@ -69,17 +82,32 @@ const Navbar = ({currentUser}) => {
                         </li> 
                     </ul>
                 </li>
+                <li>
+                    <ul className="collapsible">
+                        <li>
+                            <div className="collapsible-header">QR</div>
+                            <div className="collapsible-body">
+                                <ul>
+                                    <li><a href="/generator">New QRCode</a></li>
+                                    <li><a href="/scanner">QR Scanner</a></li>
+                                </ul>
+                            </div>
+                        </li> 
+                    </ul>
+                </li>
             </ul>
 
 
             <ul id="file-dropdown" className="dropdown-content">
                 <li><a href="/new_file">New File</a></li>
-                <li><a href="/generator">New QRCode</a></li>
-                <li><a href="/scanner">QR Scanner</a></li>
                 <li><a href="/files">All Files</a></li>
             </ul>
             <ul id="user-dropdown" className="dropdown-content">
                 <li><a href="/register">Register</a></li>
+            </ul>
+            <ul id="qr-dropdown" className="dropdown-content">
+                <li><a href="/generator">New QRCode</a></li>
+                <li><a href="/scanner">QR Scanner</a></li>
             </ul>
 
         </Fragment>

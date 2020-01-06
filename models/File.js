@@ -9,6 +9,9 @@ const fileSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    details:{
+        type: String
+    },
     owner:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
@@ -34,6 +37,15 @@ const fileSchema = new mongoose.Schema({
             owner:{
                 type:Boolean,
                 default: false
+            },
+            received:{
+                type: Date
+            },
+            dispatched:{
+                type: Date
+            },
+            notes:{
+                type: String
             }
         }
     ]

@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
     picture:{
         type: String
     },
+    registered:{
+        type: Boolean,
+        default: false
+    },
     // Unique employee identification number
     emp_code:{
         type: String,
@@ -58,25 +62,32 @@ const userSchema = new mongoose.Schema({
     },
     record:{
         today:{
-            type: Number
+            type: Number,
+            default: 0
         },
         yesterday:{
-            type: Number
+            type: Number,
+            default: 0
         },
         past_week:{
-            type: Number
+            type: Number,
+            default: 0
         },
         past_month:{
-            type: Number
+            type: Number,
+            default: 0
         },
         past_quarter:{
-            type: Number
+            type: Number,
+            default: 0
         },
         past_year:{
-            type: Number
+            type: Number,
+            default: 0
         },
         all_time:{
-            type: Number
+            type: Number,
+            default: 0
         }
     }
 });

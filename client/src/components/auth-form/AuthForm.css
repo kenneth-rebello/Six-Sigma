@@ -1,0 +1,10 @@
+#supervisor{
+    margin-bottom: 0.5rem;
+}
+
+.help-span{
+    font-size: 0.85rem;
+    margin: 0.3rem;
+    color: gray;
+    font-family: sans-serif;
+}

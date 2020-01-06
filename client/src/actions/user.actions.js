@@ -4,47 +4,96 @@ import axios from 'axios';
 
 export const setCurrentUser = user => async dispatch => {
 
-    const { email, displayName, photoURL } = user;
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
+    try {
+
+        const { email, displayName, photoURL } = user;
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
+        const body = JSON.stringify({email, displayName, photoURL});
+    
+        const res = await axios.post('/api/user', body, config)
+    
+        dispatch({
+            type: SET_CURRENT_USER,
+            payload: res.data
+        })
+        
+    } catch (err) {
+        
     }
-    const body = JSON.stringify({email, displayName, photoURL});
 
-    const res = await axios.post('/api/user', body, config)
-
-    dispatch({
-        type: SET_CURRENT_USER,
-        payload: res.data
-    })
 }
 
 export const unsetCurrentUser = () => dispatch => {
-    auth.signOut();
-    dispatch({
-        type: UNSET_CURRENT_USER
-    })
+
+    try {
+    
+        auth.signOut();
+        dispatch({
+            type: UNSET_CURRENT_USER
+        })
+        
+    } catch (err) {
+        
+    }
+
 }
 
 export const fetchAllUsers = () =>async dispatch => {
 
-    const res = await axios.get('/api/user/all');
+    try {
+     
+        const res = await axios.get('/api/user/all');
 
-    dispatch({
-        type: FETCH_USERS,
-        payload: res.data
-    })
+        dispatch({
+            type: FETCH_USERS,
+            payload: res.data
+        })
+        
+    } catch (err) {
+        
+    }
 
 }
 
 export const fetchSupervisors = () =>async dispatch => {
 
-    const res = await axios.get('/api/user/supervisors');
+    try {
+     
+        const res = await axios.get('/api/user/supervisors');
 
-    dispatch({
-        type: FETCH_USERS,
-        payload: res.data
-    })
-
+        dispatch({
+            type: FETCH_USERS,
+            payload: res.data
+        })
+        
+    } catch (err) {
+        
+    }
 }
+
+export const registerUser = (formData) => async dispatch => {
+
+    try {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const res = await axios.post('/api/user/register', formData, config);
+
+        dispatch({
+            type: SET_CURRENT_USER,
+            payload: res.data
+        })
+
+    } catch (err) {
+        
+    }
+
+} 

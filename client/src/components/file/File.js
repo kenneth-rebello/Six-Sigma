@@ -9,19 +9,27 @@ import FileItem from '../files/FileItem';
 const File = ({match, file, getFileById}) => {
 
     const [steps, setSteps] = useState([]);
-    const [activeStep, setActiveStep] = useState(0)
+    const [activeStep, setActiveStep] = useState(-1);
+
+    const [show, toggleShow] = useState(false);
+
+    const [details, setDetails] = useState({})
 
     useEffect(()=>{
         getFileById(match.params.id)
     },[])
 
     useEffect(()=>{
+        setActiveStep(-1)
         file && createStepper();
     },[file]);
 
     let stepsTemp = [];
     const createStepper = () => {
         file.lineage.map(each => {
+            if(each.owner){
+                setActiveStep(each.position);
+            }
             stepsTemp.push({
                 title: each.user.displayName,
                 onClick: (e) => {
@@ -29,9 +37,6 @@ const File = ({match, file, getFileById}) => {
                     getDetails(each)
                 }
             })
-            if(each.owner){
-                setActiveStep(each.position);
-            }
         });
         setSteps(stepsTemp)
     }
@@ -40,10 +45,7 @@ const File = ({match, file, getFileById}) => {
         console.log(obj)
     }
 
-    const hoverFunc = () => {
-        alert('Hover hua')
-    }
-
+ 
     return (
         file && <div>
             <FileItem file={file}/>

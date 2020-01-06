@@ -11,12 +11,14 @@ import Generator from './components/qr/Generator';
 import NewFile from './components/file/NewFile';
 import Register from './components/auth-form/Register';
 import AllFiles from './components/files/AllFiles';
+import File from './components/file/File';
+import Suggestion from './components/layouts/Suggestion';
+
 
 import {auth } from './firebase/firebase.utils';
 import { setCurrentUser } from './actions/user.actions';
 import setAuthHeader from './utils/setAuthHeader';
 import PrivateRoute from './components/routing/PrivateRoute';
-import File from './components/file/File';
 
 
 const App = ({currentUser, setCurrentUser}) => {
@@ -39,6 +41,7 @@ const App = ({currentUser, setCurrentUser}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+
   return (
     <Router>
       <Navbar/>
@@ -54,12 +57,14 @@ const App = ({currentUser, setCurrentUser}) => {
           <PrivateRoute exact path="/file/:id" component={File}/>
         </div>
       </Switch>
+      <Suggestion/>
     </Router>
   );
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser   
+  currentUser: state.user.currentUser,
+  suggested: state.user.suggested
 })
 
 export default connect(mapStateToProps, {setCurrentUser})(App);
