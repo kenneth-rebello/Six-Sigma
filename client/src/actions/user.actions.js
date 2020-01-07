@@ -1,6 +1,13 @@
-import { SET_CURRENT_USER, UNSET_CURRENT_USER, FETCH_USERS } from "../redux/types";
+import { SET_CURRENT_USER, UNSET_CURRENT_USER, FETCH_USERS, CHECK_ONLINE } from "../redux/types";
 import { auth } from '../firebase/firebase.utils';
 import axios from 'axios';
+
+export const checkIfOnline = result => dispatch => {
+    dispatch({
+        type: CHECK_ONLINE,
+        payload: result
+    })
+}
 
 export const setCurrentUser = user => async dispatch => {
 
@@ -14,7 +21,7 @@ export const setCurrentUser = user => async dispatch => {
         }
         const body = JSON.stringify({email, displayName, photoURL});
     
-        const res = await axios.post('/api/user', body, config)
+        const res = await axios.post('/api/user', body, config);
     
         dispatch({
             type: SET_CURRENT_USER,

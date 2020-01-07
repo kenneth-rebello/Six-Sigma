@@ -16,12 +16,16 @@ import Suggestion from './components/layouts/Suggestion';
 
 
 import {auth } from './firebase/firebase.utils';
-import { setCurrentUser } from './actions/user.actions';
+import { setCurrentUser, checkIfOnline } from './actions/user.actions';
 import setAuthHeader from './utils/setAuthHeader';
 import PrivateRoute from './components/routing/PrivateRoute';
+import ErrorBoundary from './components/error-boundary/ErrorBoundary';
+import OnlineRoute from './components/routing/OnlineRoute';
 
 
-const App = ({currentUser, setCurrentUser}) => {
+const App = (props) => {
+
+  const {currentUser, setCurrentUser, checkIfOnline} = props;
 
   if(localStorage.token){
     setAuthHeader(localStorage.token)
@@ -35,6 +39,8 @@ const App = ({currentUser, setCurrentUser}) => {
       }
     });
 
+    checkIfOnline(window.navigator.onLine);
+
     return () => {
       unsubscribeFromAuth();
     };
@@ -47,14 +53,16 @@ const App = ({currentUser, setCurrentUser}) => {
       <Navbar/>
       <Switch>
         <div className="page">
-          <Route exact path="/" component={Home}/>
-          <Route path="/auth" render={()=> currentUser ? (<Redirect to="/"/>):<Auth/>}/>
-          <Route exact path="/register" component={Register}/>
-          <PrivateRoute exact path="/scanner" component={Scanner}/>
-          <Route exact path="/generator" component={Generator}/>
-          <Route exact path="/new_file" component={NewFile}/>
-          <PrivateRoute exact path="/files" component={AllFiles}/>
-          <PrivateRoute exact path="/file/:id" component={File}/>
+          <ErrorBoundary>
+            <Route exact path="/" component={Home}/>
+            <Route path="/auth" render={()=> currentUser ? (<Redirect to="/"/>):<Auth/>}/>
+            <PrivateRoute exact path="/register" component={Register}/>
+            <PrivateRoute exact path="/scanner" component={Scanner}/>
+            <PrivateRoute exact path="/generator" component={Generator}/>
+            <PrivateRoute exact path="/new_file" component={NewFile}/>
+            <PrivateRoute exact path="/files" component={AllFiles}/>
+            <OnlineRoute exact path="/file/:id" component={File}/>
+          </ErrorBoundary>
         </div>
       </Switch>
       <Suggestion/>
@@ -63,8 +71,7 @@ const App = ({currentUser, setCurrentUser}) => {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser,
-  suggested: state.user.suggested
+  currentUser: state.user.currentUser
 })
 
-export default connect(mapStateToProps, {setCurrentUser})(App);
+export default connect(mapStateToProps, {setCurrentUser, checkIfOnline})(App);

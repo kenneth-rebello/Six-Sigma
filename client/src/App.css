@@ -14,10 +14,10 @@ body{
   border-style: groove;
   border-radius: 25px;
   background: transparent;
-  color: gray;
+  color: black;
   font-size: 1.1rem;
 }
 
-.own-default::v{
-  color: gray;
+.form-label{
+  color: teal;
 }

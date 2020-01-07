@@ -3,7 +3,7 @@ import './Files.css'
 
 const FileItem = ({file}) => {
     return (
-        <div className="file-item">
+        <div className="file-item row">
             <div className="col s12">
                 <div className="card whitesmoke">
                     <div className="card-content row">

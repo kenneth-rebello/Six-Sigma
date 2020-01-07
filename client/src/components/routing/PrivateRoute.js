@@ -7,7 +7,7 @@ const PrivateRoute = ({component: Component, user:{loading, loggedIn}, ...rest})
     
     return (
         <Route {...rest} render = {props => !loading && !loggedIn ? (
-            <Auth/>
+            <Auth msg={"You must be logged in to visit this page"} url={props.location.pathname}/>
         ):(
             <Component {...props}/>
         )}/>

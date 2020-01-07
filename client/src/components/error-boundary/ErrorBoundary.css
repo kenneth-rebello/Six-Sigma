@@ -1,0 +1,28 @@
+.error-overlay{
+    height: 60vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-image{
+    display: inline-block;
+    background-image: url('./error.png');
+    background-size: cover;
+    background-position: center;
+    width: 40vh;
+    height: 50vh;
+}
+
+.error-text{
+    font-size: 30px;
+    color: teal;
+}
+
+.error-subtext{
+    align-self: left;
+    font-size: 15px;
+    color: red;
+}

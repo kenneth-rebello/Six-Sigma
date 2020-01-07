@@ -3,5 +3,22 @@
 }
 
 .stepper{
-    margin-top: 10rem;
+    margin: 1rem;
+}
+
+
+.file-page .description{
+    margin: 1rem;
+    margin-top: 1rem;
+    background-color: whitesmoke;
+    padding: 1rem;
+}
+
+.file-page .heading{
+    font-weight: bolder;
+}
+
+.file-page .desc-text{
+    font-size: 1.2rem;
+    color: teal;
 }

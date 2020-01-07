@@ -11,7 +11,7 @@ router.post('/', async(req, res)=>{
 
     try {
 
-        let user =  await User.findOne({email});
+        let user =  await User.findOne({email}).populate('supervisor','displayName');
 
         if(!user){
             

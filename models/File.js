@@ -9,7 +9,7 @@ const fileSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    details:{
+    description:{
         type: String
     },
     owner:{

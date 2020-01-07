@@ -7,13 +7,10 @@ import { Link } from 'react-router-dom';
 import { getAllFiles } from '../../actions/file.actions';
 import FileItem from './FileItem';
 
-const styles = {
-    row:{
-        backgroundColor: 'teal'
-    }
-}
 
-const AllFiles = ({ files, loading, getAllFiles }) => {
+const AllFiles = (props) => {
+
+    const { files, loading, getAllFiles } = props;
 
     const [size, setSize] = useState({
         height: 0.90*window.innerHeight,
@@ -46,7 +43,7 @@ const AllFiles = ({ files, loading, getAllFiles }) => {
             
             {!loading && <List
                 rowCount={files.length}
-                rowHeight={130}
+                rowHeight={135}
                 rowRenderer={rowRenderer}
                 height={size.height}
                 width={size.width}

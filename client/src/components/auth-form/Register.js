@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import { fetchSupervisors, registerUser } from '../../actions/user.actions';
 
-const Register = ({user, fetchSupervisors, registerUser}) => {
+const Register = ({users, currentUser, fetchSupervisors, registerUser}) => {
 
     useEffect(()=>{
         fetchSupervisors();
@@ -12,7 +12,22 @@ const Register = ({user, fetchSupervisors, registerUser}) => {
 
     useEffect(()=>{
         provideOptions();
-    },[user])
+    },[users])
+
+    useEffect(()=>{
+        if(currentUser){
+            setFormData({
+                displayName: currentUser.displayName ? currentUser.displayName : formData.displayName,
+                emp_code: currentUser.emp_code ? currentUser.emp_code : formData.emp_code,
+                position: currentUser.position ? currentUser.position : formData.position,
+                supervisor: currentUser.supervisor ? {
+                    label: currentUser.supervisor.displayName,
+                    value: currentUser.supervisor._id
+                } : formData.supervisor,
+            });
+            currentUser.displayName &&  document.getElementById('displayName').focus();
+        }
+    },[currentUser])
 
     const [formData, setFormData] = useState({
         displayName:"",
@@ -25,7 +40,7 @@ const Register = ({user, fetchSupervisors, registerUser}) => {
 
     const provideOptions = () => {
         let temp = [];
-        user.users.forEach(each => {
+        users.forEach(each => {
             temp.push({
                 label: each.displayName,
                 value: each._id
@@ -85,20 +100,21 @@ const Register = ({user, fetchSupervisors, registerUser}) => {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="input-field col s12">         
+                    <div className="col s12">
+                        <label className="form-label">Position</label>         
                         <select className="browser-default own-default"
                             id="position" type="text" value={position} onChange={e=>Changer(e)}>
-                            <option value="" disabled>Position</option>
+                            <option value="" disabled>Pick One</option>
                             <option value="Officer">Officer</option>
                         </select>
-                        <span className="helper-text" data-error="wrong" data-success="right">
+                        <span className="help-span" data-error="wrong" data-success="right">
                             *Enter your position in the organisation
                         </span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col s12 ">
-                        <label htmlFor="supervisor">Supervisor</label>
+                        <label className="form-label">Supervisor</label>
                         <Select
                             id="supervisor"
                             value={supervisor}
@@ -121,7 +137,8 @@ const Register = ({user, fetchSupervisors, registerUser}) => {
 }
 
 const mapStateToProps = state => ({
-    user: state.user
+    users: state.user.users,
+    currentUser: state.user.currentUser
 })
 
 export default connect(mapStateToProps, { fetchSupervisors, registerUser })(Register);

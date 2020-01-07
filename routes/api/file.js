@@ -32,6 +32,7 @@ router.post('/new_file', [auth], async(req, res)=>{
 
         file = new File({
             file_number: req.body.file_number,
+            description: req.body.description,
             creator: req.user,
             lineage,
             name: req.body.name ? req.body.name : undefined

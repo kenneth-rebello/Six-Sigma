@@ -21,7 +21,8 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
         file_number: fileNo ? fileNo : "",
         name: "",
         path: [],
-        notes: ""
+        notes: "",
+        description: ""
     });
 
     useEffect(()=>{
@@ -74,6 +75,7 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
         setFormData({
             file_number: "",
             name: "",
+            description: "",
             path: []
         })
         count(0)
@@ -97,7 +99,7 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
         }
     }
 
-    const { file_number, name, path, notes } = formData;
+    const { file_number, name, path, description } = formData;
 
     let pathSelects = []
     for(var i=0; i<=counter; i++){
@@ -149,6 +151,13 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
                         <input type="text" id="name" value={name} onChange={e=>Changer(e)}/> 
                         <label htmlFor="name">File Name</label>
                         <span className="helper-text" data-error="wrong" data-success="right">Optional</span>
+                    </div>
+                    <div className="input-field col s12">
+                        <input type="text" id="description" value={description} onChange={e=>Changer(e)} required/> 
+                        <label htmlFor="description">Description</label>
+                        <span className="helper-text" data-error="wrong" data-success="right">
+                            Additional details about this file that will be useful to anyone concerned
+                        </span>
                     </div>
                 </div>
                 <div className="row">

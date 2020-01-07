@@ -1,19 +1,11 @@
-@media screen and (max-width:800px) and (min-width:400px){
-    .all-files{
-        margin: unset;
-        margin-right: 5rem;
-    }
-}
-
-@media screen and (max-width:400px){
-    .all-files{
-        margin: unset;
-        margin-right: 10rem;
-    }
-}
-
 .file-item{
-    margin: 1rem;
+    margin-bottom: 10rem;
+}
+
+.file-item .card{
+    height: fit-content;
+    border: 3px;
+    border-style: ridge;
 }
 
 .file-item .label{
@@ -26,7 +18,7 @@
 .file-item .title{
     color: teal;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     display: block;
     margin-bottom: 1rem;
 }
