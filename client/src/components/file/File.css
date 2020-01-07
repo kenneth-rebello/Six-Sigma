@@ -18,7 +18,17 @@
     font-weight: bolder;
 }
 
+.file-page .modal-title{
+    font-size: 1.5rem;
+    font-weight: bolder;
+}
+
 .file-page .desc-text{
     font-size: 1.2rem;
     color: teal;
+}
+
+.details{
+    color: darkslategrey;
+    font-size: 1.2rem;
 }

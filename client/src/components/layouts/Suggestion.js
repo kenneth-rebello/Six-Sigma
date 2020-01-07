@@ -1,28 +1,42 @@
-import React from 'react'
-const Suggestion = ({history}) => {
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import Modal from 'react-modal';
+import { overlay, content } from '../../utils/modalStyles';
 
-    const goToRegister = () => {
-        document.getElementById('suggest-close-btn').click();
-    }
+const Suggestion = ({loading, currentUser}) => {
+
+    const [open, toggleOpen] = useState(false);
+
+    useEffect(()=>{
+        if (!loading && currentUser && !currentUser.registered) setTimeout(()=>{
+            toggleOpen(true)
+        },3000) 
+    },[loading])
+
 
     return (
         <div>
-            <a id="suggestbtn" className="waves-effect waves-light btn modal-trigger" href="#suggest">
-                Click
-            </a>
-            <div id="suggest" className="modal bottom-sheet">
+            <Modal
+                isOpen={open}
+                onRequestClose={()=>toggleOpen(false)}
+                style={{
+                    overlay: overlay,
+                    content: content
+                }}
+            >
                 <div className="modal-content">
-                    <p>You need to be a registered user </p>
-                    <a href="/register" className="btn" onClick={()=>goToRegister()}>Register now</a>
+                    <p>You need to be a registered user to actively use the Six Sigma file tracking app.
+                        Most features will remain locked until a user is properly registered</p>
+                    <a href="/register" className="btn" onClick={()=>toggleOpen(false)}>Register now</a>
                 </div>
-                <div className="modal-footer" style={{display: 'none'}}>
-                    <a href="!#" id="suggest-close-btn" className="modal-close waves-effect waves-green btn-flat">
-                        Register
-                    </a>
-                </div>
-            </div> 
+            </Modal>
         </div>
     )
 }
 
-export default Suggestion;
+const mapStateToProps = state => ({
+    loading: state.user.loading,
+    currentUser: state.user.currentUser
+})
+
+export default connect(mapStateToProps)(Suggestion);

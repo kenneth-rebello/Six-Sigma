@@ -5,11 +5,14 @@ import Stepper from '../stepper/Stepper';
 
 import { getFileById } from '../../actions/file.actions';
 import FileItem from '../files/FileItem';
+import Modal from 'react-modal';
+import { overlay, content } from '../../utils/modalStyles';
 
 const File = ({match, file, currentUser, getFileById}) => {
 
     const [steps, setSteps] = useState([]);
     const [activeStep, setActiveStep] = useState(-1);
+    const [open, toggleOpen] = useState(false)
 
     const [details, setDetails] = useState("")
 
@@ -42,12 +45,10 @@ const File = ({match, file, currentUser, getFileById}) => {
     const getDetails = obj => {
         if(obj.user._id===currentUser._id && obj.notes){
             setDetails(obj.notes);
-            const btn = document.getElementById("detail-btn");
-            btn.click();
+            toggleOpen(true)
         }
     }
 
- 
     return (
         file && <div className="file-page">
             <FileItem file={file}/>
@@ -67,16 +68,20 @@ const File = ({match, file, currentUser, getFileById}) => {
                     titleFontSize='1rem'
                 />
             </div>
-            <a id="detail-btn" className="waves-effect waves-light btn modal-trigger" href="#detail-modal" 
-            style={{display:'none'}}>
-                Click
-            </a>
-            <div id="detail-modal" className="modal">
-                <div className="modal-content">
-                    <h4 className="heading teal-text">Notes for {currentUser.displayName}</h4>
-                    <p>{details}</p>
-                </div>
-            </div>
+           
+            <Modal
+                isOpen={open}
+                onRequestClose={()=>toggleOpen(false)}
+                style={{
+                    overlay: overlay,
+                    content: {...content,
+                        color: 'teal'
+                    }
+                }}
+            >
+                <h4 className="modal-title">Notes for {currentUser.displayName}</h4>
+                <p className="details">{details}</p>
+            </Modal>
         </div>
     )
 }

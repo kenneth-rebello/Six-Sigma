@@ -69,7 +69,9 @@ router.post('/register', [auth], async(req,res)=>{
         const user = await User.findById(req.user);
     
         if(!user){
-            //TO DO - return an authorization error
+            return res.status(400).json({
+                errors: [{msg: 'User was not found, please try again'}]
+            });
         }
         
         //TO DO - add code for department

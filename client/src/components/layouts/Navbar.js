@@ -32,7 +32,7 @@ const Navbar = ({currentUser}) => {
                                     {currentUser.displayName}
                                 </a>
                             </li>}
-                            { currentUser && <li>
+                            { currentUser && currentUser.picture && <li>
                               <img onClick={()=>toggleHidden(!hidden)} 
                                 className="nav-img" src={currentUser.picture} />  
                             </li>}

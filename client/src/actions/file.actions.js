@@ -66,3 +66,28 @@ export const getFileById = id => async dispatch => {
     }
 
 }
+
+export const fileQRScanned = name => async dispatch => {
+    try {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const body = JSON.stringify({name})
+
+        const res = await axios.post('api/file/scan', body, config);
+
+        dispatch({
+            type: LOAD_FILE,
+            payload: res.data
+        })
+
+        return res.data._id;
+
+    } catch (err) {
+        
+    }
+}

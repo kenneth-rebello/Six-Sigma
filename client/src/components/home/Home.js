@@ -1,14 +1,7 @@
-import React, {useEffect} from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import './Home.css';
 
-const Home = ({loading, currentUser}) => {
-
-    useEffect(()=>{
-        if (!loading && currentUser && !currentUser.registered) setTimeout(()=>{
-            document.getElementById('suggestbtn').click();
-        },3000) 
-    },[loading])
+const Home = () => {
 
     return (
         <div className="home">
@@ -17,9 +10,4 @@ const Home = ({loading, currentUser}) => {
     )
 }
 
-const mapStateToProps = state => ({
-    loading: state.user.loading,
-    currentUser: state.user.currentUser
-})
-
-export default connect(mapStateToProps)(Home);
+export default Home;
