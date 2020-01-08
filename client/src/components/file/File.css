@@ -2,6 +2,17 @@
     max-height: 10px;
 }
 
+.date-picker{
+    margin: 5%;
+    margin-top: 0;
+}
+
+.new-file .my-label{
+    font-size: 1rem;
+    display: block;
+    margin: 1rem;
+}
+
 .stepper{
     margin: 1rem;
 }

@@ -8,10 +8,10 @@ const Scanner = ({ fileQRScanned, history }) => {
 
     const [result, setResult] = useState('No image detected')
 
-    const handleScan = data => {
+    const handleScan = async data => {
         if (data) {
             setResult(data)
-            const id = fileQRScanned(data);
+            const id = await fileQRScanned(data);
             history.push(`/file/${id}`)
         }
     }

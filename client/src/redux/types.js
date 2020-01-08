@@ -5,6 +5,7 @@ export const FETCH_USERS = "FETCH_USERS";
 export const ADD_FILE = "ADD_FILE";
 export const LOAD_FILE = "LOAD_FILE";
 export const FETCH_FILES = "FETCH_FILES";
+export const FETCH_OWN_FILES = "FETCH_OWN_FILES";
 
 
 export const CHECK_ONLINE = "CHECK_ONLINE";

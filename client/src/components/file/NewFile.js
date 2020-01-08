@@ -28,6 +28,7 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
     useEffect(()=>{
         provideOptions();
         if(counter!==0) document.getElementById(`notes${counter-1}`).disabled = true
+        if(counter!==0) document.getElementById(`deadline${counter-1}`).disabled = true
     },[counter])
     
     useEffect(()=>{
@@ -55,7 +56,8 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
             ...formData,
             path: temp
         });
-        document.getElementById(`notes${option.position}`).disabled = false
+        document.getElementById(`notes${option.position}`).disabled = false;
+        document.getElementById(`deadline${option.position}`).disabled = false;
     }
 
     const undoSelect = (i) => {
@@ -63,6 +65,7 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
         let temp = formData.path;
         temp = temp.slice(0,i-1);
         document.getElementById(`notes${i-2}`).disabled = false
+        document.getElementById(`deadline${i-2}`).disabled = false
         setFormData({
             ...formData,
             path: temp
@@ -85,12 +88,22 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
         if(e.target.id.includes("notes")){
             let note = e.target.value;
             let temp = formData.path;
+            console.log(i)
             temp[i-1].notes = note
             setFormData({
                 ...formData,
                 notes: note,
                 path: temp
             });
+        }else if(e.target.id.includes("deadline")){
+            let date = e.target.value;
+            let temp = formData.path;
+            console.log(i)
+            temp[i-1].deadline = date;
+            setFormData({
+                ...formData,
+                path: temp
+            })
         }else{
             setFormData({
                 ...formData,
@@ -118,6 +131,11 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
                     <span className="helper-text" data-error="wrong" data-success="right">
                         Add notes for this user if needed (will only be visible to this user)
                     </span>
+                </div>
+                <div className="col s12 m6">
+                    <label htmlFor="deadline">Deadline</label>
+                    <input type="date" className="date-picker"  id={`deadline${i}`} 
+                    onChange={e=>Changer(e)} required disabled/>
                 </div>
             </div>
             <div className="col s1">

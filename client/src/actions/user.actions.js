@@ -38,6 +38,7 @@ export const unsetCurrentUser = () => dispatch => {
 
     try {
     
+        console.log('Here')
         auth.signOut();
         dispatch({
             type: UNSET_CURRENT_USER

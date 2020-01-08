@@ -37,6 +37,21 @@ router.get('/one/:id', [auth], async(req, res)=>{
 
 });
 
+router.get('/own', [auth], async(req,res)=>{
+    try{
+
+        const files = await File.find({owner: req.user})
+        .populate('creator',['displayName','email'])
+        .populate('owner',['displayName','email'])
+        .populate('lineage.user',['displayName', 'email']);
+
+        res.json(files)
+
+    }catch{
+
+    }
+})
+
 
 router.post('/new_file', [auth], async(req, res)=>{
     
@@ -47,7 +62,8 @@ router.post('/new_file', [auth], async(req, res)=>{
             lineage[path.position] = {
                 position: path.position,
                 user: path.value,
-                notes: path.notes
+                notes: path.notes,
+                deadline: path.deadline
             }
         });
 
@@ -79,23 +95,52 @@ router.post('/scan', [auth], async(req,res)=>{
 
         if(file.owner==req.user){
             return res.status(400).json({
-                errors: [{msg: 'You already own this file'}]
+                errors: [{msg: 'You already own this file'}],
+                id: file.id
             });
         }
 
         let inPath = false
         let index = -1
-        file.lineage.forEach((point, idx) => {
-            if(point.user==req.user){
+        file.lineage.every((point, idx) => {
+            if(point.user==req.user && point.owner && !point.done){
                 inPath = true
                 point.owner = true,
                 point.received = Date.now()
+                index = idx
+                return false;
             }
+            return true
         });
+
+        const prev = file.lineage[index-1]
+
+        if(prev){
+            if(!prev.owner){
+                return res.status(400).json({
+                    errors: [{
+                        msg: 'The previous user must receive this file before you, this scan will not be recorded, please send back the file.',
+                    }],
+                    id: file.id
+                });
+            }
+    
+            if(!prev.done){
+                return res.status(400).json({
+                    errors: [{
+                        msg: 'The previous user must mark this file done before you, this scan will not be recorded, please ask previous user to mark their work complete.',
+                    }],
+                    id: file.id
+                });
+            }
+        }
 
         if(!inPath){
             return res.status(401).json({
-                errors: [{msg: 'Sorry you are not authorized to posess this file, if you do kindly return it'}]
+                errors: [{
+                    msg: 'Sorry you are not authorized to posess this file, if you do kindly return it, this scan is recorded for security reasons'
+                }],
+                id: file.id
             });
         }else{
             file.owner = req.user

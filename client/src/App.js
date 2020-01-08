@@ -21,6 +21,7 @@ import setAuthHeader from './utils/setAuthHeader';
 import PrivateRoute from './components/routing/PrivateRoute';
 import ErrorBoundary from './components/error-boundary/ErrorBoundary';
 import OnlineRoute from './components/routing/OnlineRoute';
+import Alert from './components/layouts/Alert';
 
 
 const App = (props) => {
@@ -51,6 +52,7 @@ const App = (props) => {
   return (
     <Router>
       <Navbar/>
+      <Alert/>
       <Switch>
         <div className="page">
           <ErrorBoundary>

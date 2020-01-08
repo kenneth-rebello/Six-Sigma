@@ -29,3 +29,20 @@ nav{
 .collapsible-header{
     margin-left: 1rem;
 }
+
+.sign-out-link{
+    border: none;
+    background-color: white;
+    margin-left: 2rem;
+    width: 100%;
+    color: black;
+    text-align: left;
+    height: 50px;
+}
+
+.sidenav .username{
+    margin-left: 1.8rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: teal;
+}

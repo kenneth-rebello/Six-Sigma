@@ -38,7 +38,13 @@ const fileSchema = new mongoose.Schema({
                 type:Boolean,
                 default: false
             },
+            deadline:{
+                type: Date
+            },
             received:{
+                type: Date
+            },
+            completed:{
                 type: Date
             },
             dispatched:{
