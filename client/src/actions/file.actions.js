@@ -29,6 +29,7 @@ export const addFileToDB = fileData => async dispatch => {
 
         
     } catch (err) {
+        console.log(err)
         const errors = err.response.data.errors;
         if(errors){
             errors.forEach(error => dispatch(setAlert(error.msg)));
@@ -49,6 +50,7 @@ export const getAllFiles = () => async dispatch => {
         })
 
     } catch (err) {
+        console.log(err)
         const errors = err.response.data.errors;
         if(errors){
             errors.forEach(error => dispatch(setAlert(error.msg)));
@@ -69,6 +71,7 @@ export const getFileById = id => async dispatch => {
         })
 
     } catch (err) {
+        console.log(err)
         const errors = err.response.data.errors;
         if(errors){
             errors.forEach(error => dispatch(setAlert(error.msg)));
@@ -90,10 +93,10 @@ export const getOwnerFiles = () => async dispatch => {
 
     } catch (err) {
         console.log(err)
-        // const errors = err.response.data.errors;
-        // if(errors){
-        //     errors.forEach(error => dispatch(setAlert(error.msg)));
-        // }
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
     }
 
 }
@@ -109,8 +112,6 @@ export const fileQRScanned = name => async dispatch => {
 
         const body = JSON.stringify({name})
 
-        console.log(body)
-
         const res = await axios.post('api/file/scan', body, config);
 
         dispatch({
@@ -121,6 +122,7 @@ export const fileQRScanned = name => async dispatch => {
         return res.data._id;
 
     } catch (err) {
+        console.log(err)
         const errors = err.response.data.errors;
         if(errors){
             errors.forEach(error => dispatch(setAlert(error.msg)));

@@ -29,7 +29,11 @@ export const setCurrentUser = user => async dispatch => {
         })
         
     } catch (err) {
-        
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
     }
 
 }
@@ -38,14 +42,17 @@ export const unsetCurrentUser = () => dispatch => {
 
     try {
     
-        console.log('Here')
         auth.signOut();
         dispatch({
             type: UNSET_CURRENT_USER
         })
         
     } catch (err) {
-        
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
     }
 
 }
@@ -62,7 +69,11 @@ export const fetchAllUsers = () =>async dispatch => {
         })
         
     } catch (err) {
-        
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
     }
 
 }
@@ -79,7 +90,11 @@ export const fetchSupervisors = () =>async dispatch => {
         })
         
     } catch (err) {
-        
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
     }
 }
 
@@ -101,7 +116,11 @@ export const registerUser = (formData) => async dispatch => {
         })
 
     } catch (err) {
-        
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
     }
 
 } 
