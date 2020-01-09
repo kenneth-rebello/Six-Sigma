@@ -1,6 +1,7 @@
 import { SET_CURRENT_USER, UNSET_CURRENT_USER, FETCH_USERS, CHECK_ONLINE } from "../redux/types";
 import { auth } from '../firebase/firebase.utils';
 import axios from 'axios';
+import { setAlert } from './alert.action';
 
 export const checkIfOnline = result => dispatch => {
     dispatch({
