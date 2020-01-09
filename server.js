@@ -1,13 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
 const compression = require('compression');
 const connectDB = require('./config/db');
 
 const app = express();
 
 app.use(bodyParser.json());
-app.use(methodOverride('_method'));
 
 if(process.env.NODE_ENV === "production"){
     app.use(bodyParser.urlencoded({extended: true}));
