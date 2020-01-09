@@ -8,7 +8,7 @@ const OwnedTab = ({files}) => {
 
     const [size, setSize] = useState({
         height: 0.90*window.innerHeight,
-        width: 0.97*window.innerWidth
+        width: 0.75*window.innerWidth
     })
 
     useEffect(()=>{
@@ -18,7 +18,7 @@ const OwnedTab = ({files}) => {
     const updateSize = () =>{
         setSize({
             height: 0.90*window.innerHeight,
-            width: 0.97*window.innerWidth
+            width: 0.75*window.innerWidth
         });
     }
 
