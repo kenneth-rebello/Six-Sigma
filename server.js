@@ -1,18 +1,14 @@
 const express = require('express');
-const cors = require('cors');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const compression = require('compression');
-const enforce = require('express-sslify');
 const connectDB = require('./config/db');
 
 const app = express();
 
-app.use(enforce.HTTPS({trustProtoHeader: true}))
 app.use(bodyParser.json());
 app.use(express.json({extended: false}));
 app.use(methodOverride('_method'));
-app.use(cors());
 
 if(process.env.NODE_ENV === "production"){
     app.use(compression());

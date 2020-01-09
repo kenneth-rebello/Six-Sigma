@@ -8,37 +8,41 @@ import UrgentTab from './tabs/UrgentTab';
 
 const Dashboard = ({files, currentUser}) => {
 
-    let today = new Date;
-    let urgent = [];
-    files.map(file=>{
-        file.lineage.every(user => {
-            if(user.user._id===currentUser._id && user.owner && !user.done){
-                if(user.deadline){
-                    let deadline = user.deadline.replace('T','-').split('-')
+    let pages = [];
+    
+    if(currentUser){
+        let today = new Date;
+        let urgent = [];
+        files.map(file=>{
+            file.lineage.every(user => {
+                if(user.user._id===currentUser._id && user.owner && !user.done){
+                    if(user.deadline){
+                        let deadline = user.deadline.replace('T','-').split('-')
 
-                    if(deadline[1]-1==today.getMonth()){
-                        //Same month
-                        if( today.getDate() > deadline[2]-4){
-                            //3 days
-                            urgent.push(file)
+                        if(deadline[1]-1==today.getMonth()){
+                            //Same month
+                            if( today.getDate() > deadline[2]-4){
+                                //3 days
+                                urgent.push(file)
+                            }
                         }
                     }
+                    return false;
                 }
-                return false;
-            }
-            return true
+                return true
+            })
         })
-    })
-    
-    const presidents = [
-        { name: 'Owned Files', component: <OwnedTab files={files}/> },
-        { name: 'Urgent Files', component: <UrgentTab files={urgent}/> }
-    ];
+        pages = [
+            { name: 'Owned Files', component: <OwnedTab files={files}/> },
+            { name: 'Urgent Files', component: <UrgentTab files={urgent}/> }
+        ];
+    }   
+     
      
     const getTabs = () => {
-      return presidents.map((president, index) => ({
-        title: president.name,
-        getContent: () => president.component,
+      return pages.map((page, index) => ({
+        title: page.name,
+        getContent: () => page.component,
         key: index,
         tabClassName: 'tab',
         panelClassName: 'panel',
