@@ -28,7 +28,7 @@ router.post('/', async(req, res)=>{
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({errors: [{msg: err.message}]});
+        res.status(400).json({errors: [{msg: err.message}]});
     }
 
 })
@@ -43,7 +43,7 @@ router.get('/all', async (req, res)=>{
         
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({errors: [{msg: err.message}]});
+        res.status(400).json({errors: [{msg: err.message}]});
     }
 
 })
@@ -58,7 +58,7 @@ router.get('/supervisors', async (req, res)=>{
         
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({errors: [{msg: err.message}]});
+        res.status(400).json({errors: [{msg: err.message}]});
     }
 
 });
@@ -93,7 +93,7 @@ router.post('/register', [auth], async(req,res)=>{
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({errors: [{msg: err.message}]});
+        res.status(400).json({errors: [{msg: err.message}]});
     }
 })
 
