@@ -15,7 +15,7 @@ router.get('/', [auth], async(req,res)=>{
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server Error');
+        res.status(500).json({errors: [{msg: err.message}]});
     }
 })
 
@@ -48,7 +48,8 @@ router.get('/own', [auth], async(req,res)=>{
         res.json(files)
 
     }catch{
-
+        console.error(err.message);
+        res.status(500).json({errors: [{msg: err.message}]});
     }
 })
 
@@ -81,7 +82,7 @@ router.post('/new_file', [auth], async(req, res)=>{
         
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server Error');
+        res.status(500).json({errors: [{msg: err.message}]});
     }
     
 });
@@ -152,7 +153,7 @@ router.post('/scan', [auth], async(req,res)=>{
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server Error');
+        res.status(500).json({errors: [{msg: err.message}]});
     }
 });
 
