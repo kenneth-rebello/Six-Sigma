@@ -3,18 +3,18 @@ import './File.css';
 import { connect } from 'react-redux';
 import Stepper from '../stepper/Stepper';
 
-import { getFileById } from '../../actions/file.actions';
+import { getFileById, markFileDone } from '../../actions/file.actions';
 import FileItem from '../files/FileItem';
 import Modal from 'react-modal';
 import { overlay, content } from '../../utils/modalStyles';
 
-const File = ({match, file, currentUser, getFileById}) => {
+const File = ({match, history, file, currentUser, getFileById, markFileDone}) => {
 
     const [steps, setSteps] = useState([]);
     const [activeStep, setActiveStep] = useState(-1);
-    const [open, toggleOpen] = useState(false)
-
-    const [details, setDetails] = useState("")
+    const [open, toggleOpen] = useState(false);
+    const [details, setDetails] = useState("");
+    const [owner, setOwner] = useState({});
 
     useEffect(()=>{
         getFileById(match.params.id)
@@ -30,6 +30,7 @@ const File = ({match, file, currentUser, getFileById}) => {
         file.lineage.map(each => {
             if(each.owner){
                 setActiveStep(each.position);
+                setOwner(each)
             }
             stepsTemp.push({
                 title: each.user.displayName,
@@ -49,9 +50,20 @@ const File = ({match, file, currentUser, getFileById}) => {
         }
     }
 
+    const markAsComplete = async id => {
+        const fileID = await markFileDone(id);
+        history.push(`/file/${fileID}`);
+    }
+
+
     return (
         file && <div className="file-page">
             <FileItem file={file}/>
+            {
+                currentUser && file.owner && file.owner._id===currentUser._id && !owner.done ?
+                <button className="btn" onClick={()=>markAsComplete(file._id)}>Mark as Complete</button>
+                : <p>You have completed this task</p>
+            }
             {file.description && <div className="description">
                 <h5 className="heading teal-text">Description</h5>
                 <p className="desc-text">{file.description}</p>
@@ -91,4 +103,4 @@ const mapStateToProps = state => ({
     currentUser: state.user.currentUser
 })
 
-export default connect(mapStateToProps, {getFileById})(File);
+export default connect(mapStateToProps, {getFileById, markFileDone})(File);

@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 
 import Home  from './components/home/Home';
 import Navbar from './components/layouts/Navbar';
-import Auth from './components/auth/Auth';
 import Scanner from './components/qr/Scanner';
 import Generator from './components/qr/Generator';
 import NewFile from './components/file/NewFile';
@@ -22,6 +21,7 @@ import PrivateRoute from './components/routing/PrivateRoute';
 import ErrorBoundary from './components/error-boundary/ErrorBoundary';
 import OnlineRoute from './components/routing/OnlineRoute';
 import Alert from './components/layouts/Alert';
+import AllUsers from './components/users/AllUsers';
 
 
 const App = (props) => {
@@ -57,13 +57,13 @@ const App = (props) => {
         <div className="page">
           <ErrorBoundary>
             <Route exact path="/" component={Home}/>
-            <Route path="/auth" render={()=> currentUser ? (<Redirect to="/"/>):<Auth/>}/>
             <PrivateRoute exact path="/register" component={Register}/>
             <PrivateRoute exact path="/scanner" component={Scanner}/>
             <PrivateRoute exact path="/generator" component={Generator}/>
             <PrivateRoute exact path="/new_file" component={NewFile}/>
             <PrivateRoute exact path="/files" component={AllFiles}/>
             <OnlineRoute exact path="/file/:id" component={File}/>
+            <PrivateRoute exact path="/users" component={AllUsers}/>
           </ErrorBoundary>
         </div>
       </Switch>

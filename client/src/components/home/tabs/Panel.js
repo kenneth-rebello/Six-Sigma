@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import './Tabs.css';
+import './Panel.css';
 import { List } from 'react-virtualized';
 import { Link } from 'react-router-dom';
 import FileItem from '../../files/FileItem';
 
-const UrgentTab = ({files}) => {
+const Panel = ({files}) => {
 
     const [size, setSize] = useState({
         height: 0.90*window.innerHeight,
-        width: 0.75*window.innerWidth
+        width: window.innerWidth<800 ? 0.80*window.innerWidth : 0.90*window.innerWidth
     })
 
     useEffect(()=>{
@@ -16,10 +16,17 @@ const UrgentTab = ({files}) => {
     },[]);
 
     const updateSize = () =>{
-        setSize({
-            height: 0.90*window.innerHeight,
-            width: 0.75*window.innerWidth
-        });
+        if(window.innerWidth>800){
+            setSize({
+                height: 0.90*window.innerHeight,
+                width: 0.90*window.innerWidth
+            })
+        }else{
+            setSize({
+                height: 0.90*window.innerHeight,
+                width: 0.80*window.innerWidth
+            });
+        }
     }
 
     const rowRenderer = ({ key, index, style}) => {
@@ -48,4 +55,4 @@ const UrgentTab = ({files}) => {
 }
 
 
-export default UrgentTab
+export default Panel

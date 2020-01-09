@@ -1,0 +1,36 @@
+.user-item .card{
+    background-color: whitesmoke;
+    color: teal;
+    margin: 0;
+}
+
+.user-item .picture{
+    height: 90px;
+    width: 90px;
+    margin: 0;
+    padding: 0;
+    border: 4px solid darkcyan;
+    border-style: inset;
+}
+
+.user-item .label{
+    color: black;
+    font-size: 0.9rem;
+    margin: 0.5rem;
+    margin-left: 0;
+}
+
+.user-item .title{
+    color: teal;
+    font-weight: bold;
+    font-size: 1.7rem;
+    display: block;
+    margin-bottom: 0;
+}
+
+.user-item .subtitle{
+    color: darkslategray;
+    font-weight: bold;
+    font-size: 1.3rem;
+    display: block;
+}

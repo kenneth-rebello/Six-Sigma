@@ -6,6 +6,7 @@ import storage from 'redux-persist/lib/storage';
 import userReducer from './user.reducer';
 import fileReducer from './file.reducer';
 import { alertReducer } from './alert.reducer';
+import deptReducer from './dept.reducer';
 
 const persistConfig = {
     key: 'root',
@@ -16,6 +17,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     user: userReducer,
     file: fileReducer,
+    dept: deptReducer,
     alert: alertReducer
 });
 

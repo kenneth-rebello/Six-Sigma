@@ -1,0 +1,1 @@
+export const positions = ['Position A','Position B','Position C','Position D','Position S']

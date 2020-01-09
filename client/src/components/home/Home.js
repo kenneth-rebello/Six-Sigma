@@ -4,10 +4,16 @@ import { connect } from 'react-redux';
 import { getOwnerFiles } from '../../actions/file.actions';
 import Dashboard from './Dashboard';
 
-const Home = ({ getOwnerFiles, owned }) => {
+const Home = ({ getOwnerFiles, owned, msg, url }) => {
 
     useEffect(()=>{
         getOwnerFiles()
+    },[])
+
+    useEffect(()=>{
+        if(msg){
+            alert(`${msg} - ${url} is a secured page`)
+        }
     },[])
 
     return (

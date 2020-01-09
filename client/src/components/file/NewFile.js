@@ -88,7 +88,6 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
         if(e.target.id.includes("notes")){
             let note = e.target.value;
             let temp = formData.path;
-            console.log(i)
             temp[i-1].notes = note
             setFormData({
                 ...formData,
@@ -98,7 +97,6 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
         }else if(e.target.id.includes("deadline")){
             let date = e.target.value;
             let temp = formData.path;
-            console.log(i)
             temp[i-1].deadline = date;
             setFormData({
                 ...formData,

@@ -37,7 +37,8 @@ router.get('/all', async (req, res)=>{
 
     try {
 
-        const users = await User.find();
+        const users = await User.find({registered:true})
+        .populate('department','name');
         
         res.json(users)
         
@@ -52,7 +53,7 @@ router.get('/supervisors', async (req, res)=>{
 
     try {
 
-        const users = await User.find();
+        const users = await User.find({position:'Position S'});
         
         res.json(users)
         
@@ -74,18 +75,16 @@ router.post('/register', [auth], async(req,res)=>{
             });
         }
         
-        //TO DO - add code for department
         const { position, displayName, emp_code, supervisor, department } = req.body;
 
         let toUpdate = {};
 
-        if(position) toUpdate.position = position;
+        if(position) toUpdate.position = position.value;
         if(displayName) toUpdate.displayName = displayName;
         if(emp_code) toUpdate.emp_code = emp_code;
         if(supervisor) toUpdate.supervisor = supervisor.value;
-        if(department) toUpdate.department = department;
-
-        if(emp_code && supervisor && position) toUpdate.registered = true
+        if(department) toUpdate.department = department.value;
+        toUpdate.registered = true
 
         const updated = await User.findOneAndUpdate({_id: req.user}, { $set: toUpdate}, {new:true});
 

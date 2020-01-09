@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
     // Referring to the department id in the database
     department:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'dept'
+        ref: 'department'
     },
     // Referring to the user who is the direct supervisor of the user
     supervisor:{

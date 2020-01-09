@@ -104,10 +104,10 @@ router.post('/scan', [auth], async(req,res)=>{
         let inPath = false
         let index = -1
         file.lineage.every((point, idx) => {
-            if(point.user==req.user && point.owner && !point.done){
+            if(point.user==req.user && !point.done){
                 inPath = true
                 point.owner = true,
-                point.received = Date.now()
+                point.received = new Date
                 index = idx
                 return false;
             }
@@ -124,6 +124,8 @@ router.post('/scan', [auth], async(req,res)=>{
                     }],
                     id: file.id
                 });
+            }else{
+                file.lineage[index-1].owner = false
             }
     
             if(!prev.done){
@@ -137,6 +139,9 @@ router.post('/scan', [auth], async(req,res)=>{
         }
 
         if(!inPath){
+            if(!file.illicit_scans) file.illicit_scans = [];
+            file.illicit_scans.push(req.user);
+            await File.findOneAndUpdate({file_number: file.file_number}, { $set: file});
             return res.status(401).json({
                 errors: [{
                     msg: 'Sorry you are not authorized to posess this file, if you do kindly return it, this scan is recorded for security reasons'
@@ -146,6 +151,39 @@ router.post('/scan', [auth], async(req,res)=>{
         }else{
             file.owner = req.user
         }
+
+        const updated = await File.findOneAndUpdate({file_number: file.file_number}, { $set: file}, {new:true});
+
+        res.json(updated)
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+});
+
+
+router.post('/done', [auth], async(req,res)=>{
+    try {
+
+        const file = await File.findById(req.body.id);
+
+        if(!file){
+            return res.status(404).json({
+                errors: [{
+                    msg: 'Sorry the file could not be found, please try again'
+                }]
+            })
+        }
+
+        file.lineage.every((point) => {
+            if(point.user==req.user && point.owner && !point.done){
+                point.completed = new Date
+                point.done = true
+                return false;
+            }
+            return true
+        });
 
         const updated = await File.findOneAndUpdate({file_number: file.file_number}, { $set: file}, {new:true});
 

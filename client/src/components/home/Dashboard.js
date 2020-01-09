@@ -3,8 +3,7 @@ import './Dashboard.css';
 import { connect } from 'react-redux';
 import Tabs from 'react-responsive-tabs';
 import 'react-responsive-tabs/styles.css';
-import OwnedTab from './tabs/OwnedTab';
-import UrgentTab from './tabs/UrgentTab';
+import Panel from './tabs/Panel';
 
 const Dashboard = ({files, currentUser}) => {
 
@@ -13,19 +12,24 @@ const Dashboard = ({files, currentUser}) => {
     if(currentUser){
         let today = new Date;
         let urgent = [];
+        let complete = [];
         files.map(file=>{
             file.lineage.every(user => {
-                if(user.user._id===currentUser._id && user.owner && !user.done){
-                    if(user.deadline){
-                        let deadline = user.deadline.replace('T','-').split('-')
-
-                        if(deadline[1]-1==today.getMonth()){
-                            //Same month
-                            if( today.getDate() > deadline[2]-4){
-                                //3 days
-                                urgent.push(file)
+                if(user.user._id===currentUser._id && user.owner){
+                    if(!user.done){
+                        if(user.deadline){
+                            let deadline = user.deadline.replace('T','-').split('-')
+    
+                            if(deadline[1]-1==today.getMonth()){
+                                //Same month
+                                if( today.getDate() > deadline[2]-4){
+                                    //3 days
+                                    urgent.push(file)
+                                }
                             }
                         }
+                    }else{
+                        complete.push(file)
                     }
                     return false;
                 }
@@ -33,8 +37,9 @@ const Dashboard = ({files, currentUser}) => {
             })
         })
         pages = [
-            { name: 'Owned Files', component: <OwnedTab files={files}/> },
-            { name: 'Urgent Files', component: <UrgentTab files={urgent}/> }
+            { name: 'Owned Files', component: <Panel files={files}/> },
+            { name: 'Urgent Files', component: <Panel files={urgent}/> },
+            { name: 'Completed Files', component: <Panel files={complete}/> }
         ];
     }   
      

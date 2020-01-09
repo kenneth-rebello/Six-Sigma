@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import './Files.css'
+import React ,{ useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'react-virtualized';
 import { Link } from 'react-router-dom';
+import { fetchAllUsers } from '../../actions/user.actions';
+import UserItem from './UserItem';
 
-import { getAllFiles } from '../../actions/file.actions';
-import FileItem from './FileItem';
+const AllUsers = (props) => {
 
-
-const AllFiles = (props) => {
-
-    const { files, loading, getAllFiles } = props;
+    const { users, loading, fetchAllUsers } = props;
 
     const [size, setSize] = useState({
         height: 0.85*window.innerHeight,
@@ -18,13 +15,13 @@ const AllFiles = (props) => {
     })
 
     useEffect(()=>{
-        getAllFiles();
+        fetchAllUsers();
         window.addEventListener('resize', updateSize);
     },[]);
 
     const updateSize = () =>{
         setSize({
-            height: 0.90*window.innerHeight,
+            height: 0.80*window.innerHeight,
             width: 0.97*window.innerWidth
         });
     }
@@ -32,18 +29,18 @@ const AllFiles = (props) => {
     const rowRenderer = ({ key, index, style}) => {
         
         return (
-          <Link to={`/file/${files[index]._id}`} key={key} style={style}>
-            <FileItem file={files[index]}/>
+          <Link to={`/user/${users[index]._id}`} key={key} style={style}>
+            <UserItem user={users[index]}/>
           </Link>
         );
     }
 
     return (
-        <div className="all-files">
+        <div className="all-users">
             
             {!loading && <List
-                rowCount={files.length}
-                rowHeight={135}
+                rowCount={users.length}
+                rowHeight={150}
                 rowRenderer={rowRenderer}
                 height={size.height}
                 width={size.width}
@@ -54,8 +51,8 @@ const AllFiles = (props) => {
 }
 
 const mapStateToProps = state => ({
-    files: state.file.files,
-    loading: state.file.loading
+    users: state.user.users,
+    loading: state.user.loading
 })
 
-export default connect(mapStateToProps, {getAllFiles})(AllFiles);
+export default connect(mapStateToProps, {fetchAllUsers})(AllUsers);

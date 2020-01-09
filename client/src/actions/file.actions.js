@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ADD_FILE, LOAD_FILE, FETCH_FILES, FETCH_OWN_FILES } from '../redux/types';
-import { setAlert } from './alert.action';
+import { setAlert } from './alert.actions';
 
 export const addFile = fileNo => dispatch => {
 
@@ -113,6 +113,37 @@ export const fileQRScanned = name => async dispatch => {
         const body = JSON.stringify({name})
 
         const res = await axios.post('api/file/scan', body, config);
+
+        dispatch({
+            type: LOAD_FILE,
+            payload: res.data
+        })
+
+        return res.data._id;
+
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+        return err.response.data.id
+    }
+}
+
+export const markFileDone = id => async dispatch =>{
+    try {
+        
+        console.log(id)
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const body = JSON.stringify({id})
+
+        const res = await axios.post('/api/file/done', body, config);
 
         dispatch({
             type: LOAD_FILE,

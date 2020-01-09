@@ -20,6 +20,10 @@ const fileSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
+    created:{
+        type: Date,
+        default: new Date
+    },
     // Complete history of the file in terms of users
     lineage:[
         {
@@ -54,7 +58,13 @@ const fileSchema = new mongoose.Schema({
                 type: String
             }
         }
-    ]
+    ],
+    illicit_scans:[{
+        user:{
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: 'user'
+        }
+    }]
 });
 
 module.exports = File = mongoose.model('file',fileSchema);

@@ -3,12 +3,39 @@ import './AuthForm.css';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { fetchSupervisors, registerUser } from '../../actions/user.actions';
+import { fetchDepts } from '../../actions/dept.actions';
+import { positions } from '../../utils/data';
 
-const Register = ({users, currentUser, fetchSupervisors, registerUser}) => {
+const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fetchDepts}) => {
+
+    const [options, setOptions] = useState([])
+    const [deptOptions, setDeptOptions] = useState([])
+    const [posOptions, setPosOptions] = useState([])
 
     useEffect(()=>{
+        let temp =[];
         fetchSupervisors();
+        fetchDepts();
+        positions.map(pos => {
+            temp.push({
+                label: pos,
+                value: pos
+            })
+        });
+        setPosOptions(temp)
     },[])
+
+    useEffect(()=>{
+        let temp = [];
+        depts.forEach(dept => {
+            temp.push({
+                label: dept.name,
+                value: dept._id,
+                supervisor: dept.supervisor
+            })
+        })
+        setDeptOptions(temp)
+    },[depts])
 
     useEffect(()=>{
         provideOptions();
@@ -24,19 +51,21 @@ const Register = ({users, currentUser, fetchSupervisors, registerUser}) => {
                     label: currentUser.supervisor.displayName,
                     value: currentUser.supervisor._id
                 } : formData.supervisor,
+                department: currentUser.department ? currentUser.department : formData.department
             });
             currentUser.displayName &&  document.getElementById('displayName').focus();
         }
     },[currentUser])
 
+
     const [formData, setFormData] = useState({
         displayName:"",
         emp_code:"",
         position:"",
-        supervisor: null
+        supervisor: null,
+        department: ''
     });
 
-    const [options, setOptions] = useState([])
 
     const provideOptions = () => {
         let temp = [];
@@ -62,6 +91,20 @@ const Register = ({users, currentUser, fetchSupervisors, registerUser}) => {
             supervisor: option
         })
     }
+    const handleDeptSelect = option => {
+        let temp = options.find(opt => opt.value===option.supervisor);
+        setFormData({
+            ...formData,
+            department: option,
+            supervisor: temp
+        })
+    }
+    const handlePosSelect = option => {
+        setFormData({
+            ...formData,
+            position: option
+        })
+    }
 
     const Submitter = e => {
         e.preventDefault();
@@ -72,11 +115,12 @@ const Register = ({users, currentUser, fetchSupervisors, registerUser}) => {
             displayName:"",
             emp_code:"",
             position:"",
-            supervisor: null
+            supervisor: null,
+            department:''
         })
     }
 
-    const { displayName, emp_code, position, supervisor } = formData;
+    const { displayName, emp_code, position, supervisor, department } = formData;
 
     return (
         <div className="register">
@@ -102,17 +146,34 @@ const Register = ({users, currentUser, fetchSupervisors, registerUser}) => {
                 <div className="row">
                     <div className="col s12">
                         <label className="form-label">Position</label>         
-                        <select className="browser-default own-default"
-                            id="position" type="text" value={position} onChange={e=>Changer(e)}>
-                            <option value="" disabled>Pick One</option>
-                            <option value="Officer">Officer</option>
-                        </select>
+                        <Select
+                            id="position"
+                            value={position}
+                            onChange={handlePosSelect}
+                            options={posOptions}
+                            isSearchable
+                        />
                         <span className="help-span" data-error="wrong" data-success="right">
-                            *Enter your position in the organisation
+                            *Select your position in the organisation
                         </span>
                     </div>
                 </div>
                 <div className="row">
+                    <div className="col s12">
+                        <label className="form-label">Department</label>         
+                        <Select
+                            id="department"
+                            value={department}
+                            onChange={handleDeptSelect}
+                            options={deptOptions}
+                            isSearchable
+                        />
+                        <span className="help-span" data-error="wrong" data-success="right">
+                            *Select the department that you work in
+                        </span>
+                    </div>
+                </div>
+                {position.value !== "Position S" && <div className="row">
                     <div className="col s12 ">
                         <label className="form-label">Supervisor</label>
                         <Select
@@ -120,12 +181,13 @@ const Register = ({users, currentUser, fetchSupervisors, registerUser}) => {
                             value={supervisor}
                             onChange={handleSelect}
                             options={options}
+                            isSearchable
                         />
                         <span className="help-span" data-error="wrong" data-success="right">
                             *Select the username of your direct supervisor
                         </span>
                     </div>
-                </div>
+                </div>}
                 <div className="row">
                     <div className="input-field col s6">
                         <input type="submit" className="btn" value="Submit"/>
@@ -138,7 +200,8 @@ const Register = ({users, currentUser, fetchSupervisors, registerUser}) => {
 
 const mapStateToProps = state => ({
     users: state.user.users,
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
+    depts: state.dept.depts
 })
 
-export default connect(mapStateToProps, { fetchSupervisors, registerUser })(Register);
+export default connect(mapStateToProps, { fetchSupervisors, registerUser, fetchDepts })(Register);

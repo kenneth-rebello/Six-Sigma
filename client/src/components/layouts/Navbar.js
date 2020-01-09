@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import SignOut from '../auth/SignOut';
 import Alert from './Alert';
 import { unsetCurrentUser } from '../../actions/user.actions';
+import { signInWithGoogle } from '../../firebase/firebase.utils';
 
 const Navbar = ({currentUser, unsetCurrentUser}) => {
 
@@ -28,7 +29,7 @@ const Navbar = ({currentUser, unsetCurrentUser}) => {
                             <li><a className="dropdown-trigger" href="#!" data-target="user-dropdown">
                                 User
                             </a></li>
-                            { !currentUser ? <li><a href="/auth">SignIn</a></li> 
+                            { !currentUser ? <li><a href="#" onClick={signInWithGoogle}>SignIn</a></li> 
                             : <li>
                                 <a href="#" onClick={()=>toggleHidden(!hidden)}>
                                     {currentUser.displayName}
@@ -82,12 +83,15 @@ const Navbar = ({currentUser, unsetCurrentUser}) => {
                             <div className="collapsible-header">User</div>
                             <div className="collapsible-body">
                                 <ul>
+                                    <li><a href="/users">All Users</a></li>
                                     <li><a href="/register">
                                         {currentUser && currentUser.registered ? "Edit Profile" : "Register"}
                                     </a></li>
                                     {currentUser ? <button className="sign-out-link" onClick={()=>unsetCurrentUser()}>
                                         Sign Out
-                                    </button>: <li><a href="/auth">Sign In</a></li>}
+                                    </button>: <button onClick={signInWithGoogle}>
+                                        Sign In
+                                    </button>}
                                 </ul>
                             </div>
                         </li> 
@@ -101,6 +105,7 @@ const Navbar = ({currentUser, unsetCurrentUser}) => {
                 <li><a href="/files">All Files</a></li>
             </ul>
             <ul id="user-dropdown" className="dropdown-content">
+                <li><a href="/users">All Users</a></li>
                 <li><a href="/register">
                     {currentUser && currentUser.registered ? "Edit Profile" : "Register"}
                 </a></li>
