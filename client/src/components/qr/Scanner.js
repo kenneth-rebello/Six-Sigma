@@ -7,10 +7,12 @@ import { connect } from 'react-redux';
 const Scanner = ({ fileQRScanned, history }) => {
 
     const [result, setResult] = useState('No image detected')
+    const [scanned, setScanned] = useState(false)
 
     const handleScan = async data => {
-        if (data) {
+        if (!scanned && data) {
             setResult(data)
+            setScanned(true)
             const id = await fileQRScanned(data);
             history.push(`/file/${id}`)
         }

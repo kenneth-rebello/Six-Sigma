@@ -1,9 +1,10 @@
-import { ADD_FILE, LOAD_FILE, FETCH_FILES, FETCH_OWN_FILES, FETCH_ASS_FILES } from "../redux/types";
+import { ADD_FILE, LOAD_FILE, FETCH_FILES, FETCH_OWN_FILES, FETCH_ASS_FILES, FETCH_UPC_FILES } from "../redux/types";
 
 const initialState = {
     file: null,
     files: [],
     owned: [],
+    upcoming: [],
     assigned: [],
     newFile: "",
     loading: true
@@ -41,6 +42,11 @@ const fileReducer = (state = initialState, action) => {
             return{
                 ...state,
                 assigned: payload
+            }
+        case FETCH_UPC_FILES:
+            return{
+                ...state,
+                upcoming: payload
             }
         default: 
             return state;

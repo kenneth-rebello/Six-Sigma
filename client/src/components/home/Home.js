@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import './Home.css';
 import { connect } from 'react-redux';
-import { getOwnerFiles, getAssignedFiles } from '../../actions/file.actions';
+import { getOwnedFiles, getAssignedFiles, getUpcomingFiles } from '../../actions/file.actions';
 import Dashboard from './Dashboard';
 
-const Home = ({ getOwnerFiles, getAssignedFiles, owned, assigned, supervisor, msg, url }) => {
+const Home = ({ getOwnedFiles, getAssignedFiles, getUpcomingFiles,
+             owned, assigned, upcoming, supervisor, msg, url }) => {
 
     useEffect(()=>{
-        getOwnerFiles()
+        getOwnedFiles();
+        getUpcomingFiles();
         if(supervisor) getAssignedFiles();
     },[])
 
@@ -19,7 +21,7 @@ const Home = ({ getOwnerFiles, getAssignedFiles, owned, assigned, supervisor, ms
 
     return (
         <div className="home">
-            {owned && <Dashboard owned={owned} assigned={assigned}/>}
+            {owned && <Dashboard owned={owned} assigned={assigned} upcoming={upcoming}/>}
         </div>
     )
 }
@@ -27,7 +29,8 @@ const Home = ({ getOwnerFiles, getAssignedFiles, owned, assigned, supervisor, ms
 const mapStateToProps = state => ({
     supervisor: state.user.supervisor,
     owned: state.file.owned,
-    assigned: state.file.assigned
+    assigned: state.file.assigned,
+    upcoming: state.file.upcoming
 })
 
-export default connect(mapStateToProps, { getOwnerFiles, getAssignedFiles })(Home);
+export default connect(mapStateToProps, { getOwnedFiles, getAssignedFiles, getUpcomingFiles })(Home);

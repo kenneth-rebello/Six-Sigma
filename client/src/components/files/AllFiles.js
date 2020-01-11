@@ -14,7 +14,8 @@ const AllFiles = (props) => {
 
     const [size, setSize] = useState({
         height: 0.85*window.innerHeight,
-        width: 0.97*window.innerWidth
+        width: window.innerWidth>600 ? 0.97*window.innerWidth : 0.90*window.innerWidth,
+        row: window.innerWidth<600 ? 230 : 130
     })
 
     useEffect(()=>{
@@ -22,10 +23,12 @@ const AllFiles = (props) => {
         window.addEventListener('resize', updateSize);
     },[]);
 
+
     const updateSize = () =>{
         setSize({
             height: 0.90*window.innerHeight,
-            width: 0.97*window.innerWidth
+            width: window.innerWidth>600 ? 0.97*window.innerWidth : 0.90*window.innerWidth,
+            row: window.innerWidth<600 ? 230 : 130
         });
     }
 
@@ -43,7 +46,7 @@ const AllFiles = (props) => {
             
             {!loading && <List
                 rowCount={files.length}
-                rowHeight={135}
+                rowHeight={size.row}
                 rowRenderer={rowRenderer}
                 height={size.height}
                 width={size.width}

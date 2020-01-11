@@ -5,7 +5,7 @@ import Tabs from 'react-responsive-tabs';
 import 'react-responsive-tabs/styles.css';
 import Panel from './tabs/Panel';
 
-const Dashboard = ({owned, assigned, currentUser, supervisor}) => {
+const Dashboard = ({owned, assigned, upcoming, currentUser, supervisor}) => {
 
     let pages = [];
     
@@ -39,9 +39,10 @@ const Dashboard = ({owned, assigned, currentUser, supervisor}) => {
         pages = [
             { name: 'Owned Files', component: <Panel files={owned}/> },
             { name: 'Urgent Files', component: <Panel files={urgent}/> },
+            { name: 'Upcoming Files', component: <Panel files={upcoming}/> },
             { name: 'Completed Files', component: <Panel files={complete}/> }
         ];
-        if(supervisor) pages.push({ name: 'Assigned Files', component: <Panel files={assigned}/> })
+        if(supervisor) pages.unshift({ name: 'Assigned Files', component: <Panel files={assigned}/> })
     }   
      
      

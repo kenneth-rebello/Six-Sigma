@@ -8,7 +8,8 @@ const Panel = ({files}) => {
 
     const [size, setSize] = useState({
         height: 0.90*window.innerHeight,
-        width: window.innerWidth<800 ? 0.80*window.innerWidth : 0.90*window.innerWidth
+        width: window.innerWidth<800 ? 0.78*window.innerWidth : 0.90*window.innerWidth,
+        row: window.innerWidth<800 ? 230 : 130
     })
 
     useEffect(()=>{
@@ -19,12 +20,14 @@ const Panel = ({files}) => {
         if(window.innerWidth>800){
             setSize({
                 height: 0.90*window.innerHeight,
-                width: 0.90*window.innerWidth
+                width: 0.90*window.innerWidth,
+                row: 130
             })
         }else{
             setSize({
                 height: 0.90*window.innerHeight,
-                width: 0.80*window.innerWidth
+                width: 0.78*window.innerWidth,
+                row: 230
             });
         }
     }
@@ -44,7 +47,7 @@ const Panel = ({files}) => {
             <List
                 className="list"
                 rowCount={files.length}
-                rowHeight={135}
+                rowHeight={size.row}
                 rowRenderer={rowRenderer}
                 height={size.height}
                 width={size.width}

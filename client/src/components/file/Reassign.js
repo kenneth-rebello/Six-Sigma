@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import'./Reassign.css';
 import { connect } from 'react-redux';
 import Select from 'react-select';
-
+import Moment from 'react-moment';
 import { positions } from '../../utils/data';
 import { fetchUsersByDesgn } from '../../actions/user.actions';
 import { editFilePath } from '../../actions/file.actions';
@@ -44,8 +44,7 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
                     position: idx
                 },
                 notes: data.notes,
-                deadline: data.deadline,
-                deadlineToShow: data.deadline.split('T')[0].split('-').reverse().join('-')
+                deadline: data.deadline
             }
         });
         setLineage(tempLineage)
@@ -185,7 +184,9 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
                             <input type="date" name="deadline" id={`deadline${idx}`} 
                             onChange={e=>Changer(e, idx)} required
                             disabled={idx!==counter}/>
-                            <span className="prev">Current value: {point.deadlineToShow}</span>
+                            <span className="prev">Current value: 
+                                <Moment format="MM/DD/YYYY">{point.designation}</Moment>
+                            </span>
                         </div>
                     </div>
                     <div className="col s1">

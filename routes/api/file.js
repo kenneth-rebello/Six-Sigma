@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 
 const File = require('../../models/File');
+const User = require('../../models/User');
 
 router.get('/', [auth], async(req,res)=>{
     try {
@@ -48,7 +49,7 @@ router.get('/own', [auth], async(req,res)=>{
 
         res.json(files)
 
-    }catch{
+    }catch(err){
         console.error(err.message);
         res.status(400).json({errors: [{msg: err.message}]});
     }
@@ -65,7 +66,26 @@ router.get('/assigned', [auth], async(req,res)=>{
 
         res.json(files)
 
-    }catch{
+    }catch(err){
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+});
+
+router.get('/upcoming', [auth], async(req, res)=>{
+    try {
+        
+        const user = await User.findById(req.user);
+        const ids = user.upcoming;
+
+        const files = await File.find({_id: {$in: ids}})
+        .populate('creator',['displayName','email'])
+        .populate('owner',['displayName','email'])
+        .populate('lineage.user',['displayName', 'email']);
+
+        res.json(files)
+
+    } catch (err) {
         console.error(err.message);
         res.status(400).json({errors: [{msg: err.message}]});
     }
@@ -157,6 +177,8 @@ router.post('/scan', [auth], async(req,res)=>{
         
         const file = await File.findOne({file_number: req.body.name});
 
+        let fileCopy = file;
+
         if(file.owner==req.user){
             return res.status(400).json({
                 errors: [{msg: 'You already own this file'}],
@@ -169,8 +191,6 @@ router.post('/scan', [auth], async(req,res)=>{
         file.lineage.every((point, idx) => {
             if(point.user==req.user && !point.done){
                 inPath = true
-                point.owner = true,
-                point.received = new Date
                 index = idx
                 return false;
             }
@@ -181,11 +201,11 @@ router.post('/scan', [auth], async(req,res)=>{
 
         if(prev){
             if(!prev.owner){
-                if(!file.illicit_scans) file.illicit_scans = [];
-                file.illicit_scans.push({
+                if(!fileCopy.illicit_scans) fileCopy.illicit_scans = [];
+                fileCopy.illicit_scans.push({
                     user: req.user
                 });
-                await File.findOneAndUpdate({file_number: file.file_number}, { $set: file});
+                await File.findOneAndUpdate({file_number: file.file_number}, { $set: fileCopy });
                 return res.status(400).json({
                     errors: [{
                         msg: 'The previous user must receive this file before you, this scan will be recorded for security reasons, please send back the file.',
@@ -193,7 +213,7 @@ router.post('/scan', [auth], async(req,res)=>{
                     id: file.id
                 });
             }else{
-                file.lineage[index-1].owner = false
+                if(index!==-1)file.lineage[index-1].owner = false
             }
     
             if(!prev.done){
@@ -201,26 +221,47 @@ router.post('/scan', [auth], async(req,res)=>{
                     errors: [{
                         msg: 'The previous user must mark this file done before you, this scan will not be recorded, please ask previous user to mark their work complete.',
                     }],
-                    id: file.id
+                    id: fileCopy.id
                 });
             }
         }
 
         if(!inPath){
-            if(!file.illicit_scans) file.illicit_scans = [];
-            file.illicit_scans.push({user: req.user});
-            await File.findOneAndUpdate({file_number: file.file_number}, { $set: file});
+            if(!fileCopy.illicit_scans) fileCopy.illicit_scans = [];
+            fileCopy.illicit_scans.push({user: req.user});
+            await File.findOneAndUpdate({file_number: fileCopy.file_number}, { $set: fileCopy });
             return res.status(401).json({
                 errors: [{
                     msg: 'Sorry you are not authorized to posess this file, if you do kindly return it, this scan is recorded for security reasons'
                 }],
-                id: file.id
+                id: fileCopy.id
             });
-        }else{
-            file.owner = req.user
         }
 
+        file.lineage.every((point) => {
+            if(point.user==req.user && !point.done){
+                point.owner = true,
+                point.received = new Date
+                return false;
+            }
+            return true
+        });
+
+        file.owner = req.user;
+    
         const updated = await File.findOneAndUpdate({file_number: file.file_number}, { $set: file}, {new:true});
+
+        const nextUser = await User.findOne(file.lineage[index+1].user);
+        const user = await User.findOne(file.lineage[index].user);
+
+        if(!nextUser.upcoming) nextUser.upcoming = [];
+        nextUser.upcoming.push(file._id);
+
+        await User.findOneAndUpdate({_id: nextUser._id}, {$set: nextUser});
+        
+        if(user.upcoming) user.upcoming.splice(user.upcoming.indexOf(file._id), 1);
+        await User.findOneAndUpdate({_id: user._id}, {$set: user});
+
 
         res.json(updated)
 
@@ -235,14 +276,6 @@ router.post('/done', [auth], async(req,res)=>{
     try {
 
         const file = await File.findById(req.body.id);
-
-        if(!file){
-            return res.status(404).json({
-                errors: [{
-                    msg: 'Sorry the file could not be found, please try again'
-                }]
-            })
-        }
 
         file.lineage.every((point) => {
             if(point.user==req.user && point.owner && !point.done){

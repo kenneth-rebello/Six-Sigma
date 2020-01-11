@@ -18,22 +18,22 @@
 .file-item .title{
     color: teal;
     font-weight: bold;
-    font-size: 1.7rem;
+    font-size: 1.4rem;
     display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
 }
 
 .file-item .subtitle{
     color: darkslategray;
     font-weight: bold;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     display: block;
 }
 
 .file-item .name{
     color: darkslategray;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.2rem;
     display: block;
 }
 

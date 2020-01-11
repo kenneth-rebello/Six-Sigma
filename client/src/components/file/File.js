@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import './File.css';
 import { connect } from 'react-redux';
 import Stepper from '../stepper/Stepper';
+import Moment from 'react-moment';
 
 import { getFileById, markFileDone } from '../../actions/file.actions';
 import FileItem from '../files/FileItem';
@@ -15,6 +16,7 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
     const [activeStep, setActiveStep] = useState(-1);
     const [open, toggleOpen] = useState(false);
     const [list, toggleList] = useState(false);
+    const [report, toggleReport] = useState(false);
     const [details, setDetails] = useState("");
     const [owner, setOwner] = useState({});
 
@@ -49,6 +51,8 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
         if(obj.user._id===currentUser._id && obj.notes){
             setDetails(obj.notes);
             toggleOpen(true)
+        }else if(obj.user._id===currentUser._id && obj.done){
+            toggleReport(true)
         }
     }
 
@@ -106,6 +110,7 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
                         color: 'teal'
                     }
                 }}
+                ariaHideApp={false}
             >
                 <h4 className="modal-title">Notes for {currentUser.displayName}</h4>
                 <p className="details">{details}</p>
@@ -123,9 +128,28 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
             >
                 <h5>Unauthorized Scans</h5>
                 {file.illicit_scans.map(each => 
-                    <p key={each._id}>{each.user.displayName}</p>
+                    <div key={each._id}>
+                        <span>{each.user.displayName}</span>{`  -  `}
+                        <span><Moment format="DD/MM/YYYY HH:MM">
+                            {each.scanned}
+                        </Moment></span>
+                    </div>
                 )}
             </Modal>
+
+            <Modal
+                isOpen={report}
+                onRequestClose={()=>toggleReport(false)}
+                style={{
+                    overlay: overlay,
+                    content: {...content,
+                        color: 'red'
+                    }
+                }}
+            >
+                <h5>Report</h5>
+            </Modal>
+
         </div>
     )
 }

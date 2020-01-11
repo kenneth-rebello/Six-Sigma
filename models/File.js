@@ -70,6 +70,10 @@ const fileSchema = new mongoose.Schema({
         user:{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
+        },
+        scanned:{
+            type: Date,
+            default: new Date
         }
     }]
 });

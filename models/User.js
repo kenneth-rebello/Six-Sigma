@@ -34,8 +34,17 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
-
-    // Average completion time of file passing on ( receving to confirmation )
+    upcoming:[{
+        owner:{
+            type: String
+        },
+        creator:{
+            type: String
+        },
+        name:{
+            type: String
+        }
+    }],
     avg_comp_time:{
         type: Number
     },
