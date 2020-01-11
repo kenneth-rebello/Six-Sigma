@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import './Home.css';
 import { connect } from 'react-redux';
-import { getOwnerFiles } from '../../actions/file.actions';
+import { getOwnerFiles, getAssignedFiles } from '../../actions/file.actions';
 import Dashboard from './Dashboard';
 
-const Home = ({ getOwnerFiles, owned, msg, url }) => {
+const Home = ({ getOwnerFiles, getAssignedFiles, owned, assigned, supervisor, msg, url }) => {
 
     useEffect(()=>{
         getOwnerFiles()
+        if(supervisor) getAssignedFiles();
     },[])
 
     useEffect(()=>{
@@ -18,13 +19,15 @@ const Home = ({ getOwnerFiles, owned, msg, url }) => {
 
     return (
         <div className="home">
-            {owned && <Dashboard files={owned}/>}
+            {owned && <Dashboard owned={owned} assigned={assigned}/>}
         </div>
     )
 }
 
 const mapStateToProps = state => ({
-    owned: state.file.owned
+    supervisor: state.user.supervisor,
+    owned: state.file.owned,
+    assigned: state.file.assigned
 })
 
-export default connect(mapStateToProps, { getOwnerFiles })(Home);
+export default connect(mapStateToProps, { getOwnerFiles, getAssignedFiles })(Home);

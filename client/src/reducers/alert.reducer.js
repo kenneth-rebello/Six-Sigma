@@ -2,7 +2,7 @@ import { SET_ALERT, REMOVE_ALERT } from '../redux/types';
 
 const initialState = [];
 
-export const alertReducer = (state = initialState, action) => {
+const alertReducer = (state = initialState, action) => {
 
     const { type, payload } = action;
 
@@ -15,3 +15,5 @@ export const alertReducer = (state = initialState, action) => {
             return state;
     }
 }
+
+export default alertReducer;

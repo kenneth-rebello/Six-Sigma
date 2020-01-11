@@ -99,6 +99,35 @@ export const fetchSupervisors = () =>async dispatch => {
     }
 }
 
+export const fetchUsersByDesgn = value => async dispatch => {
+    try {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const body = JSON.stringify({designation: value})
+
+        const res = await axios.post('/api/user/designation', body, config);
+
+        dispatch({
+            type: FETCH_USERS,
+            payload: res.data
+        })
+
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+    }
+}
+
+
+
 export const registerUser = (formData) => async dispatch => {
 
     try {

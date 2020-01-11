@@ -1,0 +1,15 @@
+.reassign .helper-text{
+    display: block;
+    font-size: 0.8rem;
+    color: gray;
+}
+
+.reassign .user{
+    color: teal;
+    font-weight: bold;
+}
+
+.reassign .prev{
+    color: darkred;
+    font-size: 0.9rem;
+}

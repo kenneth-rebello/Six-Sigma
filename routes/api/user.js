@@ -11,7 +11,9 @@ router.post('/', async(req, res)=>{
 
     try {
 
-        let user =  await User.findOne({email}).populate('supervisor','displayName');
+        let user =  await User.findOne({email})
+        .populate('supervisor','displayName')
+        .populate('department', 'name');
 
         if(!user){
             
@@ -53,7 +55,7 @@ router.get('/supervisors', async (req, res)=>{
 
     try {
 
-        const users = await User.find({position:'Position S'});
+        const users = await User.find({designation:'Position S'});
         
         res.json(users)
         
@@ -62,6 +64,19 @@ router.get('/supervisors', async (req, res)=>{
         res.status(400).json({errors: [{msg: err.message}]});
     }
 
+});
+
+router.post('/designation', async (req, res)=>{
+    try {
+        
+        const users = await User.find({designation:req.body.designation});
+
+        res.json(users)
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
 });
 
 router.post('/register', [auth], async(req,res)=>{

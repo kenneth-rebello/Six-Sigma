@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ADD_FILE, LOAD_FILE, FETCH_FILES, FETCH_OWN_FILES } from '../redux/types';
+import { ADD_FILE, LOAD_FILE, FETCH_FILES, FETCH_OWN_FILES, FETCH_ASS_FILES } from '../redux/types';
 import { setAlert } from './alert.actions';
 
 export const addFile = fileNo => dispatch => {
@@ -87,7 +87,29 @@ export const getOwnerFiles = () => async dispatch => {
         const res = await axios.get('/api/file/own');
 
         dispatch({
-            type: FETCH_OWN_FILES,
+            type: FETCH_ASS_FILES,
+            payload: res.data
+        })
+
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+    }
+
+}
+
+
+export const getAssignedFiles = () => async dispatch => {
+
+    try {
+        console.log('Here')
+        const res = await axios.get('/api/file/assigned');
+
+        dispatch({
+            type: FETCH_ASS_FILES,
             payload: res.data
         })
 
@@ -134,7 +156,6 @@ export const fileQRScanned = name => async dispatch => {
 export const markFileDone = id => async dispatch =>{
     try {
         
-        console.log(id)
         const config = {
             headers: {
                 'Content-Type': 'application/json'
@@ -144,6 +165,36 @@ export const markFileDone = id => async dispatch =>{
         const body = JSON.stringify({id})
 
         const res = await axios.post('/api/file/done', body, config);
+
+        dispatch({
+            type: LOAD_FILE,
+            payload: res.data
+        })
+
+        return res.data._id;
+
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+        return err.response.data.id
+    }
+}
+
+export const editFilePath = (lineage, id) => async dispatch => {
+    try {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const body = JSON.stringify({id, lineage})
+
+        const res = await axios.post('/api/file/edit', body, config);
 
         dispatch({
             type: LOAD_FILE,

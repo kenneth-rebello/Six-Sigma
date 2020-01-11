@@ -4,6 +4,7 @@ const initialState = {
     currentUser:null,
     loggedIn:false,
     users:[],
+    supervisor: false,
     loading: true,
     online: false
 }
@@ -18,6 +19,7 @@ const userReducer = (state = initialState, action) => {
             return{
                 ...state,
                 currentUser: payload,
+                supervisor: payload.designation=="Position S" ? true : false,
                 loggedIn: true,
                 loading: false
             }

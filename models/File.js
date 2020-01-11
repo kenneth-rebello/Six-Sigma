@@ -24,6 +24,13 @@ const fileSchema = new mongoose.Schema({
         type: Date,
         default: new Date
     },
+    location:{
+        type: String
+    },
+    file_task:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'task'
+    },
     // Complete history of the file in terms of users
     lineage:[
         {
@@ -61,7 +68,7 @@ const fileSchema = new mongoose.Schema({
     ],
     illicit_scans:[{
         user:{
-            type: [mongoose.Schema.Types.ObjectId],
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
         }
     }]

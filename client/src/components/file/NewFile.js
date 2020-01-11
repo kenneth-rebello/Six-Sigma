@@ -2,20 +2,17 @@ import React, { useState, useEffect } from 'react';
 import './File.css'
 import { connect } from 'react-redux';
 import Select from 'react-select';
-import { fetchAllUsers } from '../../actions/user.actions';
+import { fetchUsersByDesgn } from '../../actions/user.actions';
 import { addFileToDB } from '../../actions/file.actions';
+import { positions } from '../../utils/data';
 
-const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
-
-    useEffect(()=>{
-        fetchAllUsers();
-    },[])
-
-    useEffect(()=>{
-        provideOptions();
-    },[users])
+const NewFile = ({fileNo, users, fetchUsersByDesgn, addFileToDB}) => {
 
     const [counter, count] = useState(0);
+
+    const [options, setOptions] = useState([]);
+    const [dsgnOptions, setDsgnOpt] = useState([]);
+    const [designation, setDsgn] = useState("");
 
     const [formData, setFormData] = useState({
         file_number: fileNo ? fileNo : "",
@@ -24,6 +21,26 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
         notes: "",
         description: ""
     });
+
+
+    useEffect(()=>{
+        let temp = []
+        positions.forEach(pos => {
+            temp.push({
+                label: pos,
+                value: pos
+            })
+        })
+        setDsgnOpt(temp)
+    },[])
+
+    useEffect(()=>{
+        fetchUsersByDesgn(designation);
+    },[designation])
+
+    useEffect(()=>{
+        provideOptions();
+    },[users])
 
     useEffect(()=>{
         provideOptions();
@@ -35,7 +52,7 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
         // console.log(formData)
     },[formData])
 
-    const [options, setOptions] = useState([]);
+   
 
     const provideOptions = () => {
         let temp = [];
@@ -49,17 +66,6 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
         setOptions(temp);
     }
 
-    const handleSelect = option => {
-        let temp = formData.path;
-        temp[option.position] = option
-        setFormData({
-            ...formData,
-            path: temp
-        });
-        document.getElementById(`notes${option.position}`).disabled = false;
-        document.getElementById(`deadline${option.position}`).disabled = false;
-    }
-
     const undoSelect = (i) => {
         count(i-2);
         let temp = formData.path;
@@ -71,6 +77,25 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
             path: temp
         })
     }
+
+
+
+
+    const handleSelect = option => {
+        let temp = formData.path;
+        temp[option.position] = option
+        setFormData({
+            ...formData,
+            path: temp
+        });
+        document.getElementById(`notes${option.position}`).disabled = false;
+        document.getElementById(`deadline${option.position}`).disabled = false;
+    }
+    const handlePosSelect = option => {
+        setDsgn(option.value)
+    }
+
+
 
     const Submitter = (e) => {
         e.preventDefault();
@@ -116,13 +141,26 @@ const NewFile = ({fileNo, users, fetchAllUsers, addFileToDB}) => {
     for(var i=0; i<=counter; i++){
         pathSelects.push(<div className="row">
             <div className="col s11">
-                <label htmlFor="select">Pick user {i+1}</label>
-                <Select
-                    id={`select${i}`}
-                    onChange={handleSelect}
-                    options={options}
-                    isDisabled={i<counter}
-                />
+                <div className="col s12">
+                    <label htmlFor="designation">Pick a designation</label>
+                    <Select
+                        id={`designation${i}`}
+                        onChange={handlePosSelect}
+                        options={dsgnOptions}
+                        isDisabled={i<counter}
+                        isSearchable
+                    />
+                </div>
+                <div className="col s12">
+                    <label htmlFor="select">Pick user {i+1}</label>
+                    <Select
+                        id={`select${i}`}
+                        onChange={handleSelect}
+                        options={options}
+                        isDisabled={i<counter}
+                        isSearchable
+                    />
+                </div>
                 <div className="input-field col s12 m6">
                     <input type="text" id={`notes${i}`} onChange={e=>Changer(e)} disabled/> 
                     <label htmlFor="notes">Additional Notes</label>
@@ -197,4 +235,4 @@ const mapStateToProps = state => ({
     users: state.user.users
 })
 
-export default connect(mapStateToProps, {fetchAllUsers,addFileToDB})(NewFile);
+export default connect(mapStateToProps, {fetchUsersByDesgn,addFileToDB})(NewFile);

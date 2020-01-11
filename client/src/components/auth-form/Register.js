@@ -46,12 +46,18 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
             setFormData({
                 displayName: currentUser.displayName ? currentUser.displayName : formData.displayName,
                 emp_code: currentUser.emp_code ? currentUser.emp_code : formData.emp_code,
-                position: currentUser.position ? currentUser.position : formData.position,
+                designation: currentUser.designation ? {
+                    label: currentUser.designation,
+                    value: currentUser.designation
+                } : formData.designation,
                 supervisor: currentUser.supervisor ? {
                     label: currentUser.supervisor.displayName,
                     value: currentUser.supervisor._id
                 } : formData.supervisor,
-                department: currentUser.department ? currentUser.department : formData.department
+                department: currentUser.department ? {
+                    label: currentUser.department.name, 
+                    value: currentUser.department._id
+                } : formData.department
             });
             currentUser.displayName &&  document.getElementById('displayName').focus();
         }
@@ -61,7 +67,7 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
     const [formData, setFormData] = useState({
         displayName:"",
         emp_code:"",
-        position:"",
+        designation:"",
         supervisor: null,
         department: ''
     });
@@ -102,7 +108,7 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
     const handlePosSelect = option => {
         setFormData({
             ...formData,
-            position: option
+            designation: option
         })
     }
 
@@ -114,13 +120,13 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
         setFormData({
             displayName:"",
             emp_code:"",
-            position:"",
+            designation:"",
             supervisor: null,
             department:''
         })
     }
 
-    const { displayName, emp_code, position, supervisor, department } = formData;
+    const { displayName, emp_code, designation, supervisor, department } = formData;
 
     return (
         <div className="register">
@@ -145,16 +151,16 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
                 </div>
                 <div className="row">
                     <div className="col s12">
-                        <label className="form-label">Position</label>         
+                        <label className="form-label">Designation</label>         
                         <Select
-                            id="position"
-                            value={position}
+                            id="designation"
+                            value={designation}
                             onChange={handlePosSelect}
                             options={posOptions}
                             isSearchable
                         />
                         <span className="help-span" data-error="wrong" data-success="right">
-                            *Select your position in the organisation
+                            *Select your designation in the organisation
                         </span>
                     </div>
                 </div>
@@ -173,7 +179,7 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
                         </span>
                     </div>
                 </div>
-                {position.value !== "Position S" && <div className="row">
+                {designation.value !== "Position S" && <div className="row">
                     <div className="col s12 ">
                         <label className="form-label">Supervisor</label>
                         <Select

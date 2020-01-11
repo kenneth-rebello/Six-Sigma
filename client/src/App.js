@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import './App.css';
-import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Home  from './components/home/Home';
+import Alert from './components/layouts/Alert';
 import Navbar from './components/layouts/Navbar';
 import Scanner from './components/qr/Scanner';
 import Generator from './components/qr/Generator';
@@ -12,16 +13,18 @@ import Register from './components/auth-form/Register';
 import AllFiles from './components/files/AllFiles';
 import File from './components/file/File';
 import Suggestion from './components/layouts/Suggestion';
+import AllUsers from './components/users/AllUsers';
+import Reassign from './components/file/Reassign';
 
 
 import {auth } from './firebase/firebase.utils';
 import { setCurrentUser, checkIfOnline } from './actions/user.actions';
 import setAuthHeader from './utils/setAuthHeader';
-import PrivateRoute from './components/routing/PrivateRoute';
+
 import ErrorBoundary from './components/error-boundary/ErrorBoundary';
+import PrivateRoute from './components/routing/PrivateRoute';
 import OnlineRoute from './components/routing/OnlineRoute';
-import Alert from './components/layouts/Alert';
-import AllUsers from './components/users/AllUsers';
+import SupervisorRoute from './components/routing/SupervisorRoute';
 
 
 const App = (props) => {
@@ -64,6 +67,7 @@ const App = (props) => {
             <PrivateRoute exact path="/files" component={AllFiles}/>
             <OnlineRoute exact path="/file/:id" component={File}/>
             <PrivateRoute exact path="/users" component={AllUsers}/>
+            <SupervisorRoute exact path="/reassign/:id" component={Reassign}/>
           </ErrorBoundary>
         </div>
       </Switch>

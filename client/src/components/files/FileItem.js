@@ -17,7 +17,7 @@ const FileItem = ({file}) => {
                             <span className="subtitle">{file.owner? file.owner.displayName: "N/A"}</span>
                         </div>
                         <div className="col s6 m3">
-                            <span className="label">Origin: </span>
+                            <span className="label">Creator: </span>
                             <span className="subtitle">{file.creator? file.creator.displayName: "N/A"}</span>
                         </div>
                         {file.name &&

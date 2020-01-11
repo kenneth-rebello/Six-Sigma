@@ -5,7 +5,7 @@ import Tabs from 'react-responsive-tabs';
 import 'react-responsive-tabs/styles.css';
 import Panel from './tabs/Panel';
 
-const Dashboard = ({files, currentUser}) => {
+const Dashboard = ({owned, assigned, currentUser, supervisor}) => {
 
     let pages = [];
     
@@ -13,7 +13,7 @@ const Dashboard = ({files, currentUser}) => {
         let today = new Date;
         let urgent = [];
         let complete = [];
-        files.map(file=>{
+        owned.map(file=>{
             file.lineage.every(user => {
                 if(user.user._id===currentUser._id && user.owner){
                     if(!user.done){
@@ -37,10 +37,11 @@ const Dashboard = ({files, currentUser}) => {
             })
         })
         pages = [
-            { name: 'Owned Files', component: <Panel files={files}/> },
+            { name: 'Owned Files', component: <Panel files={owned}/> },
             { name: 'Urgent Files', component: <Panel files={urgent}/> },
             { name: 'Completed Files', component: <Panel files={complete}/> }
         ];
+        if(supervisor) pages.push({ name: 'Assigned Files', component: <Panel files={assigned}/> })
     }   
      
      
@@ -63,7 +64,8 @@ const Dashboard = ({files, currentUser}) => {
 }
 
 const mapStateToProps = state => ({
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
+    supervisor: state.user.supervisor
 })
 
 export default connect(mapStateToProps)(Dashboard);
