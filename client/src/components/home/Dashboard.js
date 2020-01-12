@@ -5,18 +5,17 @@ import Tabs from 'react-responsive-tabs';
 import 'react-responsive-tabs/styles.css';
 import Panel from './tabs/Panel';
 
-const Dashboard = ({owned, assigned, upcoming, currentUser, supervisor}) => {
+const Dashboard = ({owned, assigned, upcoming, completed, currentUser, supervisor}) => {
 
     let pages = [];
     
     if(currentUser){
         let today = new Date;
         let urgent = [];
-        let complete = [];
         owned.map(file=>{
             file.lineage.every(user => {
-                if(user.user._id===currentUser._id && user.owner){
-                    if(!user.done){
+                if( user.user._id===currentUser._id ){
+                    if(user.owner && !user.done){
                         if(user.deadline){
                             let deadline = user.deadline.replace('T','-').split('-')
     
@@ -28,8 +27,6 @@ const Dashboard = ({owned, assigned, upcoming, currentUser, supervisor}) => {
                                 }
                             }
                         }
-                    }else{
-                        complete.push(file)
                     }
                     return false;
                 }
@@ -40,7 +37,7 @@ const Dashboard = ({owned, assigned, upcoming, currentUser, supervisor}) => {
             { name: 'Owned Files', component: <Panel files={owned}/> },
             { name: 'Urgent Files', component: <Panel files={urgent}/> },
             { name: 'Upcoming Files', component: <Panel files={upcoming}/> },
-            { name: 'Completed Files', component: <Panel files={complete}/> }
+            { name: 'Completed Files', component: <Panel files={completed}/> }
         ];
         if(supervisor) pages.unshift({ name: 'Assigned Files', component: <Panel files={assigned}/> })
     }   

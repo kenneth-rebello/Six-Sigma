@@ -4,7 +4,6 @@ import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Home  from './components/home/Home';
-import Alert from './components/layouts/Alert';
 import Navbar from './components/layouts/Navbar';
 import Scanner from './components/qr/Scanner';
 import Generator from './components/qr/Generator';
@@ -25,6 +24,7 @@ import ErrorBoundary from './components/error-boundary/ErrorBoundary';
 import PrivateRoute from './components/routing/PrivateRoute';
 import OnlineRoute from './components/routing/OnlineRoute';
 import SupervisorRoute from './components/routing/SupervisorRoute';
+import Reports from './components/reports/Reports';
 
 
 const App = (props) => {
@@ -55,7 +55,6 @@ const App = (props) => {
   return (
     <Router>
       <Navbar/>
-      <Alert/>
       <Switch>
         <div className="page">
           <ErrorBoundary>
@@ -68,6 +67,7 @@ const App = (props) => {
             <OnlineRoute exact path="/file/:id" component={File}/>
             <PrivateRoute exact path="/users" component={AllUsers}/>
             <SupervisorRoute exact path="/reassign/:id" component={Reassign}/>
+            <SupervisorRoute exact path="/reports" component={Reports}/>
           </ErrorBoundary>
         </div>
       </Switch>

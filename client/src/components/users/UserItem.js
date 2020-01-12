@@ -18,7 +18,7 @@ const UserItem = ({user}) => {
                                 </div>
                                 <div className="col s6 m4">
                                     <span className="label">Position: </span>
-                                    <span className="subtitle">{user.position}</span>        
+                                    <span className="subtitle">{user.designation}</span>        
                                 </div>
                                 <div className="col s6 m4">
                                     <span className="label">Department: </span>

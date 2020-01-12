@@ -41,6 +41,7 @@ const Navbar = ({currentUser, unsetCurrentUser}) => {
                             </li>}
                         </ul>
                     </div>
+                    <Alert/>
                 </nav>
             </div>
             {hidden && <SignOut closePopup={toggleHidden}/>}
@@ -59,6 +60,7 @@ const Navbar = ({currentUser, unsetCurrentUser}) => {
                                 <ul>
                                     <li><a href="/new_file">New File</a></li>
                                     <li><a href="/files">All Files</a></li>
+                                    <li><a href="/reports">Reports</a></li>
                                 </ul>
                             </div>
                         </li> 
@@ -103,6 +105,7 @@ const Navbar = ({currentUser, unsetCurrentUser}) => {
             <ul id="file-dropdown" className="dropdown-content">
                 <li><a href="/new_file">New File</a></li>
                 <li><a href="/files">All Files</a></li>
+                <li><a href="/reports">Reports</a></li>
             </ul>
             <ul id="user-dropdown" className="dropdown-content">
                 <li><a href="/users">All Users</a></li>

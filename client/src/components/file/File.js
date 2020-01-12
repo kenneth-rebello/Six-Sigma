@@ -9,15 +9,21 @@ import FileItem from '../files/FileItem';
 import Modal from 'react-modal';
 import { overlay, content } from '../../utils/modalStyles';
 import { setFormDataAction } from '../../actions/util.actions';
+import ReportForm from './ReportForm';
 
 const File = ({match, history, file, currentUser, getFileById, markFileDone, setFormDataAction}) => {
 
     const [steps, setSteps] = useState([]);
     const [activeStep, setActiveStep] = useState(-1);
+
     const [open, toggleOpen] = useState(false);
-    const [list, toggleList] = useState(false);
-    const [report, toggleReport] = useState(false);
     const [details, setDetails] = useState("");
+
+    const [list, toggleList] = useState(false);
+    
+    const [report, toggleReport] = useState(false);
+    const [step, setStep] = useState({});
+    
     const [owner, setOwner] = useState({});
 
     useEffect(()=>{
@@ -31,9 +37,9 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
 
     let stepsTemp = [];
     const createStepper = () => {
-        file.lineage.map(each => {
+        file.lineage.map((each, idx) => {
             if(each.owner){
-                setActiveStep(each.position);
+                setActiveStep(idx);
                 setOwner(each)
             }
             stepsTemp.push({
@@ -50,15 +56,15 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
     const getDetails = obj => {
         if(obj.user._id===currentUser._id && obj.notes){
             setDetails(obj.notes);
-            toggleOpen(true)
-        }else if(obj.user._id===currentUser._id && obj.done){
+            toggleOpen(true);
+        }else if(obj.user._id!==currentUser._id && obj.done){
+            setStep(obj);
             toggleReport(true)
         }
     }
 
-    const markAsComplete = async id => {
-        const fileID = await markFileDone(id);
-        history.push(`/file/${fileID}`);
+    const markAsComplete = id => {
+        markFileDone(id, history);
     }
 
     const editFilePath = () => {
@@ -71,10 +77,21 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
         file && <div className="file-page">
             <FileItem file={file}/>
             {
-                currentUser && file.owner && file.owner._id===currentUser._id ? !owner.done ?
-                <button className="btn" onClick={()=>markAsComplete(file._id)}>Mark as Complete</button>
-                : <p>You have completed this task</p> : <p></p>
+                currentUser && file.owner && file.owner._id===currentUser._id && 
+                <Fragment>
+                    {!owner.done ? <button className="btn" onClick={()=>markAsComplete(file._id)}>
+                        Mark as Complete
+                    </button>
+                    : <p>You have completed this task</p> }
+                    <p className="deadline">
+                        Deadline:
+                        <Moment format="DD/MM/YYYY">
+                            {owner.deadline}
+                        </Moment>
+                    </p>
+                </Fragment>
             }
+            
             {file.description && <div className="description">
                 <h5 className="heading teal-text">Description</h5>
                 <p className="desc-text">{file.description}</p>
@@ -125,6 +142,7 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
                         color: 'teal'
                     }
                 }}
+                ariaHideApp={false}
             >
                 <h5>Unauthorized Scans</h5>
                 {file.illicit_scans.map(each => 
@@ -146,8 +164,19 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
                         color: 'red'
                     }
                 }}
+                ariaHideApp={false}
             >
-                <h5>Report</h5>
+                {step && step.user && 
+                <Fragment>
+                    <h5>Report {step.user.displayName}</h5>
+                    <ReportForm supervisor={file.creator} user={step.user} 
+                        file={{
+                            id:file._id, 
+                            number:file.file_number
+                        }}
+                        closeReportForm = {()=>toggleReport(false)}
+                    />
+                </Fragment>}
             </Modal>
 
         </div>

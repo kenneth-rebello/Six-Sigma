@@ -27,6 +27,10 @@ const fileSchema = new mongoose.Schema({
     location:{
         type: String
     },
+    concluded:{
+        type: Boolean,
+        default: false    
+    },
     file_task:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'task'

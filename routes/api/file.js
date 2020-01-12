@@ -91,6 +91,25 @@ router.get('/upcoming', [auth], async(req, res)=>{
     }
 })
 
+router.get('/completed', [auth], async(req, res)=>{
+    try {
+        
+        const user = await User.findById(req.user);
+        const ids = user.completed;
+
+        const files = await File.find({_id: {$in: ids}})
+        .populate('creator',['displayName','email'])
+        .populate('owner',['displayName','email'])
+        .populate('lineage.user',['displayName', 'email']);
+
+        res.json(files)
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+})
+
 
 router.post('/new_file', [auth], async(req, res)=>{
     
@@ -131,7 +150,7 @@ router.post('/edit', [auth], async(req,res)=>{
         const file = await File.findById(req.body.id);
 
         if(file.creator!=req.user){
-            res.status(403),json({
+            res.status(403).json({
                 errors: [{msg: 'Sorry, you are not authorized to edit this file'}]
             })
         }
@@ -251,17 +270,17 @@ router.post('/scan', [auth], async(req,res)=>{
     
         const updated = await File.findOneAndUpdate({file_number: file.file_number}, { $set: file}, {new:true});
 
-        const nextUser = await User.findOne(file.lineage[index+1].user);
+        if(file.lineage[index+1]){
+            const nextUser = await User.findOne(file.lineage[index+1].user);
+            if(!nextUser.upcoming) nextUser.upcoming = [];
+            nextUser.upcoming.push(file._id);
+            await User.findOneAndUpdate({_id: nextUser._id}, {$set: nextUser});
+        }
+    
         const user = await User.findOne(file.lineage[index].user);
-
-        if(!nextUser.upcoming) nextUser.upcoming = [];
-        nextUser.upcoming.push(file._id);
-
-        await User.findOneAndUpdate({_id: nextUser._id}, {$set: nextUser});
         
         if(user.upcoming) user.upcoming.splice(user.upcoming.indexOf(file._id), 1);
         await User.findOneAndUpdate({_id: user._id}, {$set: user});
-
 
         res.json(updated)
 
@@ -276,16 +295,39 @@ router.post('/done', [auth], async(req,res)=>{
     try {
 
         const file = await File.findById(req.body.id);
+        const user = await User.findById(req.user);
 
-        file.lineage.every((point) => {
+        if(file.owner!=req.user){
+            return res.status(403).json({
+                errors: [{
+                    msg: 'Sorry you do not own this file'
+                }]
+            });
+        }
+
+        let index=100;
+        file.lineage.every((point, idx) => {
             if(point.user==req.user && point.owner && !point.done){
                 point.completed = new Date
                 point.done = true
+                index = idx
                 return false;
             }
             return true
         });
 
+        if(!user.completed) user.completed = [];
+        user.completed.push(file._id);
+        user.record.today = user.record.today + 1;
+        user.record.yesterday = user.record.yesterday + 1;
+        user.record.past_week = user.record.past_week + 1;
+        user.record.past_month = user.record.past_month + 1;
+        user.record.past_quarter = user.record.past_quarter + 1;
+        user.record.past_year = user.record.past_year + 1;
+        user.record.all_time = user.record.all_time + 1;
+        await User.findOneAndUpdate({_id: user._id}, {$set: user});
+
+        if(!file.lineage[index+1]) file.concluded = true;
         const updated = await File.findOneAndUpdate({file_number: file.file_number}, { $set: file}, {new:true});
 
         res.json(updated)
@@ -295,5 +337,6 @@ router.post('/done', [auth], async(req,res)=>{
         res.status(400).json({errors: [{msg: err.message}]});
     }
 });
+
 
 module.exports = router;

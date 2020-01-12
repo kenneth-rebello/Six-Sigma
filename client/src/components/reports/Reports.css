@@ -1,21 +1,21 @@
-.file-item{
+.report-item{
     margin-bottom: 10rem;
 }
 
-.file-item .card{
+.report-item .card{
     height: fit-content;
     border: 3px;
     border-style: ridge;
 }
 
-.file-item .label{
+.report-item .label{
     color: black;
     font-size: 0.9rem;
     margin: 0.5rem;
     margin-left: 0;
 }
 
-.file-item .title{
+.report-item .title{
     color: teal;
     font-weight: bold;
     font-size: 1.4rem;
@@ -23,24 +23,20 @@
     margin-bottom: 0;
 }
 
-.file-item .subtitle{
+.report-item .subtitle{
     color: darkslategray;
     font-weight: bold;
     font-size: 1.2rem;
     display: block;
 }
 
-.file-item .name{
+.report-item .name{
     color: darkslategray;
     font-weight: bold;
     font-size: 1.2rem;
     display: block;
 }
 
-.file-item .col{
+.report-item .col{
     max-height: 3.2rem;
-}
-
-.file-item .btn{
-    font-size: 0.8rem;
 }

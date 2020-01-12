@@ -39,6 +39,10 @@
     color: teal;
 }
 
+.file-page .deadline{
+    color: red;
+}
+
 .details{
     color: darkslategrey;
     font-size: 1.2rem;

@@ -8,8 +8,10 @@ export const FETCH_FILES = "FETCH_FILES";
 export const FETCH_OWN_FILES = "FETCH_OWN_FILES";
 export const FETCH_ASS_FILES = "FETCH_ASS_FILES";
 export const FETCH_UPC_FILES = "FETCH_UPC_FILES";
+export const FETCH_CMP_FILES = "FETCH_CMP_FILES";
 
 export const FETCH_DEPTS = "FETCH_DEPTS";
+export const FETCH_REPORTS = "FETCH_REPORTS";
 
 export const CHECK_ONLINE = "CHECK_ONLINE";
 export const SET_ALERT = "SET_ALERT";

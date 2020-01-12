@@ -35,15 +35,12 @@ const userSchema = new mongoose.Schema({
         ref: 'user'
     },
     upcoming:[{
-        owner:{
-            type: String
-        },
-        creator:{
-            type: String
-        },
-        name:{
-            type: String
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'file'
+    }],
+    completed:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'file'
     }],
     avg_comp_time:{
         type: Number

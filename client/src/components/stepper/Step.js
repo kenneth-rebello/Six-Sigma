@@ -67,8 +67,7 @@ export default class Step extends Component {
         textAlign: 'center',
         display: 'block',
         color: defaultTitleColor,
-        opacity: defaultTitleOpacity,
-        cursor: 'pointer'
+        opacity: defaultTitleOpacity
       },
       activeTitle: {
         color: activeTitleColor,
