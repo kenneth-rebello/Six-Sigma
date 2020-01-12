@@ -1,13 +1,12 @@
-import React ,{ useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { fetchRequests, fetchRequestsForUser } from '../../actions/util.actions';
+import RequestItem from './RequestItem';
 import { List } from 'react-virtualized';
-import { Link } from 'react-router-dom';
-import { fetchReports } from '../../actions/util.actions';
-import ReportItem from './ReportItem';
 
-const Reports = (props) => {
+const Requests = (props) => {
 
-    const { reports, loading, fetchReports } = props;
+    const { requests, supervisor, loading, fetchRequests, fetchRequestsForUser } = props;
 
     const [size, setSize] = useState({
         height: 0.85*window.innerHeight,
@@ -16,7 +15,7 @@ const Reports = (props) => {
     })
 
     useEffect(()=>{
-        fetchReports();
+        supervisor ? fetchRequests() : fetchRequestsForUser();
         window.addEventListener('resize', updateSize);
     },[]);
 
@@ -32,7 +31,7 @@ const Reports = (props) => {
         
         return (
           <div key={key} style={style}>
-            <ReportItem report={reports[index]}/>
+            <RequestItem request={requests[index]}/>
           </div>
         );
     }
@@ -41,7 +40,7 @@ const Reports = (props) => {
         <div className="all-users">
             
             {!loading && <List
-                rowCount={reports.length}
+                rowCount={requests.length}
                 rowHeight={size.row}
                 rowRenderer={rowRenderer}
                 height={size.height}
@@ -53,8 +52,9 @@ const Reports = (props) => {
 }
 
 const mapStateToProps = state => ({
-    reports: state.file.reports,
-    loading: state.file.loading
+    requests: state.util.requests,
+    loading: state.util.loading,
+    supervisor: state.user.supervisor
 })
 
-export default connect(mapStateToProps, {fetchReports})(Reports);
+export default connect(mapStateToProps, { fetchRequests, fetchRequestsForUser })(Requests)

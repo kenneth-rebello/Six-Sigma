@@ -22,6 +22,7 @@ app.use('/api/user', require('./routes/api/user'));
 app.use('/api/file', require('./routes/api/file'));
 app.use('/api/dept', require('./routes/api/dept'));
 app.use('/api/report', require('./routes/api/report'));
+app.use('/api/request', require('./routes/api/request'));
 
 connectDB();
 

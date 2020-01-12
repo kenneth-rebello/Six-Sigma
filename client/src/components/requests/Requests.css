@@ -1,0 +1,42 @@
+.request-item{
+    margin-bottom: 10rem;
+}
+
+.request-item .card{
+    height: fit-content;
+    border: 3px;
+    border-style: ridge;
+}
+
+.request-item .label{
+    color: black;
+    font-size: 0.9rem;
+    margin: 0.5rem;
+    margin-left: 0;
+}
+
+.request-item .title{
+    color: teal;
+    font-weight: bold;
+    font-size: 1.4rem;
+    display: block;
+    margin-bottom: 0;
+}
+
+.request-item .subtitle{
+    color: darkslategray;
+    font-weight: bold;
+    font-size: 1.2rem;
+    display: block;
+}
+
+.request-item .name{
+    color: darkslategray;
+    font-weight: bold;
+    font-size: 1.2rem;
+    display: block;
+}
+
+.request-item .col{
+    max-height: 3.2rem;
+}

@@ -1,10 +1,12 @@
 import React, { useState, Fragment } from 'react';
 import './Reports.css';
+import { connect } from 'react-redux';
 import { overlay, content } from '../../utils/modalStyles';
 import Modal from 'react-modal';
 import Moment from 'react-moment';
+import { deleteReport } from '../../actions/file.actions';
 
-const ReportItem = ({report}) => {
+const ReportItem = ({report, deleteReport}) => {
 
     const [more, toggleMore] = useState(false)
 
@@ -30,7 +32,7 @@ const ReportItem = ({report}) => {
                             <button onClick={()=>toggleMore(true)} className="btn teal">
                                 Show More
                             </button>
-                            <button className="btn red">
+                            <button className="btn red" onClick={()=>deleteReport(report._id)}>
                                 Dismiss Report
                             </button>
                         </div>
@@ -61,4 +63,4 @@ const ReportItem = ({report}) => {
         </div>
     )
 }
-export default ReportItem;
+export default connect(null, { deleteReport })(ReportItem);

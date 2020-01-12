@@ -12,6 +12,7 @@ const Dashboard = ({owned, assigned, upcoming, completed, currentUser, superviso
     if(currentUser){
         let today = new Date;
         let urgent = [];
+
         owned.map(file=>{
             file.lineage.every(user => {
                 if( user.user._id===currentUser._id ){
@@ -33,12 +34,19 @@ const Dashboard = ({owned, assigned, upcoming, completed, currentUser, superviso
                 return true
             })
         })
+
+        let concluded = [];
+        if(assigned) assigned.map(file => {
+            if(file.concluded) concluded.push(file)
+        })
+
         pages = [
             { name: 'Owned Files', component: <Panel files={owned}/> },
             { name: 'Urgent Files', component: <Panel files={urgent}/> },
             { name: 'Upcoming Files', component: <Panel files={upcoming}/> },
             { name: 'Completed Files', component: <Panel files={completed}/> }
         ];
+        if(supervisor) pages.unshift({ name: 'Concluded Files', component: <Panel files={concluded}/> })
         if(supervisor) pages.unshift({ name: 'Assigned Files', component: <Panel files={assigned}/> })
     }   
      

@@ -12,6 +12,7 @@ export const FETCH_CMP_FILES = "FETCH_CMP_FILES";
 
 export const FETCH_DEPTS = "FETCH_DEPTS";
 export const FETCH_REPORTS = "FETCH_REPORTS";
+export const FETCH_REQUESTS = "FETCH_REQUESTS";
 
 export const CHECK_ONLINE = "CHECK_ONLINE";
 export const SET_ALERT = "SET_ALERT";

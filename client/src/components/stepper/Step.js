@@ -67,7 +67,8 @@ export default class Step extends Component {
         textAlign: 'center',
         display: 'block',
         color: defaultTitleColor,
-        opacity: defaultTitleOpacity
+        opacity: defaultTitleOpacity,
+        cursor: 'pointer'
       },
       activeTitle: {
         color: activeTitleColor,
@@ -111,7 +112,7 @@ export default class Step extends Component {
   }
 
   render() {
-    const { title, icon, index, active, completed, first, isLast, href, onClick, onTitleHover } = this.props;
+    const { title, icon, index, active, completed, first, isLast, href, onClick, onNameClick } = this.props;
 
     const styles = this.getStyles();
     const circleStyle = Object.assign(
@@ -139,9 +140,9 @@ export default class Step extends Component {
         )}
         </div>
         {active || completed ? (
-          <a href={href} style={ titleStyle }>{ title }</a>
+          <p onClick={onNameClick} style={ titleStyle }>{ title }</p>
         ) : (
-          <div style={ titleStyle }>{ title }</div>
+          <div onClick={onNameClick} style={ titleStyle }>{ title }</div>
         )}
         { !first && <div style={ leftStyle }></div> }
         { !isLast && <div style={ rightStyle }></div> }

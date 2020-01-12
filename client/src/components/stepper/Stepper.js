@@ -39,6 +39,7 @@ function Stepper({
             icon={step.icon}
             href={step.href}
             onClick={step.onClick}
+            onNameClick={step.onNameClick}
             active={index === activeStep}
             completed={index < activeStep}
             first={index === 0}

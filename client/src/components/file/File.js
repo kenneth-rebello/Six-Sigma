@@ -10,6 +10,7 @@ import Modal from 'react-modal';
 import { overlay, content } from '../../utils/modalStyles';
 import { setFormDataAction } from '../../actions/util.actions';
 import ReportForm from './ReportForm';
+import Request from './Request';
 
 const File = ({match, history, file, currentUser, getFileById, markFileDone, setFormDataAction}) => {
 
@@ -17,7 +18,7 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
     const [activeStep, setActiveStep] = useState(-1);
 
     const [open, toggleOpen] = useState(false);
-    const [details, setDetails] = useState("");
+    const [details, setDetails] = useState({});
 
     const [list, toggleList] = useState(false);
     
@@ -25,6 +26,7 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
     const [step, setStep] = useState({});
     
     const [owner, setOwner] = useState({});
+    const [user, setUser] = useState({});
 
     useEffect(()=>{
         getFileById(match.params.id)
@@ -38,6 +40,7 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
     let stepsTemp = [];
     const createStepper = () => {
         file.lineage.map((each, idx) => {
+            if(each.user._id===currentUser._id) setUser(each)
             if(each.owner){
                 setActiveStep(idx);
                 setOwner(each)
@@ -47,6 +50,10 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
                 onClick: (e) => {
                     e.preventDefault()
                     getDetails(each)
+                },
+                onNameClick: (e)=>{
+                    e.preventDefault()
+                    history.push(`/user/${each.user._id}`)
                 }
             })
         });
@@ -54,8 +61,8 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
     }
 
     const getDetails = obj => {
-        if(obj.user._id===currentUser._id && obj.notes){
-            setDetails(obj.notes);
+        if(obj.user._id===currentUser._id){
+            setDetails(obj);
             toggleOpen(true);
         }else if(obj.user._id!==currentUser._id && obj.done){
             setStep(obj);
@@ -72,7 +79,6 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
         history.push(`/reassign/${match.params.id}`)
     }
 
-
     return (
         file && <div className="file-page">
             <FileItem file={file}/>
@@ -83,6 +89,18 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
                         Mark as Complete
                     </button>
                     : <p>You have completed this task</p> }
+                    
+                    {user && user.deadline && !user.done && <Request supervisor={file.creator} old_date={user.deadline}
+                        user={{
+                            _id: currentUser._id,
+                            displayName: currentUser.displayName
+                        }} 
+                        file={{
+                            id:file._id, 
+                            number:file.file_number
+                        }}
+                    />}
+
                     <p className="deadline">
                         Deadline:
                         <Moment format="DD/MM/YYYY">
@@ -91,22 +109,28 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
                     </p>
                 </Fragment>
             }
+
+
+            {
+                file && file.creator._id===currentUser._id && 
+                <Fragment>
+                    {!file.concluded && <button className="btn" onClick={()=>editFilePath()}>
+                        Edit File Path
+                    </button>}
+                    <button className="btn red" onClick={()=>toggleList(true)}>
+                        Show Unauthorized Scans 
+                    </button>
+                </Fragment>
+            }
+
             
             {file.description && <div className="description">
                 <h5 className="heading teal-text">Description</h5>
                 <p className="desc-text">{file.description}</p>
             </div>}
+
             <div className="stepper">
                 <h5 className="heading teal-text">Progress</h5>
-                {file && file.creator._id===currentUser._id && 
-                <Fragment>
-                    <button className="btn" onClick={()=>editFilePath()}>
-                        Edit File Path
-                    </button>
-                    <button className="btn red" onClick={()=>toggleList(true)}>
-                        Show Unauthorized Scans 
-                    </button>
-                </Fragment>}
                 <Stepper steps={steps}
                     activeStep ={activeStep}
                     circleFontSize={0}
@@ -130,7 +154,10 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
                 ariaHideApp={false}
             >
                 <h4 className="modal-title">Notes for {currentUser.displayName}</h4>
-                <p className="details">{details}</p>
+                <p className="details">{details.notes ? details.notes : "No notes"}</p>
+                <span><Moment format="DD/MM/YYYY">
+                    {details.deadline}
+                </Moment></span>
             </Modal>
 
             <Modal 
@@ -172,7 +199,8 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
                     <ReportForm supervisor={file.creator} user={step.user} 
                         file={{
                             id:file._id, 
-                            number:file.file_number
+                            number:file.file_number,
+                            owner: file.owner._id
                         }}
                         closeReportForm = {()=>toggleReport(false)}
                     />

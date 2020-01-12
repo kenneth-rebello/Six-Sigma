@@ -1,6 +1,6 @@
 .alerts{
     width:100vw;
-    max-height:fit-content;
+    min-height:1rem;
     background-color: red;
     color:whitesmoke;
     align-items: center;

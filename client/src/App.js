@@ -25,6 +25,7 @@ import PrivateRoute from './components/routing/PrivateRoute';
 import OnlineRoute from './components/routing/OnlineRoute';
 import SupervisorRoute from './components/routing/SupervisorRoute';
 import Reports from './components/reports/Reports';
+import Requests from './components/requests/Requests';
 
 
 const App = (props) => {
@@ -68,6 +69,7 @@ const App = (props) => {
             <PrivateRoute exact path="/users" component={AllUsers}/>
             <SupervisorRoute exact path="/reassign/:id" component={Reassign}/>
             <SupervisorRoute exact path="/reports" component={Reports}/>
+            <PrivateRoute exact path="/requests" component={Requests}/>
           </ErrorBoundary>
         </div>
       </Switch>
