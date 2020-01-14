@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import { getOwnedFiles, getAssignedFiles, getUpcomingFiles, getCompletedFiles, getOverdueFiles, getLateFiles } from '../../actions/file.actions';
 import Dashboard from './Dashboard';
 import { checkPending } from '../../actions/alert.actions';
+import { fetchReports, fetchRequests } from '../../actions/util.actions';
 
-const Home = ({ getOwnedFiles, getAssignedFiles, getUpcomingFiles, getCompletedFiles, getOverdueFiles, getLateFiles, checkPending,
-             owned, assigned, upcoming, completed, overdue, supervisor, msg, url }) => {
+const Home = ({ getOwnedFiles, getAssignedFiles, getUpcomingFiles, getCompletedFiles, getOverdueFiles,
+             getLateFiles, checkPending, fetchReports, fetchRequests, reports, requests,
+             owned, assigned, upcoming, completed, overdue, supervisor }) => {
 
     useEffect(()=>{
         getOwnedFiles();
@@ -15,15 +17,11 @@ const Home = ({ getOwnedFiles, getAssignedFiles, getUpcomingFiles, getCompletedF
         if(supervisor){
             getAssignedFiles();
             getOverdueFiles();
-            checkPending();
+            fetchReports();
+            fetchRequests();
+            checkPending(reports, requests);
         }else{
             getLateFiles();
-        }
-    },[])
-
-    useEffect(()=>{
-        if(msg){
-            alert(`${msg} - ${url} is a secured page`)
         }
     },[])
 
@@ -44,8 +42,10 @@ const mapStateToProps = state => ({
     assigned: state.file.assigned,
     upcoming: state.file.upcoming,
     completed: state.file.completed,
-    overdue: state.file.overdue
+    overdue: state.file.overdue,
+    reports: state.file.reports,
+    requests: state.util.requests
 })
 
 export default connect(mapStateToProps, { getOwnedFiles, getAssignedFiles, getUpcomingFiles,
-    getCompletedFiles, getOverdueFiles, getLateFiles, checkPending  })(Home);
+    getCompletedFiles, getOverdueFiles, getLateFiles, fetchRequests, fetchReports, checkPending })(Home);

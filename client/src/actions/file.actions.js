@@ -326,3 +326,28 @@ export const deleteReport = id => async dispatch => {
         }
     }
 }
+
+export const recordReport = (data) => async dispatch => {
+    try {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const res = await axios.post('/api/report/record', data, config);
+
+        dispatch({
+            type: FETCH_REPORTS,
+            payload: res.data
+        })
+
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+    }
+}

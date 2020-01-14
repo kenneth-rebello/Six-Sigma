@@ -3,13 +3,14 @@ import './Requests.css';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { deleteRequest } from '../../actions/util.actions';
+import { deleteRequest, grantRequest } from '../../actions/util.actions';
 import { overlay, content } from '../../utils/modalStyles';
 import Modal from 'react-modal';
 
-const RequestItem = ({currentUser, request, supervisor, deleteRequest}) => {
+const RequestItem = ({currentUser, request, supervisor, deleteRequest, grantRequest}) => {
 
     const [more, toggleMore] = useState(false)
+    const [dismiss, toggleDismiss] = useState(false)
 
     return (
         <Fragment>
@@ -43,14 +44,38 @@ const RequestItem = ({currentUser, request, supervisor, deleteRequest}) => {
                     <Link className="btn green" to={`/file/${request.file._id}`} >
                         Go To File
                     </Link>
-                    {request.user._id===currentUser._id && <span>
-                        Status: {request.accepted ? "Accepted" : "Awaiting"}    
-                    </span>}
-                    {supervisor && <button className="btn red" onClick={()=>deleteRequest(request._id)}>
+                    {request.user._id===currentUser._id && <Fragment>
+                        <button className="btn red" onClick={()=>deleteRequest(request._id)}>
+                            Remove
+                        </button>
+                        <span>
+                            Status: {request.accepted ? "Accepted" : "Awaiting"}    
+                        </span>
+                    </Fragment> }
+                    {supervisor && <button className="btn red" onClick={()=>toggleDismiss(true)}>
                         Dismiss
                     </button>}
                 </div>
             </div>
+
+            <Modal 
+                isOpen={dismiss}
+                onRequestClose={()=>toggleDismiss(false)}
+                style={{
+                    overlay: overlay,
+                    content: content
+                }}
+                ariaHideApp={false}
+            >
+                <button className="btn red" onClick={()=>deleteRequest(request._id)}>
+                    Delete without accepting
+                </button>
+                <button className="btn green" onClick={()=>grantRequest(request._id)}>
+                    Grant and delete
+                </button>
+                <span>Make sure you have edited the deadline for this request before granting it</span>
+            </Modal>
+
             <Modal 
                 isOpen={more}
                 onRequestClose={()=>toggleMore(false)}
@@ -80,4 +105,4 @@ const mapStateToProps = state => ({
     currentUser: state.user.currentUser
 })
 
-export default connect(mapStateToProps, {deleteRequest})(RequestItem);
+export default connect(mapStateToProps, {deleteRequest, grantRequest})(RequestItem);

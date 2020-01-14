@@ -8,7 +8,7 @@ const Request = require('../../models/Request');
 router.get('/', [auth], async(req, res)=>{
     try {
         
-        const requests = await Request.find({supervisor:req.user})
+        const requests = await Request.find({supervisor:req.user, accepted:false})
         .populate('user',['displayName','designation'])
         .populate('supervisor',['displayName','designation'])
         .populate('file',['file_number']);
@@ -100,12 +100,32 @@ router.post('/', [auth], async(req, res)=>{
     }
 });
 
+
+router.get('/grant/:id', [auth], async(req,res)=>{
+    try {
+        
+        await Request.findByIdAndUpdate( req.params.id, {$set: {accepted: true}});
+
+        const requests = await Request.find({supervisor:req.user, accepted:false})
+        .populate('user',['displayName','designation'])
+        .populate('supervisor',['displayName','designation'])
+        .populate('file',['file_number']);
+
+        res.json(requests);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+});
+
+
 router.get('/delete/:id', [auth], async(req,res)=>{
     try {
         
         const request = await Request.findById(req.params.id);
 
-        if(request.supervisor!=req.user){
+        if(request.supervisor!=req.user && request.user!=req.user ){
             return res.status(403).json({
                 errors: [{msg: 'You are not authorized to perform this action'}]
             })
@@ -113,10 +133,20 @@ router.get('/delete/:id', [auth], async(req,res)=>{
 
         await Request.findOneAndDelete(req.params.id);
 
-        const requests = await Request.find({supervisor:req.user})
-        .populate('user',['displayName','designation'])
-        .populate('supervisor',['displayName','designation'])
-        .populate('file',['file_number']);
+        let requests = []
+        if(request.supervisor==req.user){
+
+            requests = await Request.find({supervisor:req.user, accepted:false})
+            .populate('user',['displayName','designation'])
+            .populate('supervisor',['displayName','designation'])
+            .populate('file',['file_number']);
+
+        }else if(request.user==req.user){
+            requests = await Request.find({user:req.user})
+            .populate('user',['displayName','designation'])
+            .populate('supervisor',['displayName','designation'])
+            .populate('file',['file_number']);
+        }
 
         res.json(requests);
 

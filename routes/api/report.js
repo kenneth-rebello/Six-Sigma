@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const auth = require('../../middleware/auth');
 
 const Report = require('../../models/Report');
+const File = require('../../models/File');
 
 router.get('/', [auth], async(req, res)=>{
     try {
@@ -105,6 +106,34 @@ router.get('/delete/:id', [auth], async(req,res)=>{
 
         res.json(reports);
 
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+})
+
+router.post('/record', [auth], async(req,res)=>{
+    try {
+        
+        const { id, summary } = req.body;
+
+        const report = await Report.findById(id);
+
+        const file = await File.findById(report.file);
+
+        if(!file.defaulters) file.defaulters = [];
+        file.defaulters.push({
+            user: report.against,
+            summary: summary
+        })
+
+        await File.findOneAndUpdate({ _id: file._id }, { $set: file });
+        await Report.findByIdAndDelete(id)
+
+        const reports = await Report.find({supervisor:req.user});
+
+        res,json(reports)
+        
     } catch (err) {
         console.error(err.message);
         res.status(400).json({errors: [{msg: err.message}]});

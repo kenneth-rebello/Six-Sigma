@@ -138,7 +138,7 @@ const File = ({match, history, file, currentUser, supervisor,
                     defaultColor="darkgrey"
                     completeColor="teal"
                     completeBarColor="teal"
-                    titleFontSize='1rem'
+                    titleFontSize={15}
                 />
             </div>
            

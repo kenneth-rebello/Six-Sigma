@@ -87,6 +87,20 @@ const fileSchema = new mongoose.Schema({
             type: Date,
             default: new Date
         }
+    }],
+    defaulters:[{
+        user:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
+        },
+        summary:{
+            type: String,
+            required: true
+        },
+        date:{
+            type: Date,
+            default: new Date
+        }
     }]
 });
 

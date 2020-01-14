@@ -19,8 +19,6 @@ export const fetchReports = () => async dispatch => {
             payload: res.data
         })
 
-        return res.data;
-
     } catch (err) {
         console.log(err)
         const errors = err.response.data.errors;
@@ -60,8 +58,6 @@ export const fetchRequests = () => async dispatch => {
             payload: res.data
         })
 
-        return res.data
-
     } catch (err) {
         console.log(err)
         const errors = err.response.data.errors;
@@ -88,6 +84,23 @@ export const fetchRequestsForUser = () => async dispatch => {
         if(errors){
             errors.forEach(error => dispatch(setAlert(error.msg)));
         }
+    }
+}
+
+export const grantRequest = id => async dispatch => {
+    try {
+        
+        const res = await axios.get(`/api/request/grant/${id}`);
+
+        dispatch(setAlert('Request has been granted, make sure you have updated the file path'));
+
+        dispatch({
+            type: FETCH_REQUESTS,
+            payload: res.data
+        })
+
+    } catch (err) {
+        
     }
 }
 

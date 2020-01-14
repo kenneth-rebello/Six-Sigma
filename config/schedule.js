@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const File = require('../models/File');
 const Delay = require('../models/Delay');
 
-const X = schedule.scheduleJob('56 14 * * *', async () => {
+const X = schedule.scheduleJob('08 20 * * *', async () => {
   const files = await File.find({concluded:false})
   .populate('creator',['displayName','email'])
   .populate('owner',['displayName','email']);
@@ -18,12 +18,17 @@ const X = schedule.scheduleJob('56 14 * * *', async () => {
             delay = true
             duration = (new Date).getDate() - user.deadline.getDate();
             return false
+        }else{
+            file.overdue = false
+            user.overdue = false
+            return false
         }
         return true
     })
 
+    await File.findOneAndUpdate({_id:file._id}, {$set: file})
+
     if(delay){
-        await File.findOneAndUpdate({_id:file._id}, {$set: file})
 
         let transporter = nodemailer.createTransport({
             service: 'gmail',

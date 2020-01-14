@@ -17,13 +17,12 @@ export const setAlert = (msg, timeout = 5000) => dispatch => {
 
 }
 
-export const checkPending = () => dispatch => {
+export const checkPending = (reports, requests) => dispatch => {
     try {
-        
-        const requests = fetchRequests();
-        const reports = fetchReports();
 
-        dispatch(setAlert(`You have ${requests.length} pending requests and ${reports.length} pending reports`))
+        if(requests.length>0 || reports.length>0){
+            dispatch(setAlert(`You have ${requests.length} pending requests and ${reports.length} pending reports`))
+        }
 
     } catch (err) {
         

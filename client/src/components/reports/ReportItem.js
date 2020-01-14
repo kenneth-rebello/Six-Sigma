@@ -4,11 +4,25 @@ import { connect } from 'react-redux';
 import { overlay, content } from '../../utils/modalStyles';
 import Modal from 'react-modal';
 import Moment from 'react-moment';
-import { deleteReport } from '../../actions/file.actions';
+import { deleteReport, recordReport } from '../../actions/file.actions';
 
-const ReportItem = ({report, deleteReport}) => {
+const ReportItem = ({report, deleteReport, recordReport}) => {
 
     const [more, toggleMore] = useState(false)
+    const [save, toggleSave] = useState(false)
+
+    const [msg, setMsg] = useState("")
+
+    const Submitter = e =>{
+        e.preventDefault();
+        const body = {
+            summary: msg,
+            id: report._id
+        }
+        recordReport(body);
+        setMsg("")
+        toggleSave(false)
+    }
 
     return (
         <div className="report-item row">
@@ -33,6 +47,9 @@ const ReportItem = ({report, deleteReport}) => {
                     <button className="btn red" onClick={()=>deleteReport(report._id)}>
                         Dismiss Report
                     </button>
+                    <button className="btn" onClick={()=>toggleSave(true)}>
+                        Save Report
+                    </button>
                 </div>
             </div>
 
@@ -56,7 +73,25 @@ const ReportItem = ({report, deleteReport}) => {
                     </span>
                 </Fragment>
             </Modal>
+
+            <Modal
+                isOpen={save}
+                onRequestClose={()=>toggleSave(false)}
+                style={{
+                    overlay: overlay,
+                    content: content
+                }}
+                ariaHideApp={false}
+            >
+                <form onSubmit={e=>Submitter(e)}>
+                    <input type="text" value={msg} onChange={(e)=>setMsg(e.target.value)} required/>
+                    <input className="btn" type="submit" value="Submit"/>
+                    <br/>
+                    <span>By saving this report (permenantly) you are acknowledging that this report is 
+                        legitimate and this will affect the concerned users credibility</span>
+                </form>
+            </Modal>
         </div>
     )
 }
-export default connect(null, { deleteReport })(ReportItem);
+export default connect(null, { deleteReport, recordReport })(ReportItem);
