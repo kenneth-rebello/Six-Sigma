@@ -5,6 +5,7 @@ const initialState = {
     loggedIn:false,
     users:[],
     supervisor: false,
+    language: "",
     loading: true,
     online: false
 }
@@ -20,6 +21,7 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 currentUser: payload,
                 supervisor: payload.designation=="Position S" ? true : false,
+                language: payload.language,
                 loggedIn: true,
                 loading: false
             }

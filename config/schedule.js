@@ -1,9 +1,11 @@
 const schedule = require('node-schedule');
 const nodemailer = require('nodemailer'); 
+const User = require('../models/User'); 
 const File = require('../models/File');
 const Delay = require('../models/Delay');
+const Stat = require('../models/Stat');
 
-const X = schedule.scheduleJob('08 20 * * *', async () => {
+const X = schedule.scheduleJob('00 00 * * *', async () => {
   const files = await File.find({concluded:false})
   .populate('creator',['displayName','email'])
   .populate('owner',['displayName','email']);
@@ -90,3 +92,62 @@ const X = schedule.scheduleJob('08 20 * * *', async () => {
 });
 
 module.exports.checkDeadline = X
+
+const Day = schedule.scheduleJob('00 00 * * *', async () => {
+    const users = await User.find();
+
+    users.forEach(async user => {
+        user.record.yesterday = user.record.today
+        user.record.today = 0
+        await User.findByIdAndUpdate(user._id, {$set: user});
+    })
+})
+
+module.exports.updateDaily = Day
+
+const Week = schedule.scheduleJob('00 00 * * 7', async () => {
+    const users = await User.find();
+
+    users.forEach(async user => {
+        user.record.this_week = 0;
+        await User.findByIdAndUpdate(user._id, {$set: user});
+    })
+})
+
+module.exports.updateWeekly = Week
+
+const Month = schedule.scheduleJob('05 02 * * *', async () => {
+    const users = await User.find();
+
+    users.forEach(async user => {
+        let stats = await Stat.findOne({user: user._id});
+        if(stats){
+            stats.record.push({value: user.record.this_month});
+            await Stat.findByIdAndUpdate(stats.id, {$set: stats});
+        }else{
+            stats = new Stat({
+                user: user._id,
+                record: [
+                    { value: user.record.this_month }
+                ]
+            });
+            await stats.save();
+        }
+
+        user.record.this_month = 0;
+        await User.findByIdAndUpdate(user._id, {$set: user});
+    })
+})
+
+module.exports.updateMonthly = Month
+
+const Year = schedule.scheduleJob('00 00 1 1 *', async () => {
+    const users = await User.find();
+
+    users.forEach(async user => {
+        user.record.this_year = 0;
+        await User.findByIdAndUpdate(user._id, {$set: user});
+    })
+})
+
+module.exports.updateYearly = Year

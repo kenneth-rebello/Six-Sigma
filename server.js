@@ -29,6 +29,10 @@ app.use('/api/request', require('./routes/api/request'));
 connectDB();
 
 Schedule.checkDeadline;
+Schedule.updateDaily;
+Schedule.updateMonthly;
+Schedule.updateWeekly;
+Schedule.updateYearly;
 
 const PORT = process.env.PORT || 5000;
 

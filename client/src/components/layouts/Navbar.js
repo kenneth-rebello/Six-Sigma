@@ -6,10 +6,13 @@ import SignOut from '../auth/SignOut';
 import Alert from './Alert';
 import { unsetCurrentUser } from '../../actions/user.actions';
 import { signInWithGoogle } from '../../firebase/firebase.utils';
+import { dict } from '../../utils/language';
+import LanguageSelect from './LanguageSelect';
 
-const Navbar = ({currentUser, unsetCurrentUser}) => {
+const Navbar = ({language, currentUser, unsetCurrentUser}) => {
 
     const [hidden, toggleHidden] = useState(false)
+    const [manualOpen, setManualOpen] = useState(false)
 
     return (
         <Fragment>
@@ -21,15 +24,17 @@ const Navbar = ({currentUser, unsetCurrentUser}) => {
                         <a data-target="mobile-demo" className="sidenav-trigger">Click</a>
                         <ul className="right hide-on-med-and-down">
                             <li><a className="dropdown-trigger" href="#!" data-target="file-dropdown">
-                                File
+                                {dict["File"][language]}
                             </a></li>
                             <li><a className="dropdown-trigger" href="#!" data-target="qr-dropdown">
                                 QR
                             </a></li>
                             <li><a className="dropdown-trigger" href="#!" data-target="user-dropdown">
-                                User
+                                {dict["User"][language]}
                             </a></li>
-                            { !currentUser ? <li><a href="#" onClick={signInWithGoogle}>SignIn</a></li> 
+                            { !currentUser ? <li><a href="#" onClick={signInWithGoogle}>
+                                {dict["Sign In"][language]}
+                            </a></li> 
                             : <li>
                                 <a href="#" onClick={()=>toggleHidden(!hidden)}>
                                     {currentUser.displayName}
@@ -51,17 +56,19 @@ const Navbar = ({currentUser, unsetCurrentUser}) => {
                 { currentUser && <li className="username">
                     { currentUser.displayName }
                 </li> }
-                <li><a href="/">Home</a></li>
+                <li><a href="/">
+                    {dict["Home"][language]}
+                </a></li>
                 <li>
                     <ul className="collapsible">
                         <li>
-                            <div className="collapsible-header">File</div>
+                            <div className="collapsible-header">{dict["File"][language]}</div>
                             <div className="collapsible-body">
                                 <ul>
-                                    <li><a href="/new_file">New File</a></li>
-                                    <li><a href="/files">All Files</a></li>
-                                    <li><a href="/reports">Reports</a></li>
-                                    <li><a href="/requests">Requests</a></li>
+                                    <li><a href="/new_file">{dict["New File"][language]}</a></li>
+                                    <li><a href="/files">{dict["All Files"][language]}</a></li>
+                                    <li><a href="/reports">{dict["Reports"][language]}</a></li>
+                                    <li><a href="/requests">{dict["Requests"][language]}</a></li>
                                 </ul>
                             </div>
                         </li> 
@@ -73,8 +80,8 @@ const Navbar = ({currentUser, unsetCurrentUser}) => {
                             <div className="collapsible-header">QR</div>
                             <div className="collapsible-body">
                                 <ul>
-                                    <li><a href="/generator">New QRCode</a></li>
-                                    <li><a href="/scanner">QR Scanner</a></li>
+                                    <li><a href="/generator">{dict["New QRCode"][language]}</a></li>
+                                    <li><a href="/scanner">{dict["QR Scanner"][language]}</a></li>
                                 </ul>
                             </div>
                         </li> 
@@ -83,18 +90,23 @@ const Navbar = ({currentUser, unsetCurrentUser}) => {
                 <li>
                     <ul className="collapsible">
                         <li>
-                            <div className="collapsible-header">User</div>
+                            <div className="collapsible-header">{dict["User"][language]}</div>
                             <div className="collapsible-body">
                                 <ul>
-                                    <li><a href="/users">All Users</a></li>
+                                    <li><a href="/users">{dict["All Users"][language]}</a></li>
                                     <li><a href="/register">
-                                        {currentUser && currentUser.registered ? "Edit Profile" : "Register"}
+                                        {currentUser && currentUser.registered ?
+                                         dict["Edit Profile" ][language]
+                                         : dict["Register"][language]}
                                     </a></li>
                                     {currentUser ? <button className="sign-out-link" onClick={()=>unsetCurrentUser()}>
-                                        Sign Out
+                                        {dict["Sign Out"][language]}
                                     </button>: <button onClick={signInWithGoogle}>
-                                        Sign In
+                                        {dict["Sign In"][language]}
                                     </button>}
+                                    <li><a href="/language">
+                                        {dict["Change Language"][language]}
+                                    </a></li>
                                 </ul>
                             </div>
                         </li> 
@@ -104,28 +116,35 @@ const Navbar = ({currentUser, unsetCurrentUser}) => {
 
 
             <ul id="file-dropdown" className="dropdown-content">
-                <li><a href="/new_file">New File</a></li>
-                <li><a href="/files">All Files</a></li>
-                <li><a href="/reports">Reports</a></li>
-                <li><a href="/requests">Requests</a></li>
+                <li><a href="/new_file">{dict["New File"][language]}</a></li>
+                <li><a href="/files">{dict["All Files"][language]}</a></li>
+                <li><a href="/reports">{dict["Reports"][language]}</a></li>
+                <li><a href="/requests">{dict["Requests"][language]}</a></li>
             </ul>
             <ul id="user-dropdown" className="dropdown-content">
-                <li><a href="/users">All Users</a></li>
+                <li><a href="/users">{dict["All Users"][language]}</a></li>
                 <li><a href="/register">
-                    {currentUser && currentUser.registered ? "Edit Profile" : "Register"}
+                    {currentUser && currentUser.registered ?
+                        dict["Edit Profile" ][language]
+                        : dict["Register"][language]}
+                </a></li>
+                <li><a href="/language">
+                    {dict["Change Language"][language]}
                 </a></li>
             </ul>
             <ul id="qr-dropdown" className="dropdown-content">
-                <li><a href="/generator">New QRCode</a></li>
-                <li><a href="/scanner">QR Scanner</a></li>
+                <li><a href="/generator">{dict["New QRCode"][language]}</a></li>
+                <li><a href="/scanner">{dict["QR Scanner"][language]}</a></li>
             </ul>
 
+            <LanguageSelect manualOpen={manualOpen}/>
         </Fragment>
     )
 }
 
 const mapStateToProps = state => ({
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
+    language: state.user.language
 })
 
 export default connect(mapStateToProps, {unsetCurrentUser})(Navbar);

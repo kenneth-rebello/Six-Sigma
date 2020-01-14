@@ -324,15 +324,17 @@ router.post('/done', [auth], async(req,res)=>{
         });
 
         if(!user.completed) user.completed = [];
-        user.completed.push(file._id);
-        user.record.today = user.record.today + 1;
-        user.record.yesterday = user.record.yesterday + 1;
-        user.record.past_week = user.record.past_week + 1;
-        user.record.past_month = user.record.past_month + 1;
-        user.record.past_quarter = user.record.past_quarter + 1;
-        user.record.past_year = user.record.past_year + 1;
-        user.record.all_time = user.record.all_time + 1;
-        await User.findOneAndUpdate({_id: user._id}, {$set: user});
+        if(!user.completed.includes(file._id)){
+            user.completed.push(file._id);
+            user.record.today = user.record.today + 1;
+            user.record.yesterday = user.record.yesterday + 1;
+            user.record.this_week = user.record.past_week + 1;
+            user.record.this_month = user.record.past_month + 1;
+            user.record.this_quarter = user.record.past_quarter + 1;
+            user.record.this_year = user.record.past_year + 1;
+            user.record.all_time = user.record.all_time + 1;
+            await User.findOneAndUpdate({_id: user._id}, {$set: user});
+        }
 
         if(!file.lineage[index+1]) file.concluded = true;
         const updated = await File.findOneAndUpdate({file_number: file.file_number}, { $set: file}, {new:true});

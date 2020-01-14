@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema({
     avg_comp_time:{
         type: Number
     },
+    language:{
+        type: String,
+        default: "English"
+    },
     record:{
         today:{
             type: Number,
@@ -54,19 +58,15 @@ const userSchema = new mongoose.Schema({
             type: Number,
             default: 0
         },
-        past_week:{
+        this_week:{
             type: Number,
             default: 0
         },
-        past_month:{
+        this_month:{
             type: Number,
             default: 0
         },
-        past_quarter:{
-            type: Number,
-            default: 0
-        },
-        past_year:{
+        this_year:{
             type: Number,
             default: 0
         },

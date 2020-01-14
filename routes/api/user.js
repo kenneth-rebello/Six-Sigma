@@ -111,4 +111,19 @@ router.post('/register', [auth], async(req,res)=>{
     }
 })
 
+router.get('/language/:lang', [auth], async(req,res)=>{
+    try {
+        
+        const user = await User.findByIdAndUpdate(req.user, {$set: {language: req.params.lang}}, {new: true})
+        .populate('supervisor','displayName')
+        .populate('department', 'name');
+
+        return res.json(user)
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+});
+
 module.exports = router;

@@ -132,7 +132,7 @@ router.post('/record', [auth], async(req,res)=>{
 
         const reports = await Report.find({supervisor:req.user});
 
-        res,json(reports)
+        res.json(reports)
         
     } catch (err) {
         console.error(err.message);

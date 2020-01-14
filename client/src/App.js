@@ -26,6 +26,8 @@ import OnlineRoute from './components/routing/OnlineRoute';
 import SupervisorRoute from './components/routing/SupervisorRoute';
 import Reports from './components/reports/Reports';
 import Requests from './components/requests/Requests';
+import LanguageSelect from './components/layouts/LanguageSelect';
+import LanguageChange from './components/layouts/LanguageChange';
 
 
 const App = (props) => {
@@ -52,7 +54,6 @@ const App = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-
   return (
     <Router>
       <Navbar/>
@@ -61,6 +62,7 @@ const App = (props) => {
           <ErrorBoundary>
             <Route exact path="/" component={Home}/>
             <PrivateRoute exact path="/register" component={Register}/>
+            <PrivateRoute exact path="/language" component={LanguageChange}/>
             <PrivateRoute exact path="/scanner" component={Scanner}/>
             <PrivateRoute exact path="/generator" component={Generator}/>
             <PrivateRoute exact path="/new_file" component={NewFile}/>
@@ -74,6 +76,7 @@ const App = (props) => {
         </div>
       </Switch>
       <Suggestion/>
+      <LanguageSelect/>
     </Router>
   );
 }
