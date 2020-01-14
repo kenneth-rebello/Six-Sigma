@@ -1,17 +1,24 @@
 import React, { useEffect } from 'react';
 import './Home.css';
 import { connect } from 'react-redux';
-import { getOwnedFiles, getAssignedFiles, getUpcomingFiles, getCompletedFiles } from '../../actions/file.actions';
+import { getOwnedFiles, getAssignedFiles, getUpcomingFiles, getCompletedFiles, getOverdueFiles, getLateFiles } from '../../actions/file.actions';
 import Dashboard from './Dashboard';
+import { checkPending } from '../../actions/alert.actions';
 
-const Home = ({ getOwnedFiles, getAssignedFiles, getUpcomingFiles, getCompletedFiles,
-             owned, assigned, upcoming, completed, supervisor, msg, url }) => {
+const Home = ({ getOwnedFiles, getAssignedFiles, getUpcomingFiles, getCompletedFiles, getOverdueFiles, getLateFiles, checkPending,
+             owned, assigned, upcoming, completed, overdue, supervisor, msg, url }) => {
 
     useEffect(()=>{
         getOwnedFiles();
         getUpcomingFiles();
         getCompletedFiles();
-        if(supervisor) getAssignedFiles();
+        if(supervisor){
+            getAssignedFiles();
+            getOverdueFiles();
+            checkPending();
+        }else{
+            getLateFiles();
+        }
     },[])
 
     useEffect(()=>{
@@ -22,7 +29,11 @@ const Home = ({ getOwnedFiles, getAssignedFiles, getUpcomingFiles, getCompletedF
 
     return (
         <div className="home">
-            {owned && <Dashboard owned={owned} assigned={assigned} upcoming={upcoming} completed={completed}/>}
+            {owned && <Dashboard owned={owned} 
+                assigned={assigned} 
+                upcoming={upcoming} 
+                completed={completed}
+                overdue={overdue}/>}
         </div>
     )
 }
@@ -32,7 +43,9 @@ const mapStateToProps = state => ({
     owned: state.file.owned,
     assigned: state.file.assigned,
     upcoming: state.file.upcoming,
-    completed: state.file.completed
+    completed: state.file.completed,
+    overdue: state.file.overdue
 })
 
-export default connect(mapStateToProps, { getOwnedFiles, getAssignedFiles, getUpcomingFiles, getCompletedFiles })(Home);
+export default connect(mapStateToProps, { getOwnedFiles, getAssignedFiles, getUpcomingFiles,
+    getCompletedFiles, getOverdueFiles, getLateFiles, checkPending  })(Home);

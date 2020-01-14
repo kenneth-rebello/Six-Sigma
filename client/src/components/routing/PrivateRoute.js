@@ -1,13 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Route} from 'react-router-dom';
-import Home from '../home/Home';
+import {Route, Redirect} from 'react-router-dom';
 
 const PrivateRoute = ({component: Component, user:{loading, loggedIn}, ...rest}) => {
     
     return (
         <Route {...rest} render = {props => !loading && !loggedIn ? (
-            <Home msg={"You must be logged in to visit this page"} url={props.location.pathname}/>
+            <Redirect to="/"/>
         ):(
             <Component {...props}/>
         )}/>

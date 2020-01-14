@@ -11,6 +11,7 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
 
     const [lineage, setLineage] = useState([])
     const [counter, count] = useState(0);
+    const [focus, setFocus] = useState(0);
     const [loading, setLoading] = useState(false);
     const [designation, setDesignation] = useState("");
 
@@ -34,6 +35,10 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
 
         let tempLineage = [];
         if(formData.data) formData.data.map((data, idx)=>{
+            if(data.owner && !data.done && !focus) {
+                setFocus(idx)
+                count(idx)
+            }
             tempLineage[idx] = {
                 designation: {
                     value: data.user.designation
@@ -44,7 +49,9 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
                     position: idx
                 },
                 notes: data.notes,
-                deadline: data.deadline
+                deadline: data.deadline,
+                done: data.done,
+                owner: data.owner
             }
         });
         setLineage(tempLineage)
@@ -132,9 +139,9 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
         await setLineage(lineage)
     }
 
-    const Submitter = e => {
+    const Submitter = async e => {
         e.preventDefault();
-        const id = editFilePath(lineage, match.params.id);
+        const id = await editFilePath(lineage, match.params.id);
         history.push(`/file/${id}`)
     }
 
@@ -152,7 +159,7 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
                                 id={`designation${idx}`}
                                 onChange={handleDesSelect}
                                 options={optionsD}
-                                isDisabled={idx!==counter}
+                                isDisabled={idx!==counter || point.done || point.owner}
                                 isSearchable
                             />
                             <span className="prev">Current value: {point.designation.value}</span>
@@ -163,7 +170,7 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
                                 id={`select${idx}`}
                                 onChange={handleUserSelect}
                                 options={optionsU}
-                                isDisabled={idx!==counter}
+                                isDisabled={idx!==counter || point.done || point.owner}
                                 isSearchable
                             />
                             <span className="prev">Current value: {point.user.label}</span>
@@ -173,7 +180,8 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
                             <input type="text" id={`notes${idx}`} 
                                 name="notes"
                                 onChange={e=>Changer(e, idx)}
-                                disabled={idx!==counter}/> 
+                                disabled={idx!==counter || point.done}
+                                autoFocus={idx===focus}/> 
                             <span className="helper-text" data-error="wrong" data-success="right">
                                 Add notes for this user if needed (will only be visible to this user)
                             </span>
@@ -183,9 +191,9 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
                             <label htmlFor="deadline">Deadline</label>
                             <input type="date" name="deadline" id={`deadline${idx}`} 
                             onChange={e=>Changer(e, idx)} required
-                            disabled={idx!==counter}/>
+                            disabled={idx!==counter || point.done}/>
                             <span className="prev">Current value: 
-                                <Moment format="MM/DD/YYYY">{point.designation}</Moment>
+                                <Moment format="DD/MM/YYYY">{point.deadline}</Moment>
                             </span>
                         </div>
                     </div>
@@ -196,7 +204,7 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
                             {idx!==lineage.length-1 && <button className="btn" onClick={()=>nextUser(idx)}>
                                 +
                             </button>}
-                            {idx!==0 && <button className="btn" onClick={()=>prevUser(idx)}>
+                            {idx!==focus && <button className="btn" onClick={()=>prevUser(idx)}>
                                 -
                             </button>}
                         </Fragment>
@@ -204,10 +212,10 @@ const Reassign = ({history, match, users, formData, fetchUsersByDesgn, editFileP
                     {
                         idx===counter && 
                         <Fragment>
-                            <button className="btn red" onClick={()=>delUser(idx)}>
+                            <button className="btn red" onClick={()=>delUser(idx)} disabled={point.done || point.owner}>
                                 X
                             </button>
-                            <button className="btn green" onClick={()=>addUser(idx)}>
+                            <button className="btn green" onClick={()=>addUser(idx)} disabled={point.done || point.owner}>
                                 New
                             </button>
                         </Fragment>

@@ -9,44 +9,15 @@ const Reports = (props) => {
 
     const { reports, loading, fetchReports } = props;
 
-    const [size, setSize] = useState({
-        height: 0.85*window.innerHeight,
-        width: 0.97*window.innerWidth,
-        row: window.innerWidth<600 ? 200 : 135
-    })
-
     useEffect(()=>{
         fetchReports();
-        window.addEventListener('resize', updateSize);
     },[]);
 
-    const updateSize = () =>{
-        setSize({
-            height: 0.80*window.innerHeight,
-            width: 0.97*window.innerWidth,
-            row: window.innerWidth<600 ? 200 : 135
-        });
-    }
-
-    const rowRenderer = ({ key, index, style}) => {
-        
-        return (
-          <div key={key} style={style}>
-            <ReportItem report={reports[index]}/>
-          </div>
-        );
-    }
 
     return (
         <div className="all-users">
             
-            {!loading && <List
-                rowCount={reports.length}
-                rowHeight={size.row}
-                rowRenderer={rowRenderer}
-                height={size.height}
-                width={size.width}
-            />}
+            {!loading && reports.map(report => <ReportItem report={report}/>)}
             
         </div>
     )

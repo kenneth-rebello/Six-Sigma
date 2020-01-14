@@ -19,6 +19,8 @@ export const fetchReports = () => async dispatch => {
             payload: res.data
         })
 
+        return res.data;
+
     } catch (err) {
         console.log(err)
         const errors = err.response.data.errors;
@@ -57,6 +59,8 @@ export const fetchRequests = () => async dispatch => {
             type: FETCH_REQUESTS,
             payload: res.data
         })
+
+        return res.data
 
     } catch (err) {
         console.log(err)

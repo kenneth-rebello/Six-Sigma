@@ -12,13 +12,13 @@ import { setFormDataAction } from '../../actions/util.actions';
 import ReportForm from './ReportForm';
 import Request from './Request';
 
-const File = ({match, history, file, currentUser, getFileById, markFileDone, setFormDataAction}) => {
+const File = ({match, history, file, currentUser, supervisor, 
+    getFileById, markFileDone, setFormDataAction}) => {
 
     const [steps, setSteps] = useState([]);
     const [activeStep, setActiveStep] = useState(-1);
 
     const [open, toggleOpen] = useState(false);
-    const [details, setDetails] = useState({});
 
     const [list, toggleList] = useState(false);
     
@@ -61,8 +61,8 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
     }
 
     const getDetails = obj => {
-        if(obj.user._id===currentUser._id){
-            setDetails(obj);
+        if(obj.user._id===currentUser._id || supervisor){
+            setStep(obj);
             toggleOpen(true);
         }else if(obj.user._id!==currentUser._id && obj.done){
             setStep(obj);
@@ -83,9 +83,9 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
         file && <div className="file-page">
             <FileItem file={file}/>
             {
-                currentUser && file.owner && file.owner._id===currentUser._id && 
+                currentUser && owner.user && owner.user._id===currentUser._id && 
                 <Fragment>
-                    {!owner.done ? <button className="btn" onClick={()=>markAsComplete(file._id)}>
+                    {!owner.done && owner._id!==file.creator._id ? <button className="btn" onClick={()=>markAsComplete(file._id)}>
                         Mark as Complete
                     </button>
                     : <p>You have completed this task</p> }
@@ -153,10 +153,10 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
                 }}
                 ariaHideApp={false}
             >
-                <h4 className="modal-title">Notes for {currentUser.displayName}</h4>
-                <p className="details">{details.notes ? details.notes : "No notes"}</p>
+                {step.user && <h4 className="modal-title">Notes for {step.user.displayName}</h4>}
+                <p className="details">{step.notes ? step.notes : "No notes"}</p>
                 <span><Moment format="DD/MM/YYYY">
-                    {details.deadline}
+                    {step.deadline}
                 </Moment></span>
             </Modal>
 
@@ -213,7 +213,8 @@ const File = ({match, history, file, currentUser, getFileById, markFileDone, set
 
 const mapStateToProps = state => ({
     file: state.file.file,
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
+    supervisor: state.user.supervisor
 })
 
 export default connect(mapStateToProps, {getFileById, markFileDone, setFormDataAction})(File);

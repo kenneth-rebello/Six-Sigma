@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ADD_FILE, LOAD_FILE, FETCH_FILES, FETCH_OWN_FILES, FETCH_ASS_FILES, FETCH_UPC_FILES, FETCH_CMP_FILES, FETCH_REPORTS } from '../redux/types';
+import { ADD_FILE, LOAD_FILE, FETCH_FILES, FETCH_OWN_FILES, FETCH_ASS_FILES, FETCH_UPC_FILES, FETCH_CMP_FILES, FETCH_REPORTS, FETCH_OVER_FILES } from '../redux/types';
 import { setAlert } from './alert.actions';
 
 export const addFile = fileNo => dispatch => {
@@ -164,6 +164,43 @@ export const getCompletedFiles = () => async dispatch => {
 
 }
 
+export const getOverdueFiles = () => async dispatch => {
+    try {
+        
+        const res = await axios.get('/api/file/overdue');
+
+        dispatch({
+            type: FETCH_OVER_FILES,
+            payload: res.data
+        })
+
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+    }
+}
+
+export const getLateFiles = () => async dispatch => {
+    try {
+        
+        const res = await axios.get('/api/file/late');
+
+        dispatch({
+            type: FETCH_OVER_FILES,
+            payload: res.data
+        })
+
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+    }
+}
 
 export const fileQRScanned = name => async dispatch => {
     try {

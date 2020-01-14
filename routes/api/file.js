@@ -128,6 +128,7 @@ router.post('/new_file', [auth], async(req, res)=>{
         file = new File({
             file_number: req.body.file_number,
             description: req.body.description,
+            owner: req.user,
             creator: req.user,
             lineage,
             name: req.body.name ? req.body.name : undefined
@@ -160,20 +161,21 @@ router.post('/edit', [auth], async(req,res)=>{
 
         req.body.lineage.map(point => {
             let index = point.user.position;
-            if(old[index]){
-                if(!old[index].done){
-                    newLineage[index] = {
-                        user: point.user ? point.user.value : old[index].user,
-                        notes: point.notes ? point.notes : old[index].notes,
-                        deadline: point.deadline ? point.deadline : old[index].deadline
-                    }
-                   
+            if(old[index] && !old[index].done){
+                newLineage[index] = {
+                    user: point.user ? point.user.value : old[index].user,
+                    notes: point.notes,
+                    deadline: point.deadline ? point.deadline : old[index].deadline,
+                    done: point.done ? point.done : old[index].done,
+                    owner: point.owner ? point.owner : old[index].owner
                 }
             }else{
                 newLineage[index] = {             
                     user: point.user ? point.user.value : undefined,
                     notes: point.notes ? point.notes : undefined,
-                    deadline: point.deadline ? point.deadline : undefined
+                    deadline: point.deadline ? point.deadline : undefined,
+                    done: point.done ? point.done : undefined,
+                    owner: point.owner ? point.owner : undefined
                 }        
             }
         });
@@ -215,6 +217,11 @@ router.post('/scan', [auth], async(req,res)=>{
             }
             return true
         });
+        if(file.creator==req.user){
+            file.owner = req.user;    
+            const updated = await File.findOneAndUpdate({file_number: file.file_number}, { $set: file}, {new:true});
+            return res.json(updated)
+        }
 
         const prev = file.lineage[index-1]
 
@@ -338,5 +345,46 @@ router.post('/done', [auth], async(req,res)=>{
     }
 });
 
+
+router.get('/overdue', [auth], async(req,res)=>{
+    try {
+        
+        const user = await User.findById(req.user);
+        if(user.designation != "Position S"){
+            return res.status(403).json({
+                errors: [{
+                    msg: 'Sorry you are not a supervisor'
+                }]
+            });
+        }
+
+        const files = await File.find({creator: req.user, overdue:true})
+        .populate('creator',['displayName','email'])
+        .populate('owner',['displayName','email'])
+        .populate('lineage.user',['displayName', 'email']);
+
+        res.json(files)
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+});
+
+router.get('/late', [auth], async(req, res)=>{
+    try {
+        
+        const files = await File.find({owner:req.user, overdue: true})
+        .populate('creator',['displayName','email'])
+        .populate('owner',['displayName','email'])
+        .populate('lineage.user',['displayName', 'email']);
+
+        res.json(files)
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+})
 
 module.exports = router;

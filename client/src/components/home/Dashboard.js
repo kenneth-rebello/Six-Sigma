@@ -5,7 +5,7 @@ import Tabs from 'react-responsive-tabs';
 import 'react-responsive-tabs/styles.css';
 import Panel from './tabs/Panel';
 
-const Dashboard = ({owned, assigned, upcoming, completed, currentUser, supervisor}) => {
+const Dashboard = ({owned, assigned, upcoming, completed, overdue, currentUser, supervisor}) => {
 
     let pages = [];
     
@@ -36,18 +36,21 @@ const Dashboard = ({owned, assigned, upcoming, completed, currentUser, superviso
         })
 
         let concluded = [];
+        let assigned_but_concluded = []
         if(assigned) assigned.map(file => {
             if(file.concluded) concluded.push(file)
+            else assigned_but_concluded.push(file)
         })
 
         pages = [
             { name: 'Owned Files', component: <Panel files={owned}/> },
             { name: 'Urgent Files', component: <Panel files={urgent}/> },
+            { name: 'Overdue Files', component: <Panel files={overdue}/> },
             { name: 'Upcoming Files', component: <Panel files={upcoming}/> },
             { name: 'Completed Files', component: <Panel files={completed}/> }
         ];
-        if(supervisor) pages.unshift({ name: 'Concluded Files', component: <Panel files={concluded}/> })
-        if(supervisor) pages.unshift({ name: 'Assigned Files', component: <Panel files={assigned}/> })
+        if(supervisor) pages.push({ name: 'Concluded Files', component: <Panel files={concluded}/> })
+        if(supervisor) pages.unshift({ name: 'Assigned Files', component: <Panel files={assigned_but_concluded}/> })
     }   
      
      

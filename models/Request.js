@@ -28,6 +28,10 @@ const requestSchema = new mongoose.Schema({
     requested_on:{
         type: Date,
         default: new Date
+    },
+    accepted:{
+        type: Boolean,
+        default: false
     }
 });
 

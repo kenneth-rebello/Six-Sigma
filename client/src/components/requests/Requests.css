@@ -1,9 +1,8 @@
-.request-item{
-    margin-bottom: 10rem;
-}
-
-.request-item .card{
+.request-item {
     height: fit-content;
+    background-color: whitesmoke;
+    padding: 2%;
+    margin: 1%;
     border: 3px;
     border-style: ridge;
 }
@@ -35,8 +34,4 @@
     font-weight: bold;
     font-size: 1.2rem;
     display: block;
-}
-
-.request-item .col{
-    max-height: 3.2rem;
 }

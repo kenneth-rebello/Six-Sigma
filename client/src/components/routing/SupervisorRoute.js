@@ -1,14 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Route} from 'react-router-dom';
-import Home from '../home/Home';
+import {Route, Redirect} from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 
-const SupervisorRoute = ({component: Component, user:{loading, loggedIn, supervisor}, ...rest}) => {
+const SupervisorRoute = ({component: Component, user:{loading, supervisor}, ...rest}) => {
     
     return (
         <Route {...rest} render = {props => !loading && !supervisor ? (
-            <Home msg={"You are not authorized to view this page"} url={props.location.pathname}/>
+            <Redirect to="/"/>
         ):(
             <PrivateRoute component={Component} {...props}/>
         )}/>

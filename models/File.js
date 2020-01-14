@@ -31,6 +31,10 @@ const fileSchema = new mongoose.Schema({
         type: Boolean,
         default: false    
     },
+    overdue:{
+        type: Boolean,
+        default: false
+    },
     file_task:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'task'
@@ -67,6 +71,10 @@ const fileSchema = new mongoose.Schema({
             },
             notes:{
                 type: String
+            },
+            overdue:{
+                type: Boolean,
+                default: false
             }
         }
     ],

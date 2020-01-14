@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const connectDB = require('./config/db');
 
+const Schedule = require('./config/schedule');
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -25,6 +27,8 @@ app.use('/api/report', require('./routes/api/report'));
 app.use('/api/request', require('./routes/api/request'));
 
 connectDB();
+
+Schedule.checkDeadline;
 
 const PORT = process.env.PORT || 5000;
 
