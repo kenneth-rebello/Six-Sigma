@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SET_LANG, SET_FORMDATA, FETCH_REPORTS, FETCH_REQUESTS, SET_CURRENT_USER } from "../redux/types";
+import { SET_LANG, SET_FORMDATA, FETCH_REPORTS, FETCH_REQUESTS, SET_CURRENT_USER, SET_RECORDS } from "../redux/types";
 import { setAlert } from './alert.actions';
 
 export const setLanguage = lang => async dispatch => {
@@ -25,6 +25,15 @@ export const setFormDataAction = data => dispatch =>{
     dispatch({
         type: SET_FORMDATA,
         payload: data
+    })
+}
+
+export const fetchRecordsById = id =>async dispatch => {
+    const res = await axios.get(`/api/user/stats/${id}`);
+
+    dispatch({
+        type: SET_RECORDS,
+        payload: res.data
     })
 }
 

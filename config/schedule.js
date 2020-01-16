@@ -116,7 +116,7 @@ const Week = schedule.scheduleJob('00 00 * * 7', async () => {
 
 module.exports.updateWeekly = Week
 
-const Month = schedule.scheduleJob('05 02 * * *', async () => {
+const Month = schedule.scheduleJob('15 15 * * *', async () => {
     const users = await User.find();
 
     users.forEach(async user => {
@@ -128,7 +128,11 @@ const Month = schedule.scheduleJob('05 02 * * *', async () => {
             stats = new Stat({
                 user: user._id,
                 record: [
-                    { value: user.record.this_month }
+                    {
+                        value: user.record.this_month,
+                        month: (new Date).getMonth(),
+                        year: (new Date).getFullYear() 
+                    }
                 ]
             });
             await stats.save();
@@ -151,3 +155,45 @@ const Year = schedule.scheduleJob('00 00 1 1 *', async () => {
 })
 
 module.exports.updateYearly = Year
+
+
+
+
+
+
+
+
+
+// const Dummy = schedule.scheduleJob('31 17 * * *', async () => {
+//     const users = await User.find();
+
+//     let years = [2019, 2018]
+
+//     users.forEach(async user => {
+    
+//         let tempRecord = []
+
+//         years.forEach(year => {
+//             for(var i=0; i<12; i++){
+//                 let rValue = Math.floor((Math.random() * 200) + 300);
+//                 tempRecord.push({
+//                     month: i,
+//                     year: year,
+//                     value:rValue
+//                 })
+//             }
+//         })
+        
+//         stats = new Stat({
+//             user: user._id,
+//             record: tempRecord
+//         });
+//         await stats.save();
+
+//         console.log(user.displayName);
+//     });
+
+//     console.log('Done')
+// })
+
+// module.exports.generateDummy = Dummy

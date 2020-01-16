@@ -7,8 +7,10 @@ const statSchema = new mongoose.Schema({
     },
     record: [{
         month:{
-            type: Date,
-            default: new Date
+            type: Number
+        },
+        year:{
+            type: Number
         },
         value:{
             type: Number

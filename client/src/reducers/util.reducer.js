@@ -1,4 +1,4 @@
-import { SET_FORMDATA, FETCH_REQUESTS } from '../redux/types';
+import { SET_FORMDATA, FETCH_REQUESTS, SET_RECORDS } from '../redux/types';
 
 const initialState = {
     file: {},
@@ -6,6 +6,7 @@ const initialState = {
     formData: {},
     other: {},
     requests:[],
+    records: [],
     loading: true
 }
 
@@ -26,6 +27,12 @@ const utilReducer = (state = initialState, action) => {
             return {
                 ...state,
                 requests: payload,
+                loading: false
+            }
+        case SET_RECORDS:
+            return {
+                ...state,
+                records: payload,
                 loading: false
             }
         default: 

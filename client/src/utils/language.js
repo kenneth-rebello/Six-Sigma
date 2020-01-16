@@ -74,10 +74,10 @@ export const dict = {
         "Nepali": "भाषा परिवर्तन गर्नुहोस्",
         "Hindi": "भाषा बदलो"
     },
-    "":{
-        "English": "",
-        "Nepali": "",
-        "Hindi": ""
+    "Statistics":{
+        "English": "Statistics",
+        "Nepali": "तथ्याड़क",
+        "Hindi": "आंकड़े"
     },
     "":{
         "English": "",

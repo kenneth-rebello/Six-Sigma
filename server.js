@@ -33,6 +33,7 @@ Schedule.updateDaily;
 Schedule.updateMonthly;
 Schedule.updateWeekly;
 Schedule.updateYearly;
+// Schedule.generateDummy;
 
 const PORT = process.env.PORT || 5000;
 
