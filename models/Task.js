@@ -1,14 +1,21 @@
 const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema({
-    title:{
+    type:{
         type: String
+    },
+    creator:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
     },
     order:[{
         designation: {
             type: String
         },
         position:{
+            type: Number
+        },
+        deadline:{
             type: Number
         }
     }]

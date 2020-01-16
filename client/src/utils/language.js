@@ -79,8 +79,8 @@ export const dict = {
         "Nepali": "तथ्याड़क",
         "Hindi": "आंकड़े"
     },
-    "":{
-        "English": "",
+    "New Task":{
+        "English": "New Task",
         "Nepali": "",
         "Hindi": ""
     },

@@ -69,6 +69,7 @@ const Navbar = ({language, currentUser, unsetCurrentUser}) => {
                                     <li><a href="/files">{dict["All Files"][language]}</a></li>
                                     <li><a href="/reports">{dict["Reports"][language]}</a></li>
                                     <li><a href="/requests">{dict["Requests"][language]}</a></li>
+                                    <li><a href="/new_task">{dict["New Task"][language]}</a></li>
                                 </ul>
                             </div>
                         </li> 
@@ -107,6 +108,9 @@ const Navbar = ({language, currentUser, unsetCurrentUser}) => {
                                     <li><a href="/language">
                                         {dict["Change Language"][language]}
                                     </a></li>
+                                    <li><a href="/stats">
+                                        {dict["Statistics"][language]}
+                                    </a></li>
                                 </ul>
                             </div>
                         </li> 
@@ -120,6 +124,7 @@ const Navbar = ({language, currentUser, unsetCurrentUser}) => {
                 <li><a href="/files">{dict["All Files"][language]}</a></li>
                 <li><a href="/reports">{dict["Reports"][language]}</a></li>
                 <li><a href="/requests">{dict["Requests"][language]}</a></li>
+                <li><a href="/new_task">{dict["New Task"][language]}</a></li>
             </ul>
             <ul id="user-dropdown" className="dropdown-content">
                 <li><a href="/users">{dict["All Users"][language]}</a></li>

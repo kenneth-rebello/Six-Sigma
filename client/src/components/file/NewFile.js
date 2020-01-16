@@ -3,23 +3,27 @@ import './File.css'
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { fetchUsersByDesgn } from '../../actions/user.actions';
-import { addFileToDB } from '../../actions/file.actions';
+import { addFileToDB, fetchTasks, fetchTaskById, addFileToDBAuto, getIdealUsers } from '../../actions/file.actions';
 import { positions } from '../../utils/data';
 
-const NewFile = ({fileNo, users, fetchUsersByDesgn, addFileToDB}) => {
+const NewFile = ({fileNo, users, task, tasks, list, getIdealUsers,
+    fetchTasks, fetchTaskById, fetchUsersByDesgn, addFileToDB, addFileToDBAuto}) => {
 
     const [counter, count] = useState(0);
 
     const [options, setOptions] = useState([]);
     const [dsgnOptions, setDsgnOpt] = useState([]);
+    const [taskOptions, setTaskOpt] = useState([]);
     const [designation, setDsgn] = useState("");
+    const [auto, toggleAuto] = useState(false);
 
     const [formData, setFormData] = useState({
         file_number: fileNo ? fileNo : "",
         name: "",
         path: [],
         notes: "",
-        description: ""
+        description: "",
+        auto:{}
     });
 
 
@@ -32,6 +36,7 @@ const NewFile = ({fileNo, users, fetchUsersByDesgn, addFileToDB}) => {
             })
         })
         setDsgnOpt(temp)
+        fetchTasks();
     },[])
 
     useEffect(()=>{
@@ -49,6 +54,37 @@ const NewFile = ({fileNo, users, fetchUsersByDesgn, addFileToDB}) => {
     },[counter])
     
     useEffect(()=>{
+        if(tasks.length>0){
+            let temp = [];
+            tasks.forEach(task => {
+                temp.push({
+                    value: task._id,
+                    label: task.type
+                })
+            })
+            setTaskOpt(temp)
+        }
+    },[tasks])
+
+    useEffect(()=>{
+        if(task){
+            setFormData({
+                ...formData,
+                auto: task
+            })
+        }
+    },[task])
+
+    useEffect(()=>{
+        if(list.length>0){
+            setFormData({
+                ...formData,
+                path: list
+            })
+        }
+    },[list])
+
+    useEffect(()=>{
         // console.log(formData)
     },[formData])
 
@@ -58,7 +94,7 @@ const NewFile = ({fileNo, users, fetchUsersByDesgn, addFileToDB}) => {
         let temp = [];
         users.forEach(each => {
             temp.push({
-                label: each.displayName,
+                label: `${each.displayName} (${each.upcoming.length})`,
                 value: each._id,
                 position: counter
             })
@@ -79,8 +115,6 @@ const NewFile = ({fileNo, users, fetchUsersByDesgn, addFileToDB}) => {
     }
 
 
-
-
     const handleSelect = option => {
         let temp = formData.path;
         temp[option.position] = option
@@ -94,17 +128,26 @@ const NewFile = ({fileNo, users, fetchUsersByDesgn, addFileToDB}) => {
     const handlePosSelect = option => {
         setDsgn(option.value)
     }
-
+    const handleAutoSelect = option => {
+        fetchTaskById(option.value)
+        getIdealUsers(option.value)
+    }
 
 
     const Submitter = (e) => {
         e.preventDefault();
-        addFileToDB(formData);
+        if(auto){
+            addFileToDBAuto(formData)
+        }else{
+            addFileToDB(formData);
+        }
+
         setFormData({
             file_number: "",
             name: "",
             description: "",
-            path: []
+            path: [],
+            auto: {}
         })
         count(0)
     }
@@ -134,6 +177,8 @@ const NewFile = ({fileNo, users, fetchUsersByDesgn, addFileToDB}) => {
             })
         }
     }
+
+    
 
     const { file_number, name, path, description } = formData;
 
@@ -215,7 +260,19 @@ const NewFile = ({fileNo, users, fetchUsersByDesgn, addFileToDB}) => {
                     </div>
                 </div>
                 <div className="row">
-                    {pathSelects}
+                    <div className="col s12">
+                        <button className="btn" type="button" onClick={()=>toggleAuto(!auto)}>
+                            Use template
+                        </button>
+                        {auto && <Select
+                            onChange={handleAutoSelect}
+                            options={taskOptions}
+                            isSearchable
+                        />}
+                    </div>
+                </div>
+                <div className="row">
+                    {auto ? null : pathSelects}
                 </div>
                 <div className="row">
                     <div className="input-field col s6">
@@ -232,7 +289,11 @@ const NewFile = ({fileNo, users, fetchUsersByDesgn, addFileToDB}) => {
 
 const mapStateToProps = state => ({
     fileNo: state.file.newFile,
-    users: state.user.users
+    users: state.user.users,
+    tasks: state.util.tasks,
+    task: state.util.task,
+    list: state.util.list
 })
 
-export default connect(mapStateToProps, {fetchUsersByDesgn,addFileToDB})(NewFile);
+export default connect(mapStateToProps, {
+    fetchTasks, fetchTaskById, fetchUsersByDesgn, getIdealUsers, addFileToDB, addFileToDBAuto})(NewFile);

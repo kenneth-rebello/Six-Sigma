@@ -47,6 +47,14 @@ export const getChartData = (data) => {
     if(data && data.record){
         let points = [];
         let xcat = [];
+
+        data.record.sort((a,b) => {
+          return a.month-b.month
+        })
+        data.record.sort((a,b) => {
+          return a.year-b.year
+        })
+
         data.record.forEach(obj => {
             points.push(obj.value);
             let period = `${month[obj.month]} - ${obj.year}`

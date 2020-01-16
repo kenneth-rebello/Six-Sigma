@@ -1,12 +1,12 @@
-import { SET_FORMDATA, FETCH_REQUESTS, SET_RECORDS } from '../redux/types';
+import { SET_FORMDATA, FETCH_REQUESTS, SET_RECORDS, FETCH_TASKS, FETCH_TASK, SET_USER_LIST } from '../redux/types';
 
 const initialState = {
-    file: {},
-    user: {},
     formData: {},
-    other: {},
     requests:[],
     records: [],
+    tasks: [],
+    task: [],
+    list:[],
     loading: true
 }
 
@@ -34,6 +34,24 @@ const utilReducer = (state = initialState, action) => {
                 ...state,
                 records: payload,
                 loading: false
+            }
+        case FETCH_TASKS:
+            return{
+                ...state,
+                tasks: payload,
+                loading: false
+            }
+        case FETCH_TASK:{
+            return {
+                ...state,
+                task: payload,
+                loading: false
+            }
+        }
+        case SET_USER_LIST:
+            return {
+                ...state,
+                list: payload
             }
         default: 
             return state;

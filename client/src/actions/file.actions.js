@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ADD_FILE, LOAD_FILE, FETCH_FILES, FETCH_OWN_FILES, FETCH_ASS_FILES, FETCH_UPC_FILES, FETCH_CMP_FILES, FETCH_REPORTS, FETCH_OVER_FILES } from '../redux/types';
+import { ADD_FILE, LOAD_FILE, FETCH_FILES, FETCH_OWN_FILES, FETCH_ASS_FILES, FETCH_UPC_FILES, FETCH_CMP_FILES, FETCH_REPORTS, FETCH_OVER_FILES, FETCH_TASKS, FETCH_TASK, SET_USER_LIST } from '../redux/types';
 import { setAlert } from './alert.actions';
 
 export const addFile = fileNo => dispatch => {
@@ -26,7 +26,7 @@ export const addFileToDB = fileData => async dispatch => {
             type: LOAD_FILE,
             payload: res.data
         })
-
+        return res.data._id;
         
     } catch (err) {
         console.log(err)
@@ -37,6 +37,35 @@ export const addFileToDB = fileData => async dispatch => {
     }
 
 }
+
+
+export const addFileToDBAuto = fileData => async dispatch => {
+    
+    try {
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        const res = await axios.post('api/file/new_file/automatic', fileData, config);
+    
+        dispatch({
+            type: LOAD_FILE,
+            payload: res.data
+        })
+        return res.data._id;
+        
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+    }
+
+}
+
 
 export const getAllFiles = () => async dispatch => {
 
@@ -287,6 +316,86 @@ export const editFilePath = (lineage, id) => async dispatch => {
         return err.response.data.id
     }
 }
+
+export const addNewTask = formData => async dispatch => {
+    try {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        await axios.post('/api/file/task', formData, config);
+
+        dispatch(setAlert('New Task Default saved successfully'));
+
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+    }
+}
+
+export const fetchTaskById = (id) => async dispatch => {
+    try {
+        
+        const res = await axios.get(`/api/file/task/${id}`);
+
+        dispatch({
+            type: FETCH_TASK,
+            payload: res.data
+        })
+
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+    }
+}
+
+export const fetchTasks = () => async dispatch => {
+    try {
+        
+        const res = await axios.get('/api/file/task');
+
+        dispatch({
+            type: FETCH_TASKS,
+            payload: res.data
+        })
+
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+    }
+}
+
+export const getIdealUsers = id => async dispatch => {
+    try {
+
+        const res = await axios.get(`/api/user/task/${id}`);
+
+        dispatch({
+            type:SET_USER_LIST,
+            payload: res.data
+        });
+        
+    } catch (err) {
+        console.log(err)
+            const errors = err.response.data.errors;
+            if(errors){
+                errors.forEach(error => dispatch(setAlert(error.msg)));
+            }
+    }
+}
+
 
 export const reportUser = formData => async dispatch => {
     try {

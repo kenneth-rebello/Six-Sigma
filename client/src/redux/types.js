@@ -14,6 +14,8 @@ export const FETCH_OVER_FILES = "FETCH_OVER_FILES";
 export const FETCH_DEPTS = "FETCH_DEPTS";
 export const FETCH_REPORTS = "FETCH_REPORTS";
 export const FETCH_REQUESTS = "FETCH_REQUESTS";
+export const FETCH_TASKS = "FETCH_TASKS";
+export const FETCH_TASK = "FETCH_TASK";
 
 export const CHECK_ONLINE = "CHECK_ONLINE";
 export const SET_ALERT = "SET_ALERT";
@@ -22,3 +24,4 @@ export const REMOVE_ALERT = "REMOVE_ALERT";
 export const SET_FORMDATA = "SET_FORMDATA";
 export const SET_LANG = "SET_LANG";
 export const SET_RECORDS = "SET_RECORDS";
+export const SET_USER_LIST = "SET_USER_LIST";

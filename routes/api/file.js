@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 
 const File = require('../../models/File');
+const Task = require('../../models/Task');
 const User = require('../../models/User');
 
 router.get('/', [auth], async(req,res)=>{
@@ -387,6 +388,106 @@ router.get('/late', [auth], async(req, res)=>{
         console.error(err.message);
         res.status(400).json({errors: [{msg: err.message}]});
     }
+})
+
+router.get('/task/:id', async(req,res)=>{
+    try {
+        
+        let task = await Task.findById(req.params.id);
+        return res.json(task)
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+});
+
+router.get('/task', async(req,res)=>{
+    try {
+        
+        const tasks = await Task.find();
+        return res.json(tasks);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+});
+
+router.post('/task', [auth], async(req, res)=>{
+    try {
+        
+        const {type, order} = req.body;
+
+        const existing = await Task.find({creator: req.user, type:type});
+
+        if(existing.length>0){
+            return res.status(400).json({
+                errors: [{
+                    msg: 'It looks like you have already performed this action before'
+                }]
+            });
+        }
+
+        order.sort((a,b)=>{
+            return a.position-b.position
+        })
+        let tempOrder = [];
+        order.forEach(ord => {
+            tempOrder.push({
+                designation: ord.value,
+                position: ord.position,
+                deadline: ord.deadline
+            })
+        })
+
+        let task = new Task({
+            type: type,
+            creator: req.user,
+            order: tempOrder
+        })
+
+        await task.save();
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+})
+
+router.post('/new_file/automatic', [auth], async(req,res)=>{
+
+    const {auto, path, file_number, name, description } = req.body;
+
+    const file = await File.find({file_number: file_number});
+    console.log(file)
+    if(file.length>0){
+        return res.status(400).json({
+            errors: [{
+                msg: 'The file number already exists'
+            }]
+        });
+    }
+
+    let lineage = [];
+    path.map((path, idx) => {
+        lineage.push({
+            position: idx,
+            user: path.user._id,
+            deadline: path.deadline
+        })
+    });
+
+    let new_file = new File({
+        file_number: file_number,
+        description: description,
+        owner: req.user,
+        creator: req.user,
+        lineage,
+        name: name ? name : undefined
+    })
+
+    await new_file.save();
 })
 
 module.exports = router;
