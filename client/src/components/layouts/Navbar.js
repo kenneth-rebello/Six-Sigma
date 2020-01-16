@@ -131,6 +131,7 @@ const Navbar = ({language, currentUser, unsetCurrentUser}) => {
                 <li><a href="/language">
                     {dict["Change Language"][language]}
                 </a></li>
+                <li><a href="/stats">{dict["Statistics"][language]}</a></li>
             </ul>
             <ul id="qr-dropdown" className="dropdown-content">
                 <li><a href="/generator">{dict["New QRCode"][language]}</a></li>

@@ -126,4 +126,18 @@ router.get('/language/:lang', [auth], async(req,res)=>{
     }
 });
 
+router.get('/stats/:id', async(req, res)=>{
+    try {
+        
+        const stats = await Stat.find({user: req.params.id})
+        .populate('user',['displayName']);
+
+        return res.json(stats);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+});
+
 module.exports = router;
