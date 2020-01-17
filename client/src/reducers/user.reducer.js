@@ -5,7 +5,7 @@ const initialState = {
     loggedIn:false,
     users:[],
     supervisor: false,
-    language: "",
+    language: "English",
     loading: true,
     online: false
 }

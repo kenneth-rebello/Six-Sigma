@@ -44,11 +44,12 @@ const Dashboard = ({owned, assigned, upcoming, completed, overdue, currentUser, 
 
         pages = [
             { name: 'Owned Files', component: <Panel files={owned}/> },
-            { name: 'Urgent Files', component: <Panel files={urgent}/> },
             { name: 'Overdue Files', component: <Panel files={overdue}/> },
+            { name: 'Urgent Files', component: <Panel files={urgent}/> },
             { name: 'Upcoming Files', component: <Panel files={upcoming}/> },
             { name: 'Completed Files', component: <Panel files={completed}/> }
         ];
+        
         if(supervisor) pages.push({ name: 'Concluded Files', component: <Panel files={concluded}/> })
         if(supervisor) pages.unshift({ name: 'Assigned Files', component: <Panel files={assigned_but_concluded}/> })
     }   

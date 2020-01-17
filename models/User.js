@@ -42,8 +42,11 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'file'
     }],
-    avg_comp_time:{
-        type: Number
+    comp_time:{
+        type: [Number]
+    },
+    turn_around_time:{
+        type: [Number]
     },
     language:{
         type: String,

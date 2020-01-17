@@ -11,7 +11,7 @@ export const addFile = fileNo => dispatch => {
 
 }
 
-export const addFileToDB = fileData => async dispatch => {
+export const addFileToDB = ( fileData, history ) => async dispatch => {
     
     try {
 
@@ -26,7 +26,8 @@ export const addFileToDB = fileData => async dispatch => {
             type: LOAD_FILE,
             payload: res.data
         })
-        return res.data._id;
+
+        history.push(`/file/${res.data._id}`);
         
     } catch (err) {
         console.log(err)
@@ -39,7 +40,7 @@ export const addFileToDB = fileData => async dispatch => {
 }
 
 
-export const addFileToDBAuto = fileData => async dispatch => {
+export const addFileToDBAuto = ( fileData, history ) => async dispatch => {
     
     try {
 
@@ -54,7 +55,8 @@ export const addFileToDBAuto = fileData => async dispatch => {
             type: LOAD_FILE,
             payload: res.data
         })
-        return res.data._id;
+
+        history.push(`/file/${res.data._id}`);
         
     } catch (err) {
         console.log(err)
@@ -326,8 +328,9 @@ export const addNewTask = formData => async dispatch => {
             }
         }
 
-        await axios.post('/api/file/task', formData, config);
+        const res = await axios.post('/api/file/task', formData, config);
 
+        console.log(res)
         dispatch(setAlert('New Task Default saved successfully'));
 
     } catch (err) {
@@ -374,25 +377,6 @@ export const fetchTasks = () => async dispatch => {
         if(errors){
             errors.forEach(error => dispatch(setAlert(error.msg)));
         }
-    }
-}
-
-export const getIdealUsers = id => async dispatch => {
-    try {
-
-        const res = await axios.get(`/api/user/task/${id}`);
-
-        dispatch({
-            type:SET_USER_LIST,
-            payload: res.data
-        });
-        
-    } catch (err) {
-        console.log(err)
-            const errors = err.response.data.errors;
-            if(errors){
-                errors.forEach(error => dispatch(setAlert(error.msg)));
-            }
     }
 }
 

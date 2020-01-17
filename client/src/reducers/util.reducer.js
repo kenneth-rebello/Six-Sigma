@@ -1,4 +1,4 @@
-import { SET_FORMDATA, FETCH_REQUESTS, SET_RECORDS, FETCH_TASKS, FETCH_TASK, SET_USER_LIST } from '../redux/types';
+import { SET_FORMDATA, FETCH_REQUESTS, SET_RECORDS, FETCH_TASKS, FETCH_TASK, SET_USER_LIST, CLEAR_USER_LIST } from '../redux/types';
 
 const initialState = {
     formData: {},
@@ -51,7 +51,12 @@ const utilReducer = (state = initialState, action) => {
         case SET_USER_LIST:
             return {
                 ...state,
-                list: payload
+                list: [...state.list, payload]
+            }
+        case CLEAR_USER_LIST:
+            return {
+                ...state,
+                list: []
             }
         default: 
             return state;

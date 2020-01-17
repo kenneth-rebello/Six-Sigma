@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './QR.css';
 import {connect} from 'react-redux';
 
-import html2canvas from 'html2canvas';
 import QRCode from 'qrcode.react';
 import { addFile } from '../../actions/file.actions';
 
@@ -24,20 +23,6 @@ const Generator = ({loggedIn, addFile, history}) => {
         setText('')
     }
 
-    const downloadMany = () => {
-
-        document.getElementById("toExport").style.display = "block";
-        html2canvas(document.getElementById("toExport"),{
-            logging: true,
-            profile: true,
-            useCORS: true
-        }).then(canvas =>{
-            let data = canvas.toDataURL('image/jpeg', 0.9);
-            let src = encodeURI(data);
-            document.getElementById('screenshot').src = src;
-        })
-        document.getElementById("toExport").style.display = "none"
-    }
 
     const addFileFunc = () => {
         if(text==="No text entered yet" || text.trim()===""){
@@ -94,17 +79,11 @@ const Generator = ({loggedIn, addFile, history}) => {
             />
 
             <div className="row">
-                <div className="col s12 m6 l4 center-align">
+                <div className="col s12 m6 center-align">
                     <button className="btn" onClick={downloadOne}>Save single</button>
                 </div>
-                <div className="col s12 m6 l4 center-align">
-                    <a className="waves-effect waves-light btn modal-trigger" 
-                        onClick={downloadMany}
-                        href="#pdf-modal">
-                        Save sheet
-                    </a>
-                </div>
-                <div className="col s12 m6 l4 center-align">
+
+                <div className="col s12 m6 center-align">
                     <button className="btn" onClick={addFileFunc}>Add File To Database</button>
                 </div>
             </div>
@@ -112,20 +91,6 @@ const Generator = ({loggedIn, addFile, history}) => {
             {/* Not to be modified after this point */}
             <a id="download-link" style={{display:'none'}} href="/generator">Hidden Anchor</a>
     
-            <div id="pdf-modal" className="modal">
-                <div className="modal-content center-align">
-                    <img src="" id="screenshot" 
-                        alt="Screenshot loading, please wait"/>
-                </div>
-                <div className="modal-footer">
-                    <a href="#!" className="modal-close waves-effect waves-green btn">Close</a>
-                </div>
-            </div>
-
-            <div id="toExport">
-                <h1 className="center-align">{text}</h1>
-                {pdfPage}
-            </div>
         </div>
     )
 }

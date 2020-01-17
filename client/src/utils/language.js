@@ -39,6 +39,11 @@ export const dict = {
         "Nepali": "अनुरोध",
         "Hindi": "अनुरोध"
     },
+    "New Task":{
+        "English": "New Task",
+        "Nepali": "नयाँ कार्य",
+        "Hindi": "नया कार्य"
+    },
     "New QRCode":{
         "English": "New QRCode",
         "Nepali": "नयाँ QRकोड",
@@ -73,6 +78,11 @@ export const dict = {
         "English": "Change Language",
         "Nepali": "भाषा परिवर्तन गर्नुहोस्",
         "Hindi": "भाषा बदलो"
+    },
+    "Statistics":{
+        "English": "Statistics",
+        "Nepali": "तथ्याड़क",
+        "Hindi": "आंकड़े"
     },
     "Change your default username set by your Google account":{
         "English": "Change your default username set by your Google account",
@@ -138,6 +148,16 @@ export const dict = {
         "English": "Show Unauthorized Scans",
         "Nepali": "अनधिकृत स्क्यानहरू देखाउनुहोस्",
         "Hindi": "अनधिकृत स्कैन दिखाएं"
+    },
+    "Description":{
+        "English":"Description",
+        "Nepali":"वर्णन",
+        "Hindi":"विवरण"
+    },
+    "Progress":{
+        "English":"Progress",
+        "Nepali":"प्रगति",
+        "Hindi":"प्रगति"
     },
     "Notes for":{
         "English": "Notes for",

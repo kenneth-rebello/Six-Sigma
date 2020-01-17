@@ -34,6 +34,7 @@ Schedule.updateMonthly;
 Schedule.updateWeekly;
 Schedule.updateYearly;
 // Schedule.generateDummy;
+Schedule.genTAT;
 
 const PORT = process.env.PORT || 5000;
 

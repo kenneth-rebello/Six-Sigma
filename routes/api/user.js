@@ -140,29 +140,20 @@ router.get('/stats/:id', async(req, res)=>{
     }
 });
 
-router.get('/task/:id', async(req, res)=>{
+router.get('/ideal/:dsgn/:date', async(req, res)=>{
     try {
+    
+        let users = await User.find({designation:req.params.dsgn}).select(['_id', 'upcoming','displayName']);
         
-        const task  = await Task.findById(req.params.id);
-
-        let lineage = [];
-        task.order.forEach(async(ord, idx)=>{
-            const users = await User.find({designation:ord.designation}).select(['_id', 'upcoming']);
-        
-            users.sort((a,b)=>{
-                return a.upcoming.length - b.upcoming.length
-            })
-
-            let user = users[0]
-            let today = new Date();
-            lineage.push({
-                user:user,
-                deadline: today.setDate(today.getDate()+ord.deadline)
-            })
-
-            if(idx==task.order.length-1) return res.json(lineage)
+        users.sort((a,b)=>{
+            return a.upcoming.length - b.upcoming.length
         })
+        let user = users[0];
 
+        res.json({
+            user,
+            deadline: req.params.date
+        })
 
     } catch (err) {
         console.error(err.message);

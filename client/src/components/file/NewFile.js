@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './File.css'
 import { connect } from 'react-redux';
 import Select from 'react-select';
-import { fetchUsersByDesgn } from '../../actions/user.actions';
-import { addFileToDB, fetchTasks, fetchTaskById, addFileToDBAuto, getIdealUsers } from '../../actions/file.actions';
+import { fetchUsersByDesgn, unsetUserList } from '../../actions/user.actions';
+import { addFileToDB, fetchTasks, fetchTaskById, addFileToDBAuto } from '../../actions/file.actions';
+import { getIdealUsers } from '../../actions/user.actions';
 import { positions } from '../../utils/data';
 
-const NewFile = ({fileNo, users, task, tasks, list, getIdealUsers,
+const NewFile = ({history, fileNo, users, task, tasks, list, getIdealUsers, unsetUserList,
     fetchTasks, fetchTaskById, fetchUsersByDesgn, addFileToDB, addFileToDBAuto}) => {
 
     const [counter, count] = useState(0);
-
     const [options, setOptions] = useState([]);
     const [dsgnOptions, setDsgnOpt] = useState([]);
     const [taskOptions, setTaskOpt] = useState([]);
@@ -23,7 +23,7 @@ const NewFile = ({fileNo, users, task, tasks, list, getIdealUsers,
         path: [],
         notes: "",
         description: "",
-        auto:{}
+        loading: true
     });
 
 
@@ -67,19 +67,25 @@ const NewFile = ({fileNo, users, task, tasks, list, getIdealUsers,
     },[tasks])
 
     useEffect(()=>{
-        if(task){
-            setFormData({
-                ...formData,
-                auto: task
+        var someDate = new Date();
+        if(task && task.order){
+            let correct = task.order.sort((a,b)=>{
+                return a.position - b.position
+            })
+            correct.forEach(ord => {
+                someDate.setDate(someDate.getDate() + ord.deadline); 
+                getIdealUsers(ord.designation, someDate)
             })
         }
     },[task])
 
     useEffect(()=>{
+        console.log(list)
         if(list.length>0){
             setFormData({
                 ...formData,
-                path: list
+                path: list,
+                loading: false
             })
         }
     },[list])
@@ -110,7 +116,8 @@ const NewFile = ({fileNo, users, task, tasks, list, getIdealUsers,
         document.getElementById(`deadline${i-2}`).disabled = false
         setFormData({
             ...formData,
-            path: temp
+            path: temp,
+            loading: false
         })
     }
 
@@ -120,7 +127,8 @@ const NewFile = ({fileNo, users, task, tasks, list, getIdealUsers,
         temp[option.position] = option
         setFormData({
             ...formData,
-            path: temp
+            path: temp,
+            loading: false
         });
         document.getElementById(`notes${option.position}`).disabled = false;
         document.getElementById(`deadline${option.position}`).disabled = false;
@@ -130,16 +138,15 @@ const NewFile = ({fileNo, users, task, tasks, list, getIdealUsers,
     }
     const handleAutoSelect = option => {
         fetchTaskById(option.value)
-        getIdealUsers(option.value)
     }
 
 
     const Submitter = (e) => {
         e.preventDefault();
         if(auto){
-            addFileToDBAuto(formData)
+            addFileToDBAuto(formData, history);
         }else{
-            addFileToDB(formData);
+            addFileToDB(formData, history);
         }
 
         setFormData({
@@ -147,9 +154,10 @@ const NewFile = ({fileNo, users, task, tasks, list, getIdealUsers,
             name: "",
             description: "",
             path: [],
-            auto: {}
+            loading: true
         })
-        count(0)
+        count(0);
+        unsetUserList();
     }
 
     const Changer = ( e ) => {
@@ -160,7 +168,8 @@ const NewFile = ({fileNo, users, task, tasks, list, getIdealUsers,
             setFormData({
                 ...formData,
                 notes: note,
-                path: temp
+                path: temp,
+                loading: false
             });
         }else if(e.target.id.includes("deadline")){
             let date = e.target.value;
@@ -168,19 +177,21 @@ const NewFile = ({fileNo, users, task, tasks, list, getIdealUsers,
             temp[i-1].deadline = date;
             setFormData({
                 ...formData,
-                path: temp
+                path: temp,
+                loading: false
             })
         }else{
             setFormData({
                 ...formData,
-                [e.target.id]: e.target.value
+                [e.target.id]: e.target.value,
+                loading: false
             })
         }
     }
 
     
 
-    const { file_number, name, path, description } = formData;
+    const { file_number, name, path, description, loading } = formData;
 
     let pathSelects = []
     for(var i=0; i<=counter; i++){
@@ -276,7 +287,7 @@ const NewFile = ({fileNo, users, task, tasks, list, getIdealUsers,
                 </div>
                 <div className="row">
                     <div className="input-field col s6">
-                        <input className="btn green" type="submit" value="Add"/>
+                        <input className="btn green" type="submit" value="Add" disabled={loading}/>
                         <span className="helper-text" data-error="wrong" data-success="right">
                             Add new file to database
                         </span>
@@ -296,4 +307,5 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {
-    fetchTasks, fetchTaskById, fetchUsersByDesgn, getIdealUsers, addFileToDB, addFileToDBAuto})(NewFile);
+    fetchTasks, fetchTaskById, fetchUsersByDesgn, getIdealUsers,
+    addFileToDB, addFileToDBAuto, unsetUserList })(NewFile);
