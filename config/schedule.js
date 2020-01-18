@@ -197,3 +197,24 @@ module.exports.updateYearly = Year
 // })
 
 // module.exports.generateDummy = Dummy
+
+
+const Dummy2 = schedule.scheduleJob('17 01 * * *', async () => {
+
+    const users = await User.find({});
+    
+    users.forEach(async user =>{
+        if(user.turn_around_time) user.turn_around_time = [];
+
+        for(var i=0; i<25; i++){
+            user.turn_around_time.push(Math.floor(Math.random() * 21)+10)
+        }
+
+        await User.findByIdAndUpdate(user._id, {$set: user})
+    })
+
+    console.log('done')
+
+})
+
+module.exports.genTAT = Dummy2;

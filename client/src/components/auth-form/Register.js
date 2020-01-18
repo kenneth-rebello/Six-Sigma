@@ -5,8 +5,9 @@ import Select from 'react-select';
 import { fetchSupervisors, registerUser } from '../../actions/user.actions';
 import { fetchDepts } from '../../actions/dept.actions';
 import { positions } from '../../utils/data';
+import { dict } from '../../utils/language';
 
-const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fetchDepts}) => {
+const Register = ({users, depts, currentUser, language, fetchSupervisors, registerUser, fetchDepts}) => {
 
     const [options, setOptions] = useState([])
     const [deptOptions, setDeptOptions] = useState([])
@@ -136,7 +137,7 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
                         <input id="displayName" type="text" value={displayName} onChange={e=>Changer(e)}/>
                         <label htmlFor="displayName">Username</label>
                         <span className="helper-text" data-error="wrong" data-success="right">
-                            *Change your default username set by your Google account
+                            *{dict["Change your default username set by your Google account"][language]}
                         </span>
                     </div>
                 </div>
@@ -145,13 +146,15 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
                         <input id="emp_code" type="text" value={emp_code} onChange={e=>Changer(e)}/>
                         <label htmlFor="emp_code">Employee Code</label>
                         <span className="helper-text" data-error="wrong" data-success="right">
-                            *Enter your unique employee code
+                            *{dict["Enter your unique employee code"][language]}
                         </span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col s12">
-                        <label className="form-label">Designation</label>         
+                        <label className="form-label">
+                            {dict["Designation"][language]}
+                        </label>         
                         <Select
                             id="designation"
                             value={designation}
@@ -160,13 +163,13 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
                             isSearchable
                         />
                         <span className="help-span" data-error="wrong" data-success="right">
-                            *Select your designation in the organisation
+                            *{dict["Select your designation in the organisation"][language]}
                         </span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col s12">
-                        <label className="form-label">Department</label>         
+                        <label className="form-label">{dict["Department"][language]}</label>         
                         <Select
                             id="department"
                             value={department}
@@ -175,7 +178,7 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
                             isSearchable
                         />
                         <span className="help-span" data-error="wrong" data-success="right">
-                            *Select the department that you work in
+                            *{dict["Select the department that you work in"][language]}
                         </span>
                     </div>
                 </div>
@@ -190,7 +193,7 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
                             isSearchable
                         />
                         <span className="help-span" data-error="wrong" data-success="right">
-                            *Select the username of your direct supervisor
+                            *{dict["Select the username of your direct supervisor"][language]}
                         </span>
                     </div>
                 </div>}
@@ -207,7 +210,8 @@ const Register = ({users, depts, currentUser, fetchSupervisors, registerUser, fe
 const mapStateToProps = state => ({
     users: state.user.users,
     currentUser: state.user.currentUser,
-    depts: state.dept.depts
+    depts: state.dept.depts,
+    language: state.user.language
 })
 
 export default connect(mapStateToProps, { fetchSupervisors, registerUser, fetchDepts })(Register);

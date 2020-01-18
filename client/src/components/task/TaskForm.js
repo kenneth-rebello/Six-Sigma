@@ -73,7 +73,7 @@ const TaskForm = ({addNewTask}) => {
             </div>
             <div className="col s3">
                 <label>Number of days for deadline</label>
-                <input type="number" onChange={e=>deadlineHandle(e)} disabled={order.length<=i}/>
+                <input type="number" onChange={e=>deadlineHandle(e)} disabled={order.length<=i} required/>
                 <span>Enter the number of days required to complete the task this user may perform</span>
             </div>
             <div className="col s1">

@@ -6,14 +6,14 @@ import {
 } from "../redux/types";
 
 const initialState = {
-  currentUser: null,
-  loggedIn: false,
-  users: [],
-  supervisor: false,
-  language: "English",
-  loading: true,
-  online: false
-};
+    currentUser:null,
+    loggedIn:false,
+    users:[],
+    supervisor: false,
+    language: "English",
+    loading: true,
+    online: false
+}
 
 const userReducer = (state = initialState, action) => {
   const { type, payload } = action;

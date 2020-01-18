@@ -207,6 +207,12 @@ router.post('/scan', [auth], async(req,res)=>{
                 id: file.id
             });
         }
+        if(file.creator==req.user){
+            fileCopy.owner = req.user;    
+            const updated = await File.findOneAndUpdate({file_number: file.file_number}, { $set: fileCopy}, {new:true});
+            return res.json(updated)
+        }
+
 
         let inPath = false
         let index = -1
@@ -218,12 +224,7 @@ router.post('/scan', [auth], async(req,res)=>{
             }
             return true
         });
-        if(file.creator==req.user){
-            file.owner = req.user;    
-            const updated = await File.findOneAndUpdate({file_number: file.file_number}, { $set: file}, {new:true});
-            return res.json(updated)
-        }
-
+        
         const prev = file.lineage[index-1]
 
         if(prev){
@@ -237,10 +238,10 @@ router.post('/scan', [auth], async(req,res)=>{
                     errors: [{
                         msg: 'The previous user must receive this file before you, this scan will be recorded for security reasons, please send back the file.',
                     }],
-                    id: file.id
+                    id: fileCopy.id
                 });
             }else{
-                if(index!==-1)file.lineage[index-1].owner = false
+                if(index>0)fileCopy.lineage[index-1].owner = false
             }
     
             if(!prev.done){
@@ -251,6 +252,15 @@ router.post('/scan', [auth], async(req,res)=>{
                     id: fileCopy.id
                 });
             }
+
+            let date2 = prev.received
+            
+            let TAT = parseInt(Math.abs(date1 - date2) / 36e5);
+
+            let prevUser = await User.findById(prev.user);
+            if(!prevUser.turn_around_time) prevUser.turn_around_time = [];
+            prevUser.turn_around_time.push(TAT);
+            await User.findByIdAndUpdate(prevUser._id, {$set: prevUser});
         }
 
         if(!inPath){
@@ -265,7 +275,7 @@ router.post('/scan', [auth], async(req,res)=>{
             });
         }
 
-        file.lineage.every((point) => {
+        fileCopy.lineage.every((point) => {
             if(point.user==req.user && !point.done){
                 point.owner = true,
                 point.received = new Date
@@ -274,18 +284,18 @@ router.post('/scan', [auth], async(req,res)=>{
             return true
         });
 
-        file.owner = req.user;
+        fileCopy.owner = req.user;
     
-        const updated = await File.findOneAndUpdate({file_number: file.file_number}, { $set: file}, {new:true});
+        const updated = await File.findOneAndUpdate({file_number: file.file_number}, { $set: fileCopy}, {new:true});
 
         if(file.lineage[index+1]){
-            const nextUser = await User.findOne(file.lineage[index+1].user);
+            let nextUser = await User.findOne(file.lineage[index+1].user);
             if(!nextUser.upcoming) nextUser.upcoming = [];
             nextUser.upcoming.push(file._id);
             await User.findOneAndUpdate({_id: nextUser._id}, {$set: nextUser});
         }
     
-        const user = await User.findOne(file.lineage[index].user);
+        let user = await User.findOne(file.lineage[index].user);
         
         if(user.upcoming) user.upcoming.splice(user.upcoming.indexOf(file._id), 1);
         await User.findOneAndUpdate({_id: user._id}, {$set: user});
@@ -314,19 +324,26 @@ router.post('/done', [auth], async(req,res)=>{
         }
 
         let index=100;
+        let today = new Date;
+        let received;
         file.lineage.every((point, idx) => {
             if(point.user==req.user && point.owner && !point.done){
-                point.completed = new Date
+                point.completed = today
                 point.done = true
-                index = idx
+                index = idx;
+                received = point.received;
                 return false;
             }
             return true
         });
 
+        let TAT = parseInt(Math.abs(today - received) / 36e5);
+
         if(!user.completed) user.completed = [];
+        if(!user.comp_time) user.comp_time = [];
         if(!user.completed.includes(file._id)){
             user.completed.push(file._id);
+            user.comp_time.push(TAT)
             user.record.today = user.record.today + 1;
             user.record.yesterday = user.record.yesterday + 1;
             user.record.this_week = user.record.past_week + 1;
@@ -457,10 +474,10 @@ router.post('/task', [auth], async(req, res)=>{
 
 router.post('/new_file/automatic', [auth], async(req,res)=>{
 
-    const {auto, path, file_number, name, description } = req.body;
+    const { path, file_number, name, description } = req.body;
 
     const file = await File.find({file_number: file_number});
-    console.log(file)
+    
     if(file.length>0){
         return res.status(400).json({
             errors: [{
@@ -488,6 +505,12 @@ router.post('/new_file/automatic', [auth], async(req,res)=>{
     })
 
     await new_file.save();
+
+    let user = new_file.lineage[0].user;
+    const firstUser = await User.findById(user);
+    if(!firstUser.upcoming) firstUser.upcoming = [];
+    firstUser.upcoming.push(new_file._id);
+    await User.findByIdAndUpdate(firstUser._id, {$set: firstUser});
 })
 
 module.exports = router;
