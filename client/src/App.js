@@ -67,7 +67,7 @@ const App = (props) => {
             <PrivateRoute exact path="/language" component={LanguageChange}/>
             <PrivateRoute exact path="/scanner" component={Scanner}/>
             <PrivateRoute exact path="/generator" component={Generator}/>
-            <PrivateRoute exact path="/new_file" component={NewFile}/>
+            <SupervisorRoute exact path="/new_file" component={NewFile}/>
             <PrivateRoute exact path="/files" component={AllFiles}/>
             <OnlineRoute exact path="/file/:id" component={File}/>
             <PrivateRoute exact path="/users" component={AllUsers}/>

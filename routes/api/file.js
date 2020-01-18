@@ -137,6 +137,13 @@ router.post('/new_file', [auth], async (req, res) => {
 
         await file.save();
         file = await File.findOne({ _id: file._id }).populate('creator', 'user');
+
+        let user = file.lineage[0].user;
+        const firstUser = await User.findById(user);
+        if (!firstUser.upcoming) firstUser.upcoming = [];
+        firstUser.upcoming.push(file._id);
+        await User.findByIdAndUpdate(firstUser._id, { $set: firstUser });
+
         res.json(file)
 
     } catch (err) {
@@ -252,8 +259,7 @@ router.post('/scan', [auth], async (req, res) => {
                     id: fileCopy.id
                 });
             }
-
-            let date1 = new Date;
+            let date1 = new Date
             let date2 = prev.received
 
             let TAT = parseInt(Math.abs(date1 - date2) / 36e5);
@@ -512,6 +518,8 @@ router.post('/new_file/automatic', [auth], async (req, res) => {
     if (!firstUser.upcoming) firstUser.upcoming = [];
     firstUser.upcoming.push(new_file._id);
     await User.findByIdAndUpdate(firstUser._id, { $set: firstUser });
+
+    res.json(new_file);
 })
 
 module.exports = router;

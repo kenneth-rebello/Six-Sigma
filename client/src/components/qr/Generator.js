@@ -79,10 +79,10 @@ const Generator = ({ loggedIn, addFile, history, language }) => {
             />
 
             <div className="row">
-                <div className="col s12 m6 l4 center-align">
+                <div className="col s12 m6 center-align">
                     <button className="btn" onClick={downloadOne}>{dict['Save single'][language]}</button>
                 </div>
-                <div className="col s12 m6 l4 center-align">
+                <div className="col s12 m6 center-align">
                     <button className="btn" onClick={addFileFunc}>{dict['Add File To Database'][language]}</button>
                 </div>
             </div>

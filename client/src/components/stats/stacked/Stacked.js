@@ -5,12 +5,12 @@ import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import { getChartData, getChartDataByYear } from "./getChartData";
 import { fetchAllUsers } from '../../../actions/user.actions';
-import { fetchMultiRecords } from '../../../actions/util.actions';
+import { fetchMultiRecords, clearMultiRecords } from '../../../actions/util.actions';
 require("highcharts/modules/exporting")(Highcharts);
 
 const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
-const Stacked = ({records, users, fetchAllUsers, fetchMultiRecords}) => {
+const Stacked = ({credible, users, fetchAllUsers, fetchMultiRecords, clearMultiRecords}) => {
 
     const [chartdata, setChart] = useState({});
     const [loading, setLoading] = useState(true);
@@ -21,9 +21,13 @@ const Stacked = ({records, users, fetchAllUsers, fetchMultiRecords}) => {
     useEffect(()=>{
         fetchAllUsers();
         let temp = chartdata
-        temp = getChartData(records);  
+        temp = getChartData(credible);  
         setLoading(true)
         setChart(temp)
+
+        return ()=>{
+            clearMultiRecords();
+        }
     },[])
 
     useEffect(()=>{
@@ -62,17 +66,17 @@ const Stacked = ({records, users, fetchAllUsers, fetchMultiRecords}) => {
 
     useEffect(()=>{
         let temp = chartdata
-        if(records) {
-            temp = getChartData(records);
+        if(credible) {
+            temp = getChartData(credible);
         }
         setLoading(true)
         setChart(temp)
-    },[records])
+    },[credible])
 
     useEffect(()=>{
         let temp = chartdata;
-        if(records){
-            temp = getChartDataByYear(records, selected)
+        if(credible){
+            temp = getChartDataByYear(credible, selected)
         }
         setLoading(true)
         setChart(temp)
@@ -103,13 +107,13 @@ const Stacked = ({records, users, fetchAllUsers, fetchMultiRecords}) => {
                     />
                 </div>
                 <div className="col s6">
+                    <label>Select year</label>
                     <Select
                         onChange={yearSelect}
                         options={years}
                         isSearchable
                     />
                 </div>
-        
             </div>
             {chartdata ? !loading && <div>
                 <HighchartsReact
@@ -124,7 +128,7 @@ const Stacked = ({records, users, fetchAllUsers, fetchMultiRecords}) => {
 
 const mapStateToProps = state => ({
     users: state.user.users,
-    records: state.util.records
+    credible: state.util.credible
 })
 
-export default connect(mapStateToProps, { fetchAllUsers, fetchMultiRecords })(Stacked);
+export default connect(mapStateToProps, { fetchAllUsers, fetchMultiRecords, clearMultiRecords })(Stacked);
