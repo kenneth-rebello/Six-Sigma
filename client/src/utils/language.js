@@ -205,11 +205,6 @@ export const dict = {
     Nepali: "डाटाबेसमा नयाँ फाईल जोड्नुहोस्",
     Hindi: "डेटाबेस में नई फ़ाइल जोड़ें"
   },
-  "Pick a designation": {
-    English: "Pick a designation",
-    Nepali: "पदनाम छान्नुहोस्",
-    Hindi: "एक पदनाम उठाओ"
-  },
   "Current value": {
     English: "Current value",
     Nepali: "वर्तमान मूल्य",
@@ -429,8 +424,8 @@ export const dict = {
     Nepali: "तथ्याड़क",
     Hindi: "आंकड़े"
   },
-  "": {
-    English: "",
+  "Progress": {
+    English: "Progress",
     Nepali: "",
     Hindi: ""
   },
