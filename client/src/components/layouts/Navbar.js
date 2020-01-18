@@ -9,7 +9,7 @@ import { signInWithGoogle } from "../../firebase/firebase.utils";
 import { dict } from "../../utils/language";
 import LanguageSelect from "./LanguageSelect";
 
-const Navbar = ({ language, currentUser, unsetCurrentUser }) => {
+const Navbar = ({ language, currentUser, supervisor, unsetCurrentUser }) => {
   const [hidden, toggleHidden] = useState(false);
   const [manualOpen, setManualOpen] = useState(false);
 
@@ -56,12 +56,12 @@ const Navbar = ({ language, currentUser, unsetCurrentUser }) => {
                   </a>
                 </li>
               ) : (
-                <li>
-                  <a href="#" onClick={() => toggleHidden(!hidden)}>
-                    {currentUser.displayName}
-                  </a>
-                </li>
-              )}
+                  <li>
+                    <a href="#" onClick={() => toggleHidden(!hidden)}>
+                      {currentUser.displayName}
+                    </a>
+                  </li>
+                )}
               {currentUser && currentUser.picture && (
                 <li>
                   <img
@@ -101,7 +101,7 @@ const Navbar = ({ language, currentUser, unsetCurrentUser }) => {
                   <li>
                     <a href="/requests">{dict["Requests"][language]}</a>
                   </li>
-                  {/* <li><a href="/new_task">{dict["New Task"][language]}</a></li> */}
+                  <li><a href="/new_task">{dict["New Task"][language]}</a></li>
                 </ul>
               </div>
             </li>
@@ -147,10 +147,10 @@ const Navbar = ({ language, currentUser, unsetCurrentUser }) => {
                       {dict["Sign Out"][language]}
                     </button>
                   ) : (
-                    <button onClick={signInWithGoogle}>
-                      {dict["Sign In"][language]}
-                    </button>
-                  )}
+                      <button onClick={signInWithGoogle}>
+                        {dict["Sign In"][language]}
+                      </button>
+                    )}
                   <li>
                     <a href="/language">{dict["Change Language"][language]}</a>
                   </li>
@@ -171,13 +171,19 @@ const Navbar = ({ language, currentUser, unsetCurrentUser }) => {
         <li>
           <a href="/files">{dict["All Files"][language]}</a>
         </li>
-        <li>
-          <a href="/reports">{dict["Reports"][language]}</a>
-        </li>
+        {
+          supervisor &&
+          <li>
+            <a href="/reports">{dict["Reports"][language]}</a>
+          </li>
+        }
         <li>
           <a href="/requests">{dict["Requests"][language]}</a>
         </li>
-        <li><a href="/new_task">{dict["New Task"][language]}</a></li>
+        {
+          supervisor &&
+          <li><a href="/new_task">{dict["New Task"][language]}</a></li>
+        }
       </ul>
       <ul id="user-dropdown" className="dropdown-content">
         <li>
@@ -193,7 +199,10 @@ const Navbar = ({ language, currentUser, unsetCurrentUser }) => {
         <li>
           <a href="/language">{dict["Change Language"][language]}</a>
         </li>
-        <li><a href="/stats">{dict["Statistics"][language]}</a></li>
+        {
+          supervisor &&
+          <li><a href="/stats">{dict["Statistics"][language]}</a></li>
+        }
       </ul>
       <ul id="qr-dropdown" className="dropdown-content">
         <li>
@@ -211,6 +220,7 @@ const Navbar = ({ language, currentUser, unsetCurrentUser }) => {
 
 const mapStateToProps = state => ({
   currentUser: state.user.currentUser,
+  supervisor: state.user.supervisor,
   language: state.user.language
 });
 

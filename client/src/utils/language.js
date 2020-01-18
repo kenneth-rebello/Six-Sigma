@@ -215,11 +215,6 @@ export const dict = {
     Nepali: "डाटाबेसमा नयाँ फाईल जोड्नुहोस्",
     Hindi: "डेटाबेस में नई फ़ाइल जोड़ें"
   },
-  "Pick a designation": {
-    English: "Pick a designation",
-    Nepali: "पदनाम छान्नुहोस्",
-    Hindi: "एक पदनाम उठाओ"
-  },
   "Current value": {
     English: "Current value",
     Nepali: "वर्तमान मूल्य",
@@ -433,6 +428,61 @@ export const dict = {
     English: "Request Submitted On",
     Nepali: "अनुरोध पेस गरियो",
     Hindi: "अनुरोध प्रस्तुत किया गया"
+  },
+  "New Task": {
+    English: "New Task",
+    Nepali: "नयाँ टास्क",
+    Hindi: "नया कार्यनया कार्य"
+  },
+  "Statistics": {
+    English: "Statistics",
+    Nepali: "तथ्याड़क",
+    Hindi: "आंकड़े"
+  },
+  "Progress": {
+    English: "Progress",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
   },
   "": {
     English: "",

@@ -2,82 +2,81 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
     email: {
-        type:  String,
+        type: String,
         required: true,
         unique: true
     },
     displayName: {
         type: String
     },
-    picture:{
+    picture: {
         type: String
     },
-    registered:{
+    registered: {
         type: Boolean,
         default: false
     },
-    emp_code:{
-        type: String,
-        unique: true
-    },
-    designation:{
+    emp_code: {
         type: String
     },
-    clearance:{
+    designation: {
+        type: String
+    },
+    clearance: {
         type: Number
     },
-    department:{
+    department: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'department'
     },
-    supervisor:{
+    supervisor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
-    upcoming:[{
+    upcoming: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'file'
     }],
-    completed:[{
+    completed: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'file'
     }],
-    comp_time:{
+    comp_time: {
         type: [Number]
     },
-    turn_around_time:{
+    turn_around_time: {
         type: [Number]
     },
-    language:{
+    language: {
         type: String,
         default: "English"
     },
-    record:{
-        today:{
+    record: {
+        today: {
             type: Number,
             default: 0
         },
-        yesterday:{
+        yesterday: {
             type: Number,
             default: 0
         },
-        this_week:{
+        this_week: {
             type: Number,
             default: 0
         },
-        this_month:{
+        this_month: {
             type: Number,
             default: 0
         },
-        this_year:{
+        this_year: {
             type: Number,
             default: 0
         },
-        all_time:{
+        all_time: {
             type: Number,
             default: 0
         }
     }
 });
 
-module.exports = User = mongoose.model('user',userSchema);
+module.exports = User = mongoose.model('user', userSchema);
