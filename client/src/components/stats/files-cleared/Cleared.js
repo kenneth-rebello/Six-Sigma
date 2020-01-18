@@ -4,12 +4,12 @@ import Select from 'react-select';
 import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import { getChartData } from "./getChartData";
-import { fetchAllUsers } from '../../actions/user.actions';
-import { fetchRecordsById } from '../../actions/util.actions';
+import { fetchAllUsers } from '../../../actions/user.actions';
+import { fetchRecordsById } from '../../../actions/util.actions';
 require("highcharts/modules/exporting")(Highcharts);
 
 
-const Stat = ({users, records, fetchRecordsById, fetchAllUsers}) => {
+const Cleared = ({users, records, fetchRecordsById, fetchAllUsers}) => {
 
     const [options, setOptions] = useState([]);
     const [startdates, setStartDates] = useState([]);
@@ -135,4 +135,4 @@ const mapStateToProps = state => ({
     records: state.util.records
 })
 
-export default connect(mapStateToProps, { fetchRecordsById, fetchAllUsers })(Stat);
+export default connect(mapStateToProps, { fetchRecordsById, fetchAllUsers })(Cleared);

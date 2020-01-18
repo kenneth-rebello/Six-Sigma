@@ -94,7 +94,7 @@ router.post('/register', [auth], async(req,res)=>{
 
         let toUpdate = {};
 
-        if(position) toUpdate.position = position.value;
+        if(position) toUpdate.designation = position.value;
         if(displayName) toUpdate.displayName = displayName;
         if(emp_code) toUpdate.emp_code = emp_code;
         if(supervisor) toUpdate.supervisor = supervisor.value;
@@ -154,6 +154,28 @@ router.get('/ideal/:dsgn/:date', async(req, res)=>{
             user,
             deadline: req.params.date
         })
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({errors: [{msg: err.message}]});
+    }
+})
+
+router.get('/tat', [auth], async(req,res)=>{
+    try {
+        
+        let users = await User.find();
+        let results = [];
+        
+        users.forEach(user => {
+            results.push({
+                _id: user._id,
+                name: user.displayName,
+                tatArray: user.turn_around_time,
+            })
+        })
+
+        return res.json(results);
 
     } catch (err) {
         console.error(err.message);

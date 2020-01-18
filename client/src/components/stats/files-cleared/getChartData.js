@@ -36,6 +36,9 @@ const config = {
           enabled: true
         },
         pointStart: 0
+      },
+      series: {
+        color: 'teal'
       }
     }
 };

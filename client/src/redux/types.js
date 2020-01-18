@@ -24,5 +24,7 @@ export const REMOVE_ALERT = "REMOVE_ALERT";
 export const SET_FORMDATA = "SET_FORMDATA";
 export const SET_LANG = "SET_LANG";
 export const SET_RECORDS = "SET_RECORDS";
+export const SET_MULTI_RECORDS = "SET_MULTI_RECORDS";
+export const SET_TAT = "SET_TAT";
 export const SET_USER_LIST = "SET_USER_LIST";
 export const CLEAR_USER_LIST = "CLEAR_USER_LIST";
