@@ -115,8 +115,8 @@ export const getChartDataByYear = (records, year) => {
 
         start = selected[0]
         end = selected[selected.length-1]
-        startDate = `${month[start.month]} - ${start.year}`;
-        endDate = `${month[end.month]} - ${end.year}`;
+        if(start)startDate = `${month[start.month]} - ${start.year}`;
+        if(end)endDate = `${month[end.month]} - ${end.year}`;
         selected.forEach( obj => {
             beforeTotal = obj.value + beforeTotal;
             afterTotal = obj.after + afterTotal;

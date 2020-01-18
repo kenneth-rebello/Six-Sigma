@@ -5,7 +5,7 @@ const File = require('../models/File');
 const Delay = require('../models/Delay');
 const Stat = require('../models/Stat');
 
-const X = schedule.scheduleJob('00 00 * * *', async () => {
+const X = schedule.scheduleJob('04 13 * * *', async () => {
   const files = await File.find({concluded:false})
   .populate('creator',['displayName','email'])
   .populate('owner',['displayName','email']);

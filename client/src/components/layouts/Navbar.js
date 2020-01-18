@@ -155,7 +155,7 @@ const Navbar = ({ language, currentUser, unsetCurrentUser }) => {
                     <a href="/language">{dict["Change Language"][language]}</a>
                   </li>
                   <li>
-                    {/* <a href="/stats">{dict["Statistics"][language]}</a> */}
+                    <a href="/stats">{dict["Statistics"][language]}</a>
                   </li>
                 </ul>
               </div>
@@ -177,7 +177,7 @@ const Navbar = ({ language, currentUser, unsetCurrentUser }) => {
         <li>
           <a href="/requests">{dict["Requests"][language]}</a>
         </li>
-        <li>{/* <a href="/new_task">{dict["New Task"][language]}</a> */}</li>
+        <li><a href="/new_task">{dict["New Task"][language]}</a></li>
       </ul>
       <ul id="user-dropdown" className="dropdown-content">
         <li>
@@ -193,7 +193,7 @@ const Navbar = ({ language, currentUser, unsetCurrentUser }) => {
         <li>
           <a href="/language">{dict["Change Language"][language]}</a>
         </li>
-        <li>{/* <a href="/stats">{dict["Statistics"][language]}</a> */}</li>
+        <li><a href="/stats">{dict["Statistics"][language]}</a></li>
       </ul>
       <ul id="qr-dropdown" className="dropdown-content">
         <li>

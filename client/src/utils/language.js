@@ -74,6 +74,16 @@ export const dict = {
     Nepali: "भाषा परिवर्तन गर्नुहोस्",
     Hindi: "भाषा बदलो"
   },
+  "Statistics":{
+    English: "Statistics",
+    Nepali: "",
+    Hindi: ""
+  },
+  "New Task":{
+    English: "New Task",
+    Nepali: "",
+    Hindi:""
+  },
   "Change your default username set by your Google account": {
     English: "Change your default username set by your Google account",
     Nepali:
@@ -214,6 +224,11 @@ export const dict = {
     English: "Current value",
     Nepali: "वर्तमान मूल्य",
     Hindi: "वर्तमान मूल्य"
+  },
+  "Progress":{
+    English: "Progress",
+    Nepali: "",
+    Hindi: ""
   },
   "An email will be sent to": {
     English: "An email will be sent to",

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SET_LANG, SET_FORMDATA, FETCH_REPORTS, FETCH_REQUESTS, SET_CURRENT_USER, SET_RECORDS, SET_MULTI_RECORDS } from "../redux/types";
+import { SET_LANG, SET_FORMDATA, FETCH_REPORTS, FETCH_REQUESTS, SET_CURRENT_USER, SET_RECORDS, SET_MULTI_RECORDS, CLEAR_MULTI_RECORDS } from "../redux/types";
 import { setAlert } from './alert.actions';
 
 export const setLanguage = lang => async dispatch => {
@@ -43,6 +43,12 @@ export const fetchMultiRecords = id => async dispatch => {
     dispatch({
         type: SET_MULTI_RECORDS,
         payload: res.data
+    })
+}
+
+export const clearMultiRecords = () => dispatch => {
+    dispatch({
+        type: CLEAR_MULTI_RECORDS
     })
 }
 
