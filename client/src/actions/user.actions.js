@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER, UNSET_CURRENT_USER, FETCH_USERS, CHECK_ONLINE, SET_USER_LIST, CLEAR_USER_LIST } from "../redux/types";
+import { SET_CURRENT_USER, UNSET_CURRENT_USER, FETCH_USERS, CHECK_ONLINE, SET_USER_LIST, CLEAR_USER_LIST, SET_RECORDS, SET_TAT } from "../redux/types";
 import { auth } from '../firebase/firebase.utils';
 import axios from 'axios';
 import { setAlert } from './alert.actions';
@@ -168,10 +168,10 @@ export const getIdealUsers = (dsgn, date) => async dispatch => {
         
     } catch (err) {
         console.log(err)
-            const errors = err.response.data.errors;
-            if(errors){
-                errors.forEach(error => dispatch(setAlert(error.msg)));
-            }
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
     }
 }
 
@@ -179,4 +179,23 @@ export const unsetUserList = () => async dispatch => {
     dispatch({
         type: CLEAR_USER_LIST
     })
+}
+
+export const fetchAllTATs = () => async dispatch => {
+    try {
+        
+        const res = await axios.get('/api/user/tat');
+
+        dispatch({
+            type: SET_TAT,
+            payload: res.data
+        })
+        
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if(errors){
+            errors.forEach(error => dispatch(setAlert(error.msg)));
+        }
+    }
 }

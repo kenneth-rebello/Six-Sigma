@@ -101,6 +101,7 @@ const Day = schedule.scheduleJob('00 00 * * *', async () => {
         user.record.today = 0
         await User.findByIdAndUpdate(user._id, {$set: user});
     })
+    console.log('*****Daily Update Done*****')
 })
 
 module.exports.updateDaily = Day
@@ -112,17 +113,22 @@ const Week = schedule.scheduleJob('00 00 * * 7', async () => {
         user.record.this_week = 0;
         await User.findByIdAndUpdate(user._id, {$set: user});
     })
+    console.log('*****Weekly Update Done*****')
 })
 
 module.exports.updateWeekly = Week
 
-const Month = schedule.scheduleJob('15 15 * * *', async () => {
+const Month = schedule.scheduleJob('00 00 1 * *', async () => {
     const users = await User.find();
 
     users.forEach(async user => {
         let stats = await Stat.findOne({user: user._id});
         if(stats){
-            stats.record.push({value: user.record.this_month});
+            stats.record.push({
+                value: user.record.this_month,
+                month: (new Date).getMonth(),
+                year: (new Date).getFullYear()
+            });
             await Stat.findByIdAndUpdate(stats.id, {$set: stats});
         }else{
             stats = new Stat({
@@ -141,6 +147,7 @@ const Month = schedule.scheduleJob('15 15 * * *', async () => {
         user.record.this_month = 0;
         await User.findByIdAndUpdate(user._id, {$set: user});
     })
+    console.log('*****Monthly Update Done*****')
 })
 
 module.exports.updateMonthly = Month
@@ -152,6 +159,7 @@ const Year = schedule.scheduleJob('00 00 1 1 *', async () => {
         user.record.this_year = 0;
         await User.findByIdAndUpdate(user._id, {$set: user});
     })
+    console.log('*****Yearly Update Done*****')
 })
 
 module.exports.updateYearly = Year
@@ -164,57 +172,59 @@ module.exports.updateYearly = Year
 
 
 
-// const Dummy = schedule.scheduleJob('31 17 * * *', async () => {
-//     const users = await User.find();
+const Dummy = schedule.scheduleJob('56 08 * * *', async () => {
+    const users = await User.find();
 
-//     let years = [2019, 2018]
+    let years = [2019, 2018]
 
-//     users.forEach(async user => {
+    users.forEach(async user => {
     
-//         let tempRecord = []
+        let tempRecord = []
 
-//         years.forEach(year => {
-//             for(var i=0; i<12; i++){
-//                 let rValue = Math.floor((Math.random() * 200) + 300);
-//                 tempRecord.push({
-//                     month: i,
-//                     year: year,
-//                     value:rValue
-//                 })
-//             }
-//         })
-        
-//         stats = new Stat({
-//             user: user._id,
-//             record: tempRecord
-//         });
-//         await stats.save();
+        years.forEach(year => {
+            for(var i=0; i<12; i++){
+                let rValue = Math.floor((Math.random() * 200) + 300);
+                let aValue = Math.floor((Math.random() * 200) + 300);
+                tempRecord.push({
+                    month: i,
+                    year: year,
+                    value:rValue,
+                    after: aValue
+                })
+            }
+        })
 
-//         console.log(user.displayName);
-//     });
+        stats = new Stat({
+            user: user._id,
+            record: tempRecord
+        });
+        await stats.save();
 
-//     console.log('Done')
-// })
+    });
 
-// module.exports.generateDummy = Dummy
-
-
-const Dummy2 = schedule.scheduleJob('17 01 * * *', async () => {
-
-    const users = await User.find({});
-    
-    users.forEach(async user =>{
-        if(user.turn_around_time) user.turn_around_time = [];
-
-        for(var i=0; i<25; i++){
-            user.turn_around_time.push(Math.floor(Math.random() * 21)+10)
-        }
-
-        await User.findByIdAndUpdate(user._id, {$set: user})
-    })
-
-    console.log('done')
-
+    console.log('Done')
 })
 
-module.exports.genTAT = Dummy2;
+module.exports.generateDummy = Dummy
+
+
+// const Dummy2 = schedule.scheduleJob('17 01 * * *', async () => {
+
+//     const users = await User.find({});
+    
+//     users.forEach(async user =>{
+//         if(user.turn_around_time) user.turn_around_time = [];
+
+//         for(var i=0; i<25; i++){
+//             user.turn_around_time.push(Math.floor(Math.random() * 21)+10)
+//         }
+
+//         await User.findByIdAndUpdate(user._id, {$set: user})
+//     })
+
+//     console.log('done')
+
+// })
+
+// module.exports.genTAT = Dummy2;
+

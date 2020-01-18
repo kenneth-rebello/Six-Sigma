@@ -14,6 +14,15 @@ const statSchema = new mongoose.Schema({
         },
         value:{
             type: Number
+        },
+        after:{
+            type: Number
+        },
+        reassigned:{
+            value: Number
+        },
+        misplaced:{
+            value: Number
         }
     }]
 });

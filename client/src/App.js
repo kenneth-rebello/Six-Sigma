@@ -28,7 +28,7 @@ import Reports from './components/reports/Reports';
 import Requests from './components/requests/Requests';
 import LanguageSelect from './components/layouts/LanguageSelect';
 import LanguageChange from './components/layouts/LanguageChange';
-import Stat from './components/stats/Stat';
+import Stats from './components/stats/Stats';
 import TaskForm from './components/task/TaskForm';
 
 
@@ -74,7 +74,7 @@ const App = (props) => {
             <SupervisorRoute exact path="/reassign/:id" component={Reassign}/>
             <SupervisorRoute exact path="/reports" component={Reports}/>
             <PrivateRoute exact path="/requests" component={Requests}/>
-            <SupervisorRoute exact path="/stats" component={Stat}/>
+            <SupervisorRoute exact path="/stats" component={Stats}/>
             <SupervisorRoute exact path="/new_task" component={TaskForm}/>
           </ErrorBoundary>
         </div>
