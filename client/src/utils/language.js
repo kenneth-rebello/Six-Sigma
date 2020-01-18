@@ -419,6 +419,61 @@ export const dict = {
     Nepali: "अनुरोध पेस गरियो",
     Hindi: "अनुरोध प्रस्तुत किया गया"
   },
+  "New Task": {
+    English: "New Task",
+    Nepali: "नयाँ टास्क",
+    Hindi: "नया कार्यनया कार्य"
+  },
+  "Statistics": {
+    English: "Statistics",
+    Nepali: "तथ्याड़क",
+    Hindi: "आंकड़े"
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
+  "": {
+    English: "",
+    Nepali: "",
+    Hindi: ""
+  },
   "": {
     English: "",
     Nepali: "",
