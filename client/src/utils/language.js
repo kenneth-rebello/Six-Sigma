@@ -1,10 +1,10 @@
 export const dict = {
-  File: {
+  "File": {
     English: "File",
     Nepali: "फाईल",
     Hindi: "फ़ाइल"
   },
-  User: {
+  "User": {
     English: "User",
     Nepali: "प्रयोगकर्ता",
     Hindi: "उपयोगकर्ता"
@@ -14,7 +14,7 @@ export const dict = {
     Nepali: "साइन इन",
     Hindi: "साइन इन"
   },
-  Home: {
+  "Home": {
     English: "Home",
     Nepali: "होमपेज",
     Hindi: "होमपेज"
@@ -29,12 +29,12 @@ export const dict = {
     Nepali: "सबै फाईलहरू",
     Hindi: "सारे दस्तावेज"
   },
-  Reports: {
+  "Reports": {
     English: "Reports",
     Nepali: "रिपोर्टहरू",
     Hindi: "रिपोर्ट"
   },
-  Requests: {
+  "Requests": {
     English: "Requests",
     Nepali: "अनुरोध",
     Hindi: "अनुरोध"
@@ -59,7 +59,7 @@ export const dict = {
     Nepali: "प्रोफाइल सम्पादन गर",
     Hindi: "प्रोफ़ाइल संपादित करें"
   },
-  Register: {
+  "Register": {
     English: "Register",
     Nepali: "रेजिस्टर",
     Hindi: "रजिस्टर करें"
@@ -85,7 +85,7 @@ export const dict = {
     Nepali: "तपाइँको अनुपम कर्मचारी कोड प्रविष्ट गर्नुहोस्       ",
     Hindi: "अपना अद्वितीय कर्मचारी कोड दर्ज करें"
   },
-  Designation: {
+  "Designation": {
     English: "Designation",
     Nepali: "पदनाम",
     Hindi: "पद"
@@ -95,7 +95,7 @@ export const dict = {
     Nepali: "संगठनमा तपाईंको पदनाम चयन गर्नुहोस्",
     Hindi: "संगठन में अपने पदनाम का चयन करें"
   },
-  Department: {
+  "Department": {
     English: "Department",
     Nepali: "विभाग",
     Hindi: "विभाग"
@@ -105,7 +105,7 @@ export const dict = {
     Nepali: "तपाईले काम गर्ने विभाग छान्नुहोस्",
     Hindi: "उस विभाग का चयन करें जिसमें आप काम करते हैं"
   },
-  Supervisor: {
+  "Supervisor": {
     English: "Supervisor",
     Nepali: "सुपरवाइजर",
     Hindi: "पर्यवेक्षक"
@@ -125,7 +125,7 @@ export const dict = {
     Nepali: "तपाईंले यो कार्य पूरा गर्नुभयो",
     Hindi: "आपने यह कार्य पूरा कर लिया है"
   },
-  Deadline: {
+  "Deadline": {
     English: "Deadline",
     Nepali: "अन्तिम रेखा",
     Hindi: "समयसीमा"
@@ -183,12 +183,12 @@ export const dict = {
     Nepali: "फाईल नाम",
     Hindi: "फ़ाइल का नाम"
   },
-  Optional: {
+  "Optional": {
     English: "Optional",
     Nepali: "वैकल्पिक",
     Hindi: "ऐच्छिक"
   },
-  Description: {
+  "Description": {
     English: "Description",
     Nepali: "वर्णन",
     Hindi: "विवरण"
@@ -257,7 +257,7 @@ export const dict = {
     Nepali: "हालको मालिक",
     Hindi: "वर्तमान मालिक"
   },
-  Creator: {
+  "Creator": {
     English: "Creator",
     Nepali: "निर्माता",
     Hindi: "रचनाकार"
@@ -341,7 +341,7 @@ export const dict = {
     Nepali: "लुकेको एch्कर",
     Hindi: "छिपा हुआ लंगर"
   },
-  Close: {
+  "Close": {
     English: "Close",
     Nepali: "बन्द",
     Hindi: "बंद करे"
@@ -350,11 +350,6 @@ export const dict = {
     English: "No image detected",
     Nepali: "कुनै छवि पत्ता लागेन",
     Hindi: "कोई छवि नहीं मिली"
-  },
-  "File Number": {
-    English: "File Number",
-    Nepali: "फाईल नम्बर",
-    Hindi: "फाइल संख्या"
   },
   "Old Deadline": {
     English: "Old Deadline",
@@ -366,12 +361,12 @@ export const dict = {
     Nepali: "नयाँ अन्तिम सुझाव",
     Hindi: "नई समय सीमा के सुझाव"
   },
-  Accepted: {
+  "Accepted": {
     English: "Accepted",
     Nepali: "स्वीकार गरियो",
     Hindi: "स्वीकार किया"
   },
-  Awaiting: {
+  "Awaiting": {
     English: "Awaiting",
     Nepali: "प्रतीक्षा गर्दै",
     Hindi: "प्रतीक्षा कर रहा है"
@@ -386,17 +381,17 @@ export const dict = {
     Nepali: "फाईलमा जानुहोस्",
     Hindi: "फाइल पर जाएं"
   },
-  Remove: {
+  "Remove": {
     English: "Remove",
     Nepali: "हटाउनुहोस्",
     Hindi: "हटाना"
   },
-  Status: {
+  "Status": {
     English: "Status",
     Nepali: "स्थिति",
     Hindi: "स्थिति"
   },
-  Dismiss: {
+  "Dismiss": {
     English: "Dismiss",
     Nepali: "खारेज गर्नुहोस्",
     Hindi: "खारिज"

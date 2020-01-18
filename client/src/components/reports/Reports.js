@@ -1,4 +1,4 @@
-import React ,{ useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'react-virtualized';
 import { Link } from 'react-router-dom';
@@ -9,16 +9,16 @@ const Reports = (props) => {
 
     const { reports, loading, fetchReports } = props;
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchReports();
-    },[]);
+    }, []);
 
 
     return (
         <div className="all-users">
-            
-            {!loading && reports.map(report => <ReportItem report={report}/>)}
-            
+
+            {!loading && reports.map(report => <ReportItem report={report} />)}
+
         </div>
     )
 }
@@ -28,4 +28,4 @@ const mapStateToProps = state => ({
     loading: state.file.loading
 })
 
-export default connect(mapStateToProps, {fetchReports})(Reports);
+export default connect(mapStateToProps, { fetchReports })(Reports);

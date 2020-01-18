@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import './QR.css';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import { dict } from '../../utils/language';
 
 import html2canvas from 'html2canvas';
 import QRCode from 'qrcode.react';
 import { addFile } from '../../actions/file.actions';
 
-const Generator = ({loggedIn, addFile, history}) => {
+const Generator = ({ loggedIn, addFile, history, language }) => {
 
     const [text, setText] = useState('No text entered yet');
 
@@ -15,7 +16,7 @@ const Generator = ({loggedIn, addFile, history}) => {
     }
 
     const downloadOne = () => {
-        const canvas  = document.getElementById('qrcode');
+        const canvas = document.getElementById('qrcode');
         const pngURL = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
         let downloadLink = document.getElementById('download-link');
         downloadLink.href = pngURL;
@@ -27,11 +28,11 @@ const Generator = ({loggedIn, addFile, history}) => {
     const downloadMany = () => {
 
         document.getElementById("toExport").style.display = "block";
-        html2canvas(document.getElementById("toExport"),{
+        html2canvas(document.getElementById("toExport"), {
             logging: true,
             profile: true,
             useCORS: true
-        }).then(canvas =>{
+        }).then(canvas => {
             let data = canvas.toDataURL('image/jpeg', 0.9);
             let src = encodeURI(data);
             document.getElementById('screenshot').src = src;
@@ -40,12 +41,12 @@ const Generator = ({loggedIn, addFile, history}) => {
     }
 
     const addFileFunc = () => {
-        if(text==="No text entered yet" || text.trim()===""){
-            alert('Filename needs to be filled')
+        if (text === "No text entered yet" || text.trim() === "") {
+            alert(dict['Filename needs to be filled'][language])
             return
         }
-        if(!loggedIn){
-            alert('You need to log in to add a file to database')
+        if (!loggedIn) {
+            alert(dict['You need to log in to add a file to database'][language])
             return
         }
         addFile(text);
@@ -53,7 +54,7 @@ const Generator = ({loggedIn, addFile, history}) => {
     }
 
     let pdfPage = [];
-    for(var i=0; i<3; i++){
+    for (var i = 0; i < 3; i++) {
         pdfPage.push(<div className="row">
             <div className="col s6">
                 <QRCode
@@ -80,9 +81,9 @@ const Generator = ({loggedIn, addFile, history}) => {
         <div className="qr-home">
 
             <div className="input-box">
-                <label>Enter unique file number to convert to QRCode here</label>
+                <label>{dict['Enter unique file number to convert to QRCode here'][language]}</label>
                 <input type="text" onChange={e => Changer(e)} value={text === "No text entered yet" ? '' : text}
-                    placeholder="File Number" />
+                    placeholder={dict["File Number"][language]} />
             </div>
 
             <QRCode
@@ -95,30 +96,30 @@ const Generator = ({loggedIn, addFile, history}) => {
 
             <div className="row">
                 <div className="col s12 m6 l4 center-align">
-                    <button className="btn" onClick={downloadOne}>Save single</button>
+                    <button className="btn" onClick={downloadOne}>{dict['Save single'][language]}</button>
                 </div>
                 <div className="col s12 m6 l4 center-align">
-                    <a className="waves-effect waves-light btn modal-trigger" 
+                    <a className="waves-effect waves-light btn modal-trigger"
                         onClick={downloadMany}
                         href="#pdf-modal">
-                        Save sheet
+                        {dict["Save sheet"][language]}
                     </a>
                 </div>
                 <div className="col s12 m6 l4 center-align">
-                    <button className="btn" onClick={addFileFunc}>Add File To Database</button>
+                    <button className="btn" onClick={addFileFunc}>{dict['Add File To Database'][language]}</button>
                 </div>
             </div>
-            
+
             {/* Not to be modified after this point */}
-            <a id="download-link" style={{display:'none'}} href="/generator">Hidden Anchor</a>
-    
+            <a id="download-link" style={{ display: 'none' }} href="/generator">{dict['Hidden Anchor'][language]}</a>
+
             <div id="pdf-modal" className="modal">
                 <div className="modal-content center-align">
-                    <img src="" id="screenshot" 
-                        alt="Screenshot loading, please wait"/>
+                    <img src="" id="screenshot"
+                        alt="Screenshot loading, please wait" />
                 </div>
                 <div className="modal-footer">
-                    <a href="#!" className="modal-close waves-effect waves-green btn">Close</a>
+                    <a href="#!" className="modal-close waves-effect waves-green btn">{dict['Close'][language]}</a>
                 </div>
             </div>
 
@@ -131,7 +132,8 @@ const Generator = ({loggedIn, addFile, history}) => {
 }
 
 const mapStateToProps = state => ({
-    loggedIn: state.user.loggedIn
+    loggedIn: state.user.loggedIn,
+    language: state.user.language
 })
 
-export default connect(mapStateToProps, {addFile})(Generator);
+export default connect(mapStateToProps, { addFile })(Generator);
